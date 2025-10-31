@@ -1135,7 +1135,7 @@
                 Calculate Eligibility
             </button>
             <div id="eligibility-result" class="eligibility-result pending">
-                Click "Calculate Eligibility" to assess
+                Eligibility calculator requires protocol configuration
             </div>
             <div id="criteria-details" class="criteria-list hidden">
                 <!-- Criteria will be populated dynamically -->
@@ -1221,7 +1221,7 @@
 
             // Clear/reset the eligibility calculator
             document.getElementById('eligibility-result').className = 'eligibility-result pending';
-            document.getElementById('eligibility-result').textContent = 'Click "Calculate Eligibility" to assess';
+            document.getElementById('eligibility-result').textContent = 'Eligibility calculator requires protocol configuration';
             document.getElementById('criteria-details').classList.add('hidden');
         }
 
@@ -1255,319 +1255,25 @@
         }
 
         function calculateEligibility() {
-            if (!selectedIndication) {
-                alert('Please select a study indication first!');
-                return;
-            }
-
-            const criteria = evaluateCriteria(selectedIndication);
-            displayEligibilityResults(criteria);
-        }
-
-        function evaluateCriteria(indicationType) {
-            const results = {
-                eligible: true,
-                criteria: []
-            };
-
-            // Common criteria for all studies
-            const age = parseInt(document.getElementById('age').value);
-            const ccid = document.getElementById('ccid').value;
-
-            // CCID check
-            if (!ccid) {
-                results.criteria.push({
-                    name: 'CCID Required',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'CCID Provided',
-                    met: true,
-                    required: true
-                });
-            }
-
-            // Age check (18-75 for most studies)
-            if (!age || age < 18 || age > 75) {
-                results.criteria.push({
-                    name: 'Age 18-75 years',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Age 18-75 years',
-                    met: true,
-                    required: true
-                });
-            }
-
-            // Exclusion criteria
-            const pregnant = document.getElementById('pregnant-nursing').checked;
-            const otherTrial = document.getElementById('participating-other').checked;
-            const contraindication = document.getElementById('contraindication').checked;
-            const unstable = document.getElementById('unstable-condition').checked;
-            const unableConsent = document.getElementById('unable-consent').checked;
-
-            if (pregnant || otherTrial || contraindication || unstable || unableConsent) {
-                results.criteria.push({
-                    name: 'No Exclusion Criteria Met',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'No Exclusion Criteria Met',
-                    met: true,
-                    required: true
-                });
-            }
-
-            // Study-specific criteria
-            switch(indicationType) {
-                case 'psych':
-                    evaluatePsychCriteria(results);
-                    break;
-                case 'neuro':
-                    evaluateNeuroCriteria(results);
-                    break;
-                case 'aud':
-                    evaluateAUDCriteria(results);
-                    break;
-                case 'fibromyalgia':
-                    evaluateFibromyalgiaCriteria(results);
-                    break;
-                case 'backpain':
-                    evaluateBackPainCriteria(results);
-                    break;
-            }
-
-            return results;
-        }
-
-        function evaluatePsychCriteria(results) {
-            const phq9 = parseFloat(document.getElementById('phq9-score').value);
-            const diagnosis = document.getElementById('psych-diagnosis').value;
-
-            if (!diagnosis) {
-                results.criteria.push({
-                    name: 'Primary diagnosis documented',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Primary diagnosis documented',
-                    met: true,
-                    required: true
-                });
-            }
-
-            if (phq9 && (phq9 < 10 || phq9 > 23)) {
-                results.criteria.push({
-                    name: 'PHQ-9 score 10-23 (moderate to severe)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else if (phq9) {
-                results.criteria.push({
-                    name: 'PHQ-9 score 10-23 (moderate to severe)',
-                    met: true,
-                    required: true
-                });
-            }
-        }
-
-        function evaluateNeuroCriteria(results) {
-            const diagnosis = document.getElementById('neuro-diagnosis').value;
-            const moca = parseFloat(document.getElementById('moca-score').value);
-
-            if (!diagnosis) {
-                results.criteria.push({
-                    name: 'Neurological diagnosis documented',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Neurological diagnosis documented',
-                    met: true,
-                    required: true
-                });
-            }
-
-            if (moca && moca < 18) {
-                results.criteria.push({
-                    name: 'MoCA score ≥18 (adequate cognition)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else if (moca) {
-                results.criteria.push({
-                    name: 'MoCA score ≥18 (adequate cognition)',
-                    met: true,
-                    required: true
-                });
-            }
-        }
-
-        function evaluateAUDCriteria(results) {
-            const audit = parseFloat(document.getElementById('audit-score').value);
-            const daysAbstinent = parseFloat(document.getElementById('days-abstinent').value);
-
-            if (!audit || audit < 8) {
-                results.criteria.push({
-                    name: 'AUDIT score ≥8 (hazardous drinking)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'AUDIT score ≥8 (hazardous drinking)',
-                    met: true,
-                    required: true
-                });
-            }
-
-            if (daysAbstinent && daysAbstinent >= 3 && daysAbstinent <= 90) {
-                results.criteria.push({
-                    name: 'Abstinent 3-90 days',
-                    met: true,
-                    required: true
-                });
-            } else if (daysAbstinent) {
-                results.criteria.push({
-                    name: 'Abstinent 3-90 days',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            }
-        }
-
-        function evaluateFibromyalgiaCriteria(results) {
-            const painScore = parseFloat(document.getElementById('fibro-pain-score').value);
-            const duration = parseFloat(document.getElementById('fibro-duration').value);
-
-            if (!painScore || painScore < 4) {
-                results.criteria.push({
-                    name: 'Pain score ≥4/10 (moderate to severe)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Pain score ≥4/10 (moderate to severe)',
-                    met: true,
-                    required: true
-                });
-            }
-
-            if (!duration || duration < 0.25) { // 3 months minimum
-                results.criteria.push({
-                    name: 'Symptoms >3 months (chronic)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Symptoms >3 months (chronic)',
-                    met: true,
-                    required: true
-                });
-            }
-        }
-
-        function evaluateBackPainCriteria(results) {
-            const painScore = parseFloat(document.getElementById('back-pain-score').value);
-            const duration = parseFloat(document.getElementById('back-duration').value);
-            const location = document.getElementById('back-location').value;
-
-            if (!location) {
-                results.criteria.push({
-                    name: 'Pain location documented',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Pain location documented',
-                    met: true,
-                    required: true
-                });
-            }
-
-            if (!painScore || painScore < 4) {
-                results.criteria.push({
-                    name: 'Pain score ≥4/10 (moderate to severe)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Pain score ≥4/10 (moderate to severe)',
-                    met: true,
-                    required: true
-                });
-            }
-
-            if (!duration || duration < 3) { // 3 months minimum
-                results.criteria.push({
-                    name: 'Pain >3 months (chronic)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Pain >3 months (chronic)',
-                    met: true,
-                    required: true
-                });
-            }
-        }
-
-        function displayEligibilityResults(results) {
+            // Eligibility criteria must be configured based on actual study protocols
             const resultDiv = document.getElementById('eligibility-result');
             const detailsDiv = document.getElementById('criteria-details');
 
-            // Display overall result
-            if (results.eligible) {
-                resultDiv.className = 'eligibility-result eligible';
-                resultDiv.textContent = '✅ ELIGIBLE';
-            } else {
-                resultDiv.className = 'eligibility-result not-eligible';
-                resultDiv.textContent = '❌ NOT ELIGIBLE';
-            }
+            resultDiv.className = 'eligibility-result pending';
+            resultDiv.innerHTML = '⚠️ ELIGIBILITY CALCULATOR NOT CONFIGURED';
 
-            // Display criteria details
-            let criteriaHTML = '<h3>Criteria Evaluation:</h3>';
-            results.criteria.forEach(criterion => {
-                const status = criterion.met ? 'met' : 'not-met';
-                const icon = criterion.met ? '✓' : '✗';
-                criteriaHTML += `
-                    <div class="criteria-item ${status}">
-                        <span class="criteria-icon">${icon}</span>
-                        <span>${criterion.name}</span>
-                    </div>
-                `;
-            });
-
-            detailsDiv.innerHTML = criteriaHTML;
+            detailsDiv.innerHTML = `
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="color: var(--warning-color); margin-bottom: 15px;">Configuration Required</h3>
+                    <p style="color: var(--text-dark); line-height: 1.6;">
+                        Eligibility criteria must be configured based on actual study protocols.<br>
+                        Contact your study coordinator to implement protocol-specific eligibility rules.
+                    </p>
+                    <p style="color: var(--text-muted); margin-top: 15px; font-size: 0.9em;">
+                        This tool collects screening data but does not determine eligibility without proper protocol configuration.
+                    </p>
+                </div>
+            `;
             detailsDiv.classList.remove('hidden');
         }
 
@@ -1597,7 +1303,7 @@
 
                 // Reset eligibility
                 document.getElementById('eligibility-result').className = 'eligibility-result pending';
-                document.getElementById('eligibility-result').textContent = 'Click "Calculate Eligibility" to assess';
+                document.getElementById('eligibility-result').textContent = 'Eligibility calculator requires protocol configuration';
                 document.getElementById('criteria-details').classList.add('hidden');
 
                 // Reset date to today

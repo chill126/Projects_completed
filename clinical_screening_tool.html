@@ -561,6 +561,18 @@
                     </select>
                 </div>
                 <div class="input-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" step="0.1" placeholder="Enter height">
+                </div>
+                <div class="input-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" step="0.1" placeholder="Enter weight">
+                </div>
+                <div class="input-group">
+                    <label for="bmi">BMI (kg/m²)</label>
+                    <input type="number" id="bmi" step="0.1" placeholder="Calculated automatically" readonly>
+                </div>
+                <div class="input-group">
                     <label for="ethnicity">Ethnicity</label>
                     <select id="ethnicity">
                         <option value="">Select ethnicity</option>
@@ -581,82 +593,6 @@
                         <option value="multiple">Multiple Races</option>
                         <option value="unknown">Unknown/Not Reported</option>
                     </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Vitals Section -->
-        <div class="section">
-            <h2 class="section-header">
-                <span class="section-icon">❤️</span>
-                Vital Signs
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="height">Height (cm)</label>
-                    <input type="number" id="height" step="0.1" placeholder="Enter height">
-                </div>
-                <div class="input-group">
-                    <label for="weight">Weight (kg)</label>
-                    <input type="number" id="weight" step="0.1" placeholder="Enter weight">
-                </div>
-                <div class="input-group">
-                    <label for="bmi">BMI (kg/m²)</label>
-                    <input type="number" id="bmi" step="0.1" placeholder="Calculated automatically" readonly>
-                </div>
-                <div class="input-group">
-                    <label for="systolic-bp">Systolic BP (mmHg)</label>
-                    <input type="number" id="systolic-bp" placeholder="Enter systolic BP">
-                </div>
-                <div class="input-group">
-                    <label for="diastolic-bp">Diastolic BP (mmHg)</label>
-                    <input type="number" id="diastolic-bp" placeholder="Enter diastolic BP">
-                </div>
-                <div class="input-group">
-                    <label for="heart-rate">Heart Rate (bpm)</label>
-                    <input type="number" id="heart-rate" placeholder="Enter heart rate">
-                </div>
-            </div>
-        </div>
-
-        <!-- Laboratory Values Section -->
-        <div class="section">
-            <h2 class="section-header">
-                <span class="section-icon">🔬</span>
-                Laboratory Values
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="hba1c">HbA1c (%)</label>
-                    <input type="number" id="hba1c" step="0.1" placeholder="Enter HbA1c">
-                </div>
-                <div class="input-group">
-                    <label for="fasting-glucose">Fasting Glucose (mg/dL)</label>
-                    <input type="number" id="fasting-glucose" placeholder="Enter fasting glucose">
-                </div>
-                <div class="input-group">
-                    <label for="creatinine">Creatinine (mg/dL)</label>
-                    <input type="number" id="creatinine" step="0.01" placeholder="Enter creatinine">
-                </div>
-                <div class="input-group">
-                    <label for="egfr">eGFR (mL/min/1.73m²)</label>
-                    <input type="number" id="egfr" placeholder="Enter eGFR">
-                </div>
-                <div class="input-group">
-                    <label for="total-cholesterol">Total Cholesterol (mg/dL)</label>
-                    <input type="number" id="total-cholesterol" placeholder="Enter total cholesterol">
-                </div>
-                <div class="input-group">
-                    <label for="ldl">LDL Cholesterol (mg/dL)</label>
-                    <input type="number" id="ldl" placeholder="Enter LDL">
-                </div>
-                <div class="input-group">
-                    <label for="hdl">HDL Cholesterol (mg/dL)</label>
-                    <input type="number" id="hdl" placeholder="Enter HDL">
-                </div>
-                <div class="input-group">
-                    <label for="triglycerides">Triglycerides (mg/dL)</label>
-                    <input type="number" id="triglycerides" placeholder="Enter triglycerides">
                 </div>
             </div>
         </div>
@@ -1338,26 +1274,11 @@
                 demographics: {
                     age: document.getElementById('age').value,
                     gender: document.getElementById('gender').value,
-                    ethnicity: document.getElementById('ethnicity').value,
-                    race: document.getElementById('race').value
-                },
-                vitals: {
                     height: document.getElementById('height').value,
                     weight: document.getElementById('weight').value,
                     bmi: document.getElementById('bmi').value,
-                    systolicBP: document.getElementById('systolic-bp').value,
-                    diastolicBP: document.getElementById('diastolic-bp').value,
-                    heartRate: document.getElementById('heart-rate').value
-                },
-                labs: {
-                    hba1c: document.getElementById('hba1c').value,
-                    fastingGlucose: document.getElementById('fasting-glucose').value,
-                    creatinine: document.getElementById('creatinine').value,
-                    egfr: document.getElementById('egfr').value,
-                    totalCholesterol: document.getElementById('total-cholesterol').value,
-                    ldl: document.getElementById('ldl').value,
-                    hdl: document.getElementById('hdl').value,
-                    triglycerides: document.getElementById('triglycerides').value
+                    ethnicity: document.getElementById('ethnicity').value,
+                    race: document.getElementById('race').value
                 },
                 medicalHistory: {
                     diabetes: document.getElementById('history-diabetes').checked,
@@ -1487,26 +1408,11 @@
                 ['DEMOGRAPHICS'],
                 ['Age:', formData.demographics.age],
                 ['Gender:', formData.demographics.gender],
+                ['Height (cm):', formData.demographics.height],
+                ['Weight (kg):', formData.demographics.weight],
+                ['BMI:', formData.demographics.bmi],
                 ['Ethnicity:', formData.demographics.ethnicity],
                 ['Race:', formData.demographics.race],
-                [''],
-                ['VITAL SIGNS'],
-                ['Height (cm):', formData.vitals.height],
-                ['Weight (kg):', formData.vitals.weight],
-                ['BMI:', formData.vitals.bmi],
-                ['Systolic BP:', formData.vitals.systolicBP],
-                ['Diastolic BP:', formData.vitals.diastolicBP],
-                ['Heart Rate:', formData.vitals.heartRate],
-                [''],
-                ['LABORATORY VALUES'],
-                ['HbA1c (%):', formData.labs.hba1c],
-                ['Fasting Glucose:', formData.labs.fastingGlucose],
-                ['Creatinine:', formData.labs.creatinine],
-                ['eGFR:', formData.labs.egfr],
-                ['Total Cholesterol:', formData.labs.totalCholesterol],
-                ['LDL:', formData.labs.ldl],
-                ['HDL:', formData.labs.hdl],
-                ['Triglycerides:', formData.labs.triglycerides],
                 [''],
                 ['MEDICAL HISTORY'],
                 ['Diabetes:', formData.medicalHistory.diabetes ? 'Yes' : 'No'],

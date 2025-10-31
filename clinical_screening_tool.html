@@ -47,110 +47,71 @@
         .study-selector {
             position: fixed;
             left: 0;
-            top: 0;
-            width: 280px;
-            height: 100vh;
+            top: 120px;
+            width: 85px;
             background: var(--white);
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-            padding: 30px 20px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .study-selector h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            font-size: 1.3em;
-            text-align: center;
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 10px;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 10px 7.5px;
+            border-radius: 0 12px 12px 0;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .study-option {
-            background: var(--light-gray);
-            border: 2px solid var(--border-color);
+            width: 70px;
+            height: 70px;
+            border: none;
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
-            font-weight: 600;
+            font-weight: bold;
+            font-size: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
         }
 
         .study-option:hover {
-            transform: translateX(5px);
-            box-shadow: var(--shadow);
+            transform: scale(1.05);
         }
 
-        .study-option.active {
-            border-width: 3px;
-            box-shadow: var(--shadow-hover);
+        .study-option.selected {
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .study-option.diabetes {
-            border-color: #3498db;
-            color: #3498db;
+        .study-option.unselected {
+            opacity: 0.5;
         }
 
-        .study-option.diabetes.active {
-            background: #3498db;
-            color: white;
+        .study-option.psych {
+            background: #4A90E2;
         }
 
-        .study-option.hypertension {
-            border-color: #e74c3c;
-            color: #e74c3c;
+        .study-option.neuro {
+            background: #9B59B6;
         }
 
-        .study-option.hypertension.active {
-            background: #e74c3c;
-            color: white;
+        .study-option.aud {
+            background: #F39C12;
         }
 
-        .study-option.obesity {
-            border-color: #f39c12;
-            color: #f39c12;
+        .study-option.fibromyalgia {
+            background: #16A085;
         }
 
-        .study-option.obesity.active {
-            background: #f39c12;
-            color: white;
-        }
-
-        .study-option.cardiovascular {
-            border-color: #e91e63;
-            color: #e91e63;
-        }
-
-        .study-option.cardiovascular.active {
-            background: #e91e63;
-            color: white;
-        }
-
-        .study-option.respiratory {
-            border-color: #00bcd4;
-            color: #00bcd4;
-        }
-
-        .study-option.respiratory.active {
-            background: #00bcd4;
-            color: white;
-        }
-
-        .study-option.oncology {
-            border-color: #9c27b0;
-            color: #9c27b0;
-        }
-
-        .study-option.oncology.active {
-            background: #9c27b0;
-            color: white;
+        .study-option.backpain {
+            background: #E74C3C;
         }
 
         /* ===== MAIN CONTAINER ===== */
         .main-container {
-            margin-left: 300px;
+            margin-left: 120px;
             max-width: 1200px;
             background: var(--white);
             border-radius: 15px;
@@ -243,58 +204,49 @@
         }
 
         /* Study-Specific Section Colors */
-        .section.diabetes-section {
-            border-color: #3498db;
+        .section.psych-section {
+            border-color: #4A90E2;
         }
 
-        .section.diabetes-section .section-header {
-            color: #3498db;
-            border-color: #3498db;
+        .section.psych-section .section-header {
+            color: #4A90E2;
+            border-color: #4A90E2;
         }
 
-        .section.hypertension-section {
-            border-color: #e74c3c;
+        .section.neuro-section {
+            border-color: #9B59B6;
         }
 
-        .section.hypertension-section .section-header {
-            color: #e74c3c;
-            border-color: #e74c3c;
+        .section.neuro-section .section-header {
+            color: #9B59B6;
+            border-color: #9B59B6;
         }
 
-        .section.obesity-section {
-            border-color: #f39c12;
+        .section.aud-section {
+            border-color: #F39C12;
         }
 
-        .section.obesity-section .section-header {
-            color: #f39c12;
-            border-color: #f39c12;
+        .section.aud-section .section-header {
+            color: #F39C12;
+            border-color: #F39C12;
         }
 
-        .section.cardiovascular-section {
-            border-color: #e91e63;
+        .section.fibromyalgia-section {
+            border-color: #16A085;
         }
 
-        .section.cardiovascular-section .section-header {
-            color: #e91e63;
-            border-color: #e91e63;
+        .section.fibromyalgia-section .section-header {
+            color: #16A085;
+            border-color: #16A085;
         }
 
-        .section.respiratory-section {
-            border-color: #00bcd4;
+        .section.backpain-section {
+            border-color: #E74C3C;
         }
 
-        .section.respiratory-section .section-header {
-            color: #00bcd4;
-            border-color: #00bcd4;
-        }
-
-        .section.oncology-section {
-            border-color: #9c27b0;
-        }
-
-        .section.oncology-section .section-header {
-            color: #9c27b0;
-            border-color: #9c27b0;
+        .section.backpain-section .section-header {
+            color: #E74C3C;
+            border-color: #E74C3C;
         }
 
         /* ===== FORM LAYOUT ===== */
@@ -491,26 +443,27 @@
         .mb-3 { margin-bottom: 30px; }
 
         /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 1024px) {
-            .study-selector {
-                width: 240px;
-            }
-
-            .main-container {
-                margin-left: 260px;
-            }
-        }
-
         @media (max-width: 768px) {
             .study-selector {
-                position: relative;
+                position: fixed;
+                left: 0;
+                top: 0;
                 width: 100%;
                 height: auto;
-                margin-bottom: 20px;
+                flex-direction: row;
+                padding: 10px;
+                border-radius: 0;
+                justify-content: center;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             }
 
             .main-container {
                 margin-left: 0;
+                margin-top: 110px;
+            }
+
+            body {
+                padding-top: 0;
             }
 
             .header-inputs {
@@ -553,24 +506,20 @@
 <body>
     <!-- Study Indication Selector (Floating Left Sidebar) -->
     <div class="study-selector">
-        <h2>📋 Study Indication</h2>
-        <div class="study-option diabetes" data-study="diabetes">
-            Diabetes Study
+        <div class="study-option psych" data-indication="psych">
+            PSYCH
         </div>
-        <div class="study-option hypertension" data-study="hypertension">
-            Hypertension Study
+        <div class="study-option neuro" data-indication="neuro">
+            NEURO
         </div>
-        <div class="study-option obesity" data-study="obesity">
-            Obesity Study
+        <div class="study-option aud" data-indication="aud">
+            AUD
         </div>
-        <div class="study-option cardiovascular" data-study="cardiovascular">
-            Cardiovascular Study
+        <div class="study-option fibromyalgia" data-indication="fibromyalgia">
+            FIBRO
         </div>
-        <div class="study-option respiratory" data-study="respiratory">
-            Respiratory Study
-        </div>
-        <div class="study-option oncology" data-study="oncology">
-            Oncology Study
+        <div class="study-option backpain" data-indication="backpain">
+            BACK
         </div>
     </div>
 
@@ -754,283 +703,392 @@
             </div>
         </div>
 
-        <!-- Diabetes Study Specific Section -->
-        <div class="section diabetes-section hidden" id="diabetes-specific">
+        <!-- PSYCH Study Specific Section -->
+        <div class="section psych-section hidden" id="psych-specific">
             <h2 class="section-header">
-                <span class="section-icon">💉</span>
-                Diabetes Study Criteria
+                <span class="section-icon">🧠</span>
+                Psychiatric Study Criteria
             </h2>
             <div class="form-grid">
                 <div class="input-group">
-                    <label for="diabetes-duration">Diabetes Duration (years)</label>
-                    <input type="number" id="diabetes-duration" step="0.1" placeholder="Years since diagnosis">
-                </div>
-                <div class="input-group">
-                    <label for="diabetes-medications">Current Diabetes Medications</label>
-                    <select id="diabetes-medications" multiple size="5">
-                        <option value="metformin">Metformin</option>
-                        <option value="insulin">Insulin</option>
-                        <option value="glp1">GLP-1 Agonist</option>
-                        <option value="sglt2">SGLT2 Inhibitor</option>
-                        <option value="sulfonylurea">Sulfonylurea</option>
-                        <option value="dpp4">DPP-4 Inhibitor</option>
-                        <option value="none">None</option>
-                    </select>
-                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
-                </div>
-                <div class="input-group">
-                    <label>Diabetic Complications</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="retinopathy" value="retinopathy">
-                            <span>Retinopathy</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="neuropathy" value="neuropathy">
-                            <span>Neuropathy</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="nephropathy" value="nephropathy">
-                            <span>Nephropathy</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hypertension Study Specific Section -->
-        <div class="section hypertension-section hidden" id="hypertension-specific">
-            <h2 class="section-header">
-                <span class="section-icon">🩺</span>
-                Hypertension Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="hypertension-duration">Hypertension Duration (years)</label>
-                    <input type="number" id="hypertension-duration" step="0.1" placeholder="Years since diagnosis">
-                </div>
-                <div class="input-group">
-                    <label for="hypertension-medications">Current BP Medications</label>
-                    <select id="hypertension-medications" multiple size="5">
-                        <option value="ace-inhibitor">ACE Inhibitor</option>
-                        <option value="arb">ARB</option>
-                        <option value="beta-blocker">Beta Blocker</option>
-                        <option value="calcium-channel">Calcium Channel Blocker</option>
-                        <option value="diuretic">Diuretic</option>
-                        <option value="none">None</option>
-                    </select>
-                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
-                </div>
-                <div class="input-group">
-                    <label>Hypertension Stage</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="hypertension-stage" value="stage1">
-                            <span>Stage 1 (130-139/80-89)</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="hypertension-stage" value="stage2">
-                            <span>Stage 2 (≥140/90)</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="hypertension-stage" value="controlled">
-                            <span>Controlled on Medication</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Obesity Study Specific Section -->
-        <div class="section obesity-section hidden" id="obesity-specific">
-            <h2 class="section-header">
-                <span class="section-icon">⚖️</span>
-                Obesity Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="waist-circumference">Waist Circumference (cm)</label>
-                    <input type="number" id="waist-circumference" step="0.1" placeholder="Enter waist circumference">
-                </div>
-                <div class="input-group">
-                    <label for="weight-loss-attempts">Previous Weight Loss Attempts</label>
-                    <input type="number" id="weight-loss-attempts" min="0" placeholder="Number of attempts">
-                </div>
-                <div class="input-group">
-                    <label>Weight Loss Interventions</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="diet-only" value="diet">
-                            <span>Diet Only</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="exercise" value="exercise">
-                            <span>Exercise Program</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="medication" value="medication">
-                            <span>Weight Loss Medication</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="bariatric" value="bariatric">
-                            <span>Bariatric Surgery</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cardiovascular Study Specific Section -->
-        <div class="section cardiovascular-section hidden" id="cardiovascular-specific">
-            <h2 class="section-header">
-                <span class="section-icon">❤️‍🩹</span>
-                Cardiovascular Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label>Cardiovascular Events</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="mi-history" value="mi">
-                            <span>Myocardial Infarction</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="stroke-history" value="stroke">
-                            <span>Stroke</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="heart-failure" value="heart-failure">
-                            <span>Heart Failure</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="atrial-fib" value="afib">
-                            <span>Atrial Fibrillation</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="ejection-fraction">Ejection Fraction (%)</label>
-                    <input type="number" id="ejection-fraction" min="0" max="100" placeholder="Enter EF%">
-                </div>
-                <div class="input-group">
-                    <label for="nyha-class">NYHA Class</label>
-                    <select id="nyha-class">
-                        <option value="">Select NYHA Class</option>
-                        <option value="1">Class I (No limitation)</option>
-                        <option value="2">Class II (Slight limitation)</option>
-                        <option value="3">Class III (Marked limitation)</option>
-                        <option value="4">Class IV (Severe limitation)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Respiratory Study Specific Section -->
-        <div class="section respiratory-section hidden" id="respiratory-specific">
-            <h2 class="section-header">
-                <span class="section-icon">🫁</span>
-                Respiratory Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="fev1">FEV1 (% predicted)</label>
-                    <input type="number" id="fev1" step="0.1" placeholder="Enter FEV1%">
-                </div>
-                <div class="input-group">
-                    <label for="fvc">FVC (% predicted)</label>
-                    <input type="number" id="fvc" step="0.1" placeholder="Enter FVC%">
-                </div>
-                <div class="input-group">
-                    <label>Respiratory Conditions</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="asthma" value="asthma">
-                            <span>Asthma</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="copd" value="copd">
-                            <span>COPD</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="ild" value="ild">
-                            <span>Interstitial Lung Disease</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="oxygen-use">Supplemental Oxygen</label>
-                    <select id="oxygen-use">
-                        <option value="">Select</option>
-                        <option value="none">No oxygen use</option>
-                        <option value="prn">PRN (as needed)</option>
-                        <option value="continuous">Continuous</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Oncology Study Specific Section -->
-        <div class="section oncology-section hidden" id="oncology-specific">
-            <h2 class="section-header">
-                <span class="section-icon">🎗️</span>
-                Oncology Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="cancer-type">Cancer Type</label>
-                    <select id="cancer-type">
-                        <option value="">Select cancer type</option>
-                        <option value="breast">Breast Cancer</option>
-                        <option value="lung">Lung Cancer</option>
-                        <option value="colorectal">Colorectal Cancer</option>
-                        <option value="prostate">Prostate Cancer</option>
-                        <option value="leukemia">Leukemia</option>
-                        <option value="lymphoma">Lymphoma</option>
+                    <label for="psych-diagnosis">Primary Diagnosis</label>
+                    <select id="psych-diagnosis">
+                        <option value="">Select diagnosis</option>
+                        <option value="mdd">Major Depressive Disorder</option>
+                        <option value="gad">Generalized Anxiety Disorder</option>
+                        <option value="bipolar">Bipolar Disorder</option>
+                        <option value="schizophrenia">Schizophrenia</option>
+                        <option value="ptsd">PTSD</option>
+                        <option value="ocd">OCD</option>
                         <option value="other">Other</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <label for="cancer-stage">Cancer Stage</label>
-                    <select id="cancer-stage">
-                        <option value="">Select stage</option>
-                        <option value="0">Stage 0 (In situ)</option>
-                        <option value="1">Stage I</option>
-                        <option value="2">Stage II</option>
-                        <option value="3">Stage III</option>
-                        <option value="4">Stage IV</option>
+                    <label for="psych-duration">Duration of Current Episode (months)</label>
+                    <input type="number" id="psych-duration" step="0.1" placeholder="Months">
+                </div>
+                <div class="input-group">
+                    <label for="phq9-score">PHQ-9 Score</label>
+                    <input type="number" id="phq9-score" min="0" max="27" placeholder="0-27">
+                </div>
+                <div class="input-group">
+                    <label for="gad7-score">GAD-7 Score</label>
+                    <input type="number" id="gad7-score" min="0" max="21" placeholder="0-21">
+                </div>
+                <div class="input-group">
+                    <label>Current Psychiatric Medications</label>
+                    <select id="psych-medications" multiple size="5">
+                        <option value="ssri">SSRI</option>
+                        <option value="snri">SNRI</option>
+                        <option value="antipsychotic">Antipsychotic</option>
+                        <option value="mood-stabilizer">Mood Stabilizer</option>
+                        <option value="benzodiazepine">Benzodiazepine</option>
+                        <option value="none">None</option>
                     </select>
+                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
                 </div>
                 <div class="input-group">
                     <label>Previous Treatments</label>
                     <div class="checkbox-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" id="surgery" value="surgery">
-                            <span>Surgery</span>
+                            <input type="checkbox" id="psych-therapy" value="therapy">
+                            <span>Psychotherapy</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" id="chemotherapy" value="chemotherapy">
-                            <span>Chemotherapy</span>
+                            <input type="checkbox" id="psych-hospitalization" value="hospitalization">
+                            <span>Psychiatric Hospitalization</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" id="radiation" value="radiation">
-                            <span>Radiation</span>
+                            <input type="checkbox" id="psych-ect" value="ect">
+                            <span>ECT</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEURO Study Specific Section -->
+        <div class="section neuro-section hidden" id="neuro-specific">
+            <h2 class="section-header">
+                <span class="section-icon">🧬</span>
+                Neurological Study Criteria
+            </h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="neuro-diagnosis">Primary Diagnosis</label>
+                    <select id="neuro-diagnosis">
+                        <option value="">Select diagnosis</option>
+                        <option value="parkinsons">Parkinson's Disease</option>
+                        <option value="alzheimers">Alzheimer's Disease</option>
+                        <option value="ms">Multiple Sclerosis</option>
+                        <option value="epilepsy">Epilepsy</option>
+                        <option value="migraine">Migraine</option>
+                        <option value="neuropathy">Peripheral Neuropathy</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="neuro-duration">Disease Duration (years)</label>
+                    <input type="number" id="neuro-duration" step="0.1" placeholder="Years since diagnosis">
+                </div>
+                <div class="input-group">
+                    <label for="moca-score">MoCA Score</label>
+                    <input type="number" id="moca-score" min="0" max="30" placeholder="0-30">
+                </div>
+                <div class="input-group">
+                    <label for="mmse-score">MMSE Score</label>
+                    <input type="number" id="mmse-score" min="0" max="30" placeholder="0-30">
+                </div>
+                <div class="input-group">
+                    <label>Current Neurological Medications</label>
+                    <select id="neuro-medications" multiple size="5">
+                        <option value="levodopa">Levodopa</option>
+                        <option value="anticholinergic">Anticholinergic</option>
+                        <option value="antiepileptic">Antiepileptic</option>
+                        <option value="cholinesterase">Cholinesterase Inhibitor</option>
+                        <option value="immunomodulator">Immunomodulator</option>
+                        <option value="none">None</option>
+                    </select>
+                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
+                </div>
+                <div class="input-group">
+                    <label>Neurological Symptoms</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="neuro-tremor" value="tremor">
+                            <span>Tremor</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" id="immunotherapy" value="immunotherapy">
-                            <span>Immunotherapy</span>
+                            <input type="checkbox" id="neuro-cognitive" value="cognitive">
+                            <span>Cognitive Impairment</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="neuro-motor" value="motor">
+                            <span>Motor Dysfunction</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="neuro-sensory" value="sensory">
+                            <span>Sensory Changes</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AUD Study Specific Section -->
+        <div class="section aud-section hidden" id="aud-specific">
+            <h2 class="section-header">
+                <span class="section-icon">🍷</span>
+                Alcohol Use Disorder Study Criteria
+            </h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="aud-severity">AUD Severity</label>
+                    <select id="aud-severity">
+                        <option value="">Select severity</option>
+                        <option value="mild">Mild (2-3 criteria)</option>
+                        <option value="moderate">Moderate (4-5 criteria)</option>
+                        <option value="severe">Severe (6+ criteria)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="aud-duration">Duration of Problem Drinking (years)</label>
+                    <input type="number" id="aud-duration" step="0.1" placeholder="Years">
+                </div>
+                <div class="input-group">
+                    <label for="audit-score">AUDIT Score</label>
+                    <input type="number" id="audit-score" min="0" max="40" placeholder="0-40">
+                </div>
+                <div class="input-group">
+                    <label for="drinks-per-day">Average Drinks Per Day</label>
+                    <input type="number" id="drinks-per-day" step="0.1" placeholder="Standard drinks">
+                </div>
+                <div class="input-group">
+                    <label for="days-abstinent">Days Abstinent</label>
+                    <input type="number" id="days-abstinent" min="0" placeholder="Days">
+                </div>
+                <div class="input-group">
+                    <label for="last-drink">Date of Last Drink</label>
+                    <input type="date" id="last-drink">
+                </div>
+                <div class="input-group">
+                    <label>Previous Treatment</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="aud-detox" value="detox">
+                            <span>Detoxification</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="aud-inpatient" value="inpatient">
+                            <span>Inpatient Rehab</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="aud-outpatient" value="outpatient">
+                            <span>Outpatient Treatment</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="aud-aa" value="aa">
+                            <span>AA/12-Step Program</span>
                         </label>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="ecog-status">ECOG Performance Status</label>
-                    <select id="ecog-status">
-                        <option value="">Select ECOG status</option>
-                        <option value="0">0 - Fully active</option>
-                        <option value="1">1 - Restricted in strenuous activity</option>
-                        <option value="2">2 - Ambulatory, capable of self-care</option>
-                        <option value="3">3 - Limited self-care</option>
-                        <option value="4">4 - Completely disabled</option>
+                    <label>Current Medications</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="naltrexone" value="naltrexone">
+                            <span>Naltrexone</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="acamprosate" value="acamprosate">
+                            <span>Acamprosate</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="disulfiram" value="disulfiram">
+                            <span>Disulfiram</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FIBROMYALGIA Study Specific Section -->
+        <div class="section fibromyalgia-section hidden" id="fibromyalgia-specific">
+            <h2 class="section-header">
+                <span class="section-icon">💪</span>
+                Fibromyalgia Study Criteria
+            </h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="fibro-diagnosis-date">Date of Diagnosis</label>
+                    <input type="date" id="fibro-diagnosis-date">
+                </div>
+                <div class="input-group">
+                    <label for="fibro-duration">Duration of Symptoms (years)</label>
+                    <input type="number" id="fibro-duration" step="0.1" placeholder="Years">
+                </div>
+                <div class="input-group">
+                    <label for="fibro-pain-score">Average Pain Score (0-10)</label>
+                    <input type="number" id="fibro-pain-score" min="0" max="10" placeholder="0-10">
+                </div>
+                <div class="input-group">
+                    <label for="tender-points">Number of Tender Points</label>
+                    <input type="number" id="tender-points" min="0" max="18" placeholder="0-18">
+                </div>
+                <div class="input-group">
+                    <label for="fiq-score">FIQ Score (Fibromyalgia Impact Questionnaire)</label>
+                    <input type="number" id="fiq-score" min="0" max="100" step="0.1" placeholder="0-100">
+                </div>
+                <div class="input-group">
+                    <label>Primary Symptoms</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fibro-widespread-pain" value="widespread-pain">
+                            <span>Widespread Pain</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fibro-fatigue" value="fatigue">
+                            <span>Chronic Fatigue</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fibro-sleep" value="sleep">
+                            <span>Sleep Disturbance</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fibro-cognitive" value="cognitive">
+                            <span>Cognitive Difficulties (Fibro Fog)</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Current Medications</label>
+                    <select id="fibro-medications" multiple size="5">
+                        <option value="duloxetine">Duloxetine</option>
+                        <option value="pregabalin">Pregabalin</option>
+                        <option value="gabapentin">Gabapentin</option>
+                        <option value="amitriptyline">Amitriptyline</option>
+                        <option value="nsaids">NSAIDs</option>
+                        <option value="opioids">Opioids</option>
+                        <option value="none">None</option>
                     </select>
+                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
+                </div>
+                <div class="input-group">
+                    <label>Previous Treatments</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fibro-pt" value="pt">
+                            <span>Physical Therapy</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fibro-cbt" value="cbt">
+                            <span>Cognitive Behavioral Therapy</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fibro-exercise" value="exercise">
+                            <span>Exercise Program</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BACK PAIN Study Specific Section -->
+        <div class="section backpain-section hidden" id="backpain-specific">
+            <h2 class="section-header">
+                <span class="section-icon">🔙</span>
+                Chronic Back Pain Study Criteria
+            </h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="back-location">Primary Pain Location</label>
+                    <select id="back-location">
+                        <option value="">Select location</option>
+                        <option value="cervical">Cervical (Neck)</option>
+                        <option value="thoracic">Thoracic (Mid-back)</option>
+                        <option value="lumbar">Lumbar (Lower back)</option>
+                        <option value="sacral">Sacral</option>
+                        <option value="multiple">Multiple Regions</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="back-duration">Duration of Chronic Pain (months)</label>
+                    <input type="number" id="back-duration" step="0.1" placeholder="Months">
+                </div>
+                <div class="input-group">
+                    <label for="back-pain-score">Current Pain Score (0-10)</label>
+                    <input type="number" id="back-pain-score" min="0" max="10" placeholder="0-10">
+                </div>
+                <div class="input-group">
+                    <label for="oswestry-score">Oswestry Disability Index (%)</label>
+                    <input type="number" id="oswestry-score" min="0" max="100" placeholder="0-100%">
+                </div>
+                <div class="input-group">
+                    <label for="back-etiology">Etiology</label>
+                    <select id="back-etiology">
+                        <option value="">Select cause</option>
+                        <option value="degenerative">Degenerative Disc Disease</option>
+                        <option value="herniation">Disc Herniation</option>
+                        <option value="stenosis">Spinal Stenosis</option>
+                        <option value="spondylolisthesis">Spondylolisthesis</option>
+                        <option value="muscular">Muscular/Strain</option>
+                        <option value="unknown">Unknown/Idiopathic</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Radicular Symptoms</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="radicular" value="none">
+                            <span>No Radiculopathy</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="radicular" value="unilateral">
+                            <span>Unilateral Radiculopathy</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="radicular" value="bilateral">
+                            <span>Bilateral Radiculopathy</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Current Medications</label>
+                    <select id="back-medications" multiple size="5">
+                        <option value="nsaids">NSAIDs</option>
+                        <option value="acetaminophen">Acetaminophen</option>
+                        <option value="muscle-relaxant">Muscle Relaxants</option>
+                        <option value="gabapentin">Gabapentin/Pregabalin</option>
+                        <option value="opioids">Opioids</option>
+                        <option value="none">None</option>
+                    </select>
+                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
+                </div>
+                <div class="input-group">
+                    <label>Previous Treatments</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="back-pt" value="pt">
+                            <span>Physical Therapy</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="back-chiro" value="chiro">
+                            <span>Chiropractic Care</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="back-injections" value="injections">
+                            <span>Spinal Injections</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="back-surgery" value="surgery">
+                            <span>Spine Surgery</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="back-acupuncture" value="acupuncture">
+                            <span>Acupuncture</span>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1104,7 +1162,7 @@
     <!-- JavaScript -->
     <script>
         // Global state
-        let currentStudy = null;
+        let selectedIndication = null;
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -1115,10 +1173,10 @@
             // Set default date to today
             document.getElementById('screening-date').valueAsDate = new Date();
 
-            // Add event listeners for study selection
+            // Add event listeners for indication selection
             document.querySelectorAll('.study-option').forEach(option => {
                 option.addEventListener('click', function() {
-                    selectStudy(this.dataset.study);
+                    selectIndication(this.dataset.indication);
                 });
             });
 
@@ -1130,27 +1188,38 @@
             addValidationListeners();
         }
 
-        function selectStudy(studyType) {
-            currentStudy = studyType;
+        function selectIndication(indicationType) {
+            selectedIndication = indicationType;
 
-            // Update active state on study options
+            // Deselect all other indication buttons
             document.querySelectorAll('.study-option').forEach(option => {
-                option.classList.remove('active');
+                option.classList.remove('selected');
+                option.classList.remove('unselected');
             });
-            document.querySelector(`[data-study="${studyType}"]`).classList.add('active');
 
-            // Hide all study-specific sections
+            // Mark clicked button as selected
+            const selectedButton = document.querySelector(`[data-indication="${indicationType}"]`);
+            selectedButton.classList.add('selected');
+
+            // Mark all other buttons as unselected (opacity 0.5)
+            document.querySelectorAll('.study-option').forEach(option => {
+                if (option.dataset.indication !== indicationType) {
+                    option.classList.add('unselected');
+                }
+            });
+
+            // Hide ALL study-specific sections
             document.querySelectorAll('.section[id$="-specific"]').forEach(section => {
                 section.classList.add('hidden');
             });
 
-            // Show selected study section
-            const studySection = document.getElementById(`${studyType}-specific`);
+            // Show ONLY the study-specific section matching the selected indication
+            const studySection = document.getElementById(`${indicationType}-specific`);
             if (studySection) {
                 studySection.classList.remove('hidden');
             }
 
-            // Clear previous eligibility results
+            // Clear/reset the eligibility calculator
             document.getElementById('eligibility-result').className = 'eligibility-result pending';
             document.getElementById('eligibility-result').textContent = 'Click "Calculate Eligibility" to assess';
             document.getElementById('criteria-details').classList.add('hidden');
@@ -1186,16 +1255,16 @@
         }
 
         function calculateEligibility() {
-            if (!currentStudy) {
+            if (!selectedIndication) {
                 alert('Please select a study indication first!');
                 return;
             }
 
-            const criteria = evaluateCriteria(currentStudy);
+            const criteria = evaluateCriteria(selectedIndication);
             displayEligibilityResults(criteria);
         }
 
-        function evaluateCriteria(studyType) {
+        function evaluateCriteria(indicationType) {
             const results = {
                 eligible: true,
                 criteria: []
@@ -1260,188 +1329,212 @@
             }
 
             // Study-specific criteria
-            switch(studyType) {
-                case 'diabetes':
-                    evaluateDiabetesCriteria(results);
+            switch(indicationType) {
+                case 'psych':
+                    evaluatePsychCriteria(results);
                     break;
-                case 'hypertension':
-                    evaluateHypertensionCriteria(results);
+                case 'neuro':
+                    evaluateNeuroCriteria(results);
                     break;
-                case 'obesity':
-                    evaluateObesityCriteria(results);
+                case 'aud':
+                    evaluateAUDCriteria(results);
                     break;
-                case 'cardiovascular':
-                    evaluateCardiovascularCriteria(results);
+                case 'fibromyalgia':
+                    evaluateFibromyalgiaCriteria(results);
                     break;
-                case 'respiratory':
-                    evaluateRespiratoryCriteria(results);
-                    break;
-                case 'oncology':
-                    evaluateOncologyCriteria(results);
+                case 'backpain':
+                    evaluateBackPainCriteria(results);
                     break;
             }
 
             return results;
         }
 
-        function evaluateDiabetesCriteria(results) {
-            const hba1c = parseFloat(document.getElementById('hba1c').value);
+        function evaluatePsychCriteria(results) {
+            const phq9 = parseFloat(document.getElementById('phq9-score').value);
+            const diagnosis = document.getElementById('psych-diagnosis').value;
 
-            if (!hba1c || hba1c < 7.0 || hba1c > 11.0) {
+            if (!diagnosis) {
                 results.criteria.push({
-                    name: 'HbA1c 7.0-11.0%',
+                    name: 'Primary diagnosis documented',
                     met: false,
                     required: true
                 });
                 results.eligible = false;
             } else {
                 results.criteria.push({
-                    name: 'HbA1c 7.0-11.0%',
+                    name: 'Primary diagnosis documented',
                     met: true,
                     required: true
                 });
             }
 
-            const egfr = parseFloat(document.getElementById('egfr').value);
-            if (!egfr || egfr < 45) {
+            if (phq9 && (phq9 < 10 || phq9 > 23)) {
                 results.criteria.push({
-                    name: 'eGFR ≥45 mL/min/1.73m²',
+                    name: 'PHQ-9 score 10-23 (moderate to severe)',
                     met: false,
                     required: true
                 });
                 results.eligible = false;
-            } else {
+            } else if (phq9) {
                 results.criteria.push({
-                    name: 'eGFR ≥45 mL/min/1.73m²',
-                    met: true,
-                    required: true
-                });
-            }
-        }
-
-        function evaluateHypertensionCriteria(results) {
-            const systolic = parseInt(document.getElementById('systolic-bp').value);
-            const diastolic = parseInt(document.getElementById('diastolic-bp').value);
-
-            if (!systolic || !diastolic || systolic < 130 || diastolic < 80) {
-                results.criteria.push({
-                    name: 'BP ≥130/80 mmHg',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'BP ≥130/80 mmHg',
-                    met: true,
-                    required: true
-                });
-            }
-
-            if (systolic > 180 || diastolic > 110) {
-                results.criteria.push({
-                    name: 'BP not severely elevated (>180/110)',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'BP not severely elevated (>180/110)',
+                    name: 'PHQ-9 score 10-23 (moderate to severe)',
                     met: true,
                     required: true
                 });
             }
         }
 
-        function evaluateObesityCriteria(results) {
-            const bmi = parseFloat(document.getElementById('bmi').value);
+        function evaluateNeuroCriteria(results) {
+            const diagnosis = document.getElementById('neuro-diagnosis').value;
+            const moca = parseFloat(document.getElementById('moca-score').value);
 
-            if (!bmi || bmi < 30) {
+            if (!diagnosis) {
                 results.criteria.push({
-                    name: 'BMI ≥30 kg/m²',
+                    name: 'Neurological diagnosis documented',
                     met: false,
                     required: true
                 });
                 results.eligible = false;
             } else {
                 results.criteria.push({
-                    name: 'BMI ≥30 kg/m²',
+                    name: 'Neurological diagnosis documented',
+                    met: true,
+                    required: true
+                });
+            }
+
+            if (moca && moca < 18) {
+                results.criteria.push({
+                    name: 'MoCA score ≥18 (adequate cognition)',
+                    met: false,
+                    required: true
+                });
+                results.eligible = false;
+            } else if (moca) {
+                results.criteria.push({
+                    name: 'MoCA score ≥18 (adequate cognition)',
                     met: true,
                     required: true
                 });
             }
         }
 
-        function evaluateCardiovascularCriteria(results) {
-            const hasHistory = document.getElementById('mi-history').checked ||
-                              document.getElementById('stroke-history').checked ||
-                              document.getElementById('heart-failure').checked;
+        function evaluateAUDCriteria(results) {
+            const audit = parseFloat(document.getElementById('audit-score').value);
+            const daysAbstinent = parseFloat(document.getElementById('days-abstinent').value);
 
-            if (!hasHistory) {
+            if (!audit || audit < 8) {
                 results.criteria.push({
-                    name: 'History of cardiovascular event',
+                    name: 'AUDIT score ≥8 (hazardous drinking)',
                     met: false,
                     required: true
                 });
                 results.eligible = false;
             } else {
                 results.criteria.push({
-                    name: 'History of cardiovascular event',
+                    name: 'AUDIT score ≥8 (hazardous drinking)',
+                    met: true,
+                    required: true
+                });
+            }
+
+            if (daysAbstinent && daysAbstinent >= 3 && daysAbstinent <= 90) {
+                results.criteria.push({
+                    name: 'Abstinent 3-90 days',
+                    met: true,
+                    required: true
+                });
+            } else if (daysAbstinent) {
+                results.criteria.push({
+                    name: 'Abstinent 3-90 days',
+                    met: false,
+                    required: true
+                });
+                results.eligible = false;
+            }
+        }
+
+        function evaluateFibromyalgiaCriteria(results) {
+            const painScore = parseFloat(document.getElementById('fibro-pain-score').value);
+            const duration = parseFloat(document.getElementById('fibro-duration').value);
+
+            if (!painScore || painScore < 4) {
+                results.criteria.push({
+                    name: 'Pain score ≥4/10 (moderate to severe)',
+                    met: false,
+                    required: true
+                });
+                results.eligible = false;
+            } else {
+                results.criteria.push({
+                    name: 'Pain score ≥4/10 (moderate to severe)',
+                    met: true,
+                    required: true
+                });
+            }
+
+            if (!duration || duration < 0.25) { // 3 months minimum
+                results.criteria.push({
+                    name: 'Symptoms >3 months (chronic)',
+                    met: false,
+                    required: true
+                });
+                results.eligible = false;
+            } else {
+                results.criteria.push({
+                    name: 'Symptoms >3 months (chronic)',
                     met: true,
                     required: true
                 });
             }
         }
 
-        function evaluateRespiratoryCriteria(results) {
-            const fev1 = parseFloat(document.getElementById('fev1').value);
+        function evaluateBackPainCriteria(results) {
+            const painScore = parseFloat(document.getElementById('back-pain-score').value);
+            const duration = parseFloat(document.getElementById('back-duration').value);
+            const location = document.getElementById('back-location').value;
 
-            if (!fev1 || fev1 > 80) {
+            if (!location) {
                 results.criteria.push({
-                    name: 'FEV1 ≤80% predicted',
+                    name: 'Pain location documented',
                     met: false,
                     required: true
                 });
                 results.eligible = false;
             } else {
                 results.criteria.push({
-                    name: 'FEV1 ≤80% predicted',
-                    met: true,
-                    required: true
-                });
-            }
-        }
-
-        function evaluateOncologyCriteria(results) {
-            const cancerType = document.getElementById('cancer-type').value;
-            const ecogStatus = document.getElementById('ecog-status').value;
-
-            if (!cancerType) {
-                results.criteria.push({
-                    name: 'Cancer type documented',
-                    met: false,
-                    required: true
-                });
-                results.eligible = false;
-            } else {
-                results.criteria.push({
-                    name: 'Cancer type documented',
+                    name: 'Pain location documented',
                     met: true,
                     required: true
                 });
             }
 
-            if (!ecogStatus || parseInt(ecogStatus) > 2) {
+            if (!painScore || painScore < 4) {
                 results.criteria.push({
-                    name: 'ECOG status 0-2',
+                    name: 'Pain score ≥4/10 (moderate to severe)',
                     met: false,
                     required: true
                 });
                 results.eligible = false;
             } else {
                 results.criteria.push({
-                    name: 'ECOG status 0-2',
+                    name: 'Pain score ≥4/10 (moderate to severe)',
+                    met: true,
+                    required: true
+                });
+            }
+
+            if (!duration || duration < 3) { // 3 months minimum
+                results.criteria.push({
+                    name: 'Pain >3 months (chronic)',
+                    met: false,
+                    required: true
+                });
+                results.eligible = false;
+            } else {
+                results.criteria.push({
+                    name: 'Pain >3 months (chronic)',
                     met: true,
                     required: true
                 });
@@ -1490,11 +1583,12 @@
                     select.selectedIndex = 0;
                 });
 
-                // Reset study selection
+                // Reset indication selection
                 document.querySelectorAll('.study-option').forEach(option => {
-                    option.classList.remove('active');
+                    option.classList.remove('selected');
+                    option.classList.remove('unselected');
                 });
-                currentStudy = null;
+                selectedIndication = null;
 
                 // Hide study-specific sections
                 document.querySelectorAll('.section[id$="-specific"]').forEach(section => {
@@ -1532,7 +1626,7 @@
         function collectFormData() {
             const data = {
                 timestamp: new Date().toISOString(),
-                study: currentStudy,
+                indication: selectedIndication,
                 ccid: document.getElementById('ccid').value,
                 screeningDate: document.getElementById('screening-date').value,
                 demographics: {
@@ -1579,62 +1673,82 @@
                 }
             };
 
-            // Add study-specific data if applicable
-            if (currentStudy) {
-                data.studySpecific = collectStudySpecificData(currentStudy);
+            // Add indication-specific data if applicable
+            if (selectedIndication) {
+                data.indicationSpecific = collectIndicationSpecificData(selectedIndication);
             }
 
             return data;
         }
 
-        function collectStudySpecificData(studyType) {
+        function collectIndicationSpecificData(indicationType) {
             const data = {};
 
-            switch(studyType) {
-                case 'diabetes':
-                    data.duration = document.getElementById('diabetes-duration').value;
-                    data.medications = Array.from(document.getElementById('diabetes-medications').selectedOptions).map(opt => opt.value);
-                    data.retinopathy = document.getElementById('retinopathy').checked;
-                    data.neuropathy = document.getElementById('neuropathy').checked;
-                    data.nephropathy = document.getElementById('nephropathy').checked;
+            switch(indicationType) {
+                case 'psych':
+                    data.diagnosis = document.getElementById('psych-diagnosis').value;
+                    data.duration = document.getElementById('psych-duration').value;
+                    data.phq9Score = document.getElementById('phq9-score').value;
+                    data.gad7Score = document.getElementById('gad7-score').value;
+                    data.medications = Array.from(document.getElementById('psych-medications').selectedOptions).map(opt => opt.value);
+                    data.therapy = document.getElementById('psych-therapy').checked;
+                    data.hospitalization = document.getElementById('psych-hospitalization').checked;
+                    data.ect = document.getElementById('psych-ect').checked;
                     break;
-                case 'hypertension':
-                    data.duration = document.getElementById('hypertension-duration').value;
-                    data.medications = Array.from(document.getElementById('hypertension-medications').selectedOptions).map(opt => opt.value);
-                    data.stage = document.querySelector('input[name="hypertension-stage"]:checked')?.value;
+                case 'neuro':
+                    data.diagnosis = document.getElementById('neuro-diagnosis').value;
+                    data.duration = document.getElementById('neuro-duration').value;
+                    data.mocaScore = document.getElementById('moca-score').value;
+                    data.mmseScore = document.getElementById('mmse-score').value;
+                    data.medications = Array.from(document.getElementById('neuro-medications').selectedOptions).map(opt => opt.value);
+                    data.tremor = document.getElementById('neuro-tremor').checked;
+                    data.cognitive = document.getElementById('neuro-cognitive').checked;
+                    data.motor = document.getElementById('neuro-motor').checked;
+                    data.sensory = document.getElementById('neuro-sensory').checked;
                     break;
-                case 'obesity':
-                    data.waistCircumference = document.getElementById('waist-circumference').value;
-                    data.weightLossAttempts = document.getElementById('weight-loss-attempts').value;
-                    data.dietOnly = document.getElementById('diet-only').checked;
-                    data.exercise = document.getElementById('exercise').checked;
-                    data.medication = document.getElementById('medication').checked;
-                    data.bariatric = document.getElementById('bariatric').checked;
+                case 'aud':
+                    data.severity = document.getElementById('aud-severity').value;
+                    data.duration = document.getElementById('aud-duration').value;
+                    data.auditScore = document.getElementById('audit-score').value;
+                    data.drinksPerDay = document.getElementById('drinks-per-day').value;
+                    data.daysAbstinent = document.getElementById('days-abstinent').value;
+                    data.lastDrink = document.getElementById('last-drink').value;
+                    data.detox = document.getElementById('aud-detox').checked;
+                    data.inpatient = document.getElementById('aud-inpatient').checked;
+                    data.outpatient = document.getElementById('aud-outpatient').checked;
+                    data.aa = document.getElementById('aud-aa').checked;
+                    data.naltrexone = document.getElementById('naltrexone').checked;
+                    data.acamprosate = document.getElementById('acamprosate').checked;
+                    data.disulfiram = document.getElementById('disulfiram').checked;
                     break;
-                case 'cardiovascular':
-                    data.miHistory = document.getElementById('mi-history').checked;
-                    data.strokeHistory = document.getElementById('stroke-history').checked;
-                    data.heartFailure = document.getElementById('heart-failure').checked;
-                    data.atrialFib = document.getElementById('atrial-fib').checked;
-                    data.ejectionFraction = document.getElementById('ejection-fraction').value;
-                    data.nyhaClass = document.getElementById('nyha-class').value;
+                case 'fibromyalgia':
+                    data.diagnosisDate = document.getElementById('fibro-diagnosis-date').value;
+                    data.duration = document.getElementById('fibro-duration').value;
+                    data.painScore = document.getElementById('fibro-pain-score').value;
+                    data.tenderPoints = document.getElementById('tender-points').value;
+                    data.fiqScore = document.getElementById('fiq-score').value;
+                    data.widespreadPain = document.getElementById('fibro-widespread-pain').checked;
+                    data.fatigue = document.getElementById('fibro-fatigue').checked;
+                    data.sleep = document.getElementById('fibro-sleep').checked;
+                    data.cognitive = document.getElementById('fibro-cognitive').checked;
+                    data.medications = Array.from(document.getElementById('fibro-medications').selectedOptions).map(opt => opt.value);
+                    data.pt = document.getElementById('fibro-pt').checked;
+                    data.cbt = document.getElementById('fibro-cbt').checked;
+                    data.exercise = document.getElementById('fibro-exercise').checked;
                     break;
-                case 'respiratory':
-                    data.fev1 = document.getElementById('fev1').value;
-                    data.fvc = document.getElementById('fvc').value;
-                    data.asthma = document.getElementById('asthma').checked;
-                    data.copd = document.getElementById('copd').checked;
-                    data.ild = document.getElementById('ild').checked;
-                    data.oxygenUse = document.getElementById('oxygen-use').value;
-                    break;
-                case 'oncology':
-                    data.cancerType = document.getElementById('cancer-type').value;
-                    data.cancerStage = document.getElementById('cancer-stage').value;
-                    data.surgery = document.getElementById('surgery').checked;
-                    data.chemotherapy = document.getElementById('chemotherapy').checked;
-                    data.radiation = document.getElementById('radiation').checked;
-                    data.immunotherapy = document.getElementById('immunotherapy').checked;
-                    data.ecogStatus = document.getElementById('ecog-status').value;
+                case 'backpain':
+                    data.location = document.getElementById('back-location').value;
+                    data.duration = document.getElementById('back-duration').value;
+                    data.painScore = document.getElementById('back-pain-score').value;
+                    data.oswestryScore = document.getElementById('oswestry-score').value;
+                    data.etiology = document.getElementById('back-etiology').value;
+                    data.radicular = document.querySelector('input[name="radicular"]:checked')?.value;
+                    data.medications = Array.from(document.getElementById('back-medications').selectedOptions).map(opt => opt.value);
+                    data.pt = document.getElementById('back-pt').checked;
+                    data.chiro = document.getElementById('back-chiro').checked;
+                    data.injections = document.getElementById('back-injections').checked;
+                    data.surgery = document.getElementById('back-surgery').checked;
+                    data.acupuncture = document.getElementById('back-acupuncture').checked;
                     break;
             }
 
@@ -1662,7 +1776,7 @@
                 ['BASIC INFORMATION'],
                 ['CCID:', formData.ccid],
                 ['Screening Date:', formData.screeningDate],
-                ['Study Type:', formData.study || 'Not selected'],
+                ['Study Indication:', formData.indication || 'Not selected'],
                 [''],
                 ['DEMOGRAPHICS'],
                 ['Age:', formData.demographics.age],
@@ -1707,10 +1821,10 @@
                 ['Other Exclusions:', formData.exclusions.other]
             ];
 
-            // Add study-specific data if available
-            if (formData.studySpecific) {
-                mainData.push([''], ['STUDY-SPECIFIC DATA']);
-                Object.entries(formData.studySpecific).forEach(([key, value]) => {
+            // Add indication-specific data if available
+            if (formData.indicationSpecific) {
+                mainData.push([''], ['INDICATION-SPECIFIC DATA']);
+                Object.entries(formData.indicationSpecific).forEach(([key, value]) => {
                     mainData.push([key + ':', Array.isArray(value) ? value.join(', ') : value]);
                 });
             }

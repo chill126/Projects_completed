@@ -689,6 +689,74 @@
             }
         }
 
+        /* ===== MEDICAL HISTORY TABLE ===== */
+        .medical-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .medical-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .medical-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .medical-table tbody tr {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .medical-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .medical-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+
+        .medical-table td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .medical-table input[type="text"],
+        .medical-table input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .medical-table input[type="text"]:focus,
+        .medical-table input[type="date"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .medical-table input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .medical-table .remove-row-btn:hover {
+            background: #c0392b !important;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
         /* ===== PRINT STYLES ===== */
         @media print {
             body {
@@ -851,45 +919,95 @@
         </div>
 
         <!-- Medical History Section -->
-        <div class="section">
-            <h2 class="section-header">
-                <span class="section-icon">📝</span>
+        <div class="section" style="border-left: 4px solid #E74C3C;">
+            <h2 style="color: #2d3748; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
                 Medical History
             </h2>
-            <div class="checkbox-group">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="history-diabetes" value="diabetes">
-                    <span>Diabetes Mellitus</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="history-hypertension" value="hypertension">
-                    <span>Hypertension</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="history-cardiovascular" value="cardiovascular">
-                    <span>Cardiovascular Disease</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="history-respiratory" value="respiratory">
-                    <span>Respiratory Disease</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="history-cancer" value="cancer">
-                    <span>Cancer</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="history-kidney" value="kidney">
-                    <span>Kidney Disease</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="history-liver" value="liver">
-                    <span>Liver Disease</span>
-                </label>
-            </div>
-            <div class="input-group mt-2">
-                <label for="other-conditions">Other Conditions</label>
-                <textarea id="other-conditions" rows="3" placeholder="List any other medical conditions..."></textarea>
-            </div>
+
+            <table class="medical-table" id="medicalHistoryTable">
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Condition Name</th>
+                        <th style="width: 15%;">Start Date</th>
+                        <th style="width: 15%;">End Date</th>
+                        <th style="width: 10%; text-align: center;">Current</th>
+                        <th style="width: 15%; text-align: center;">Con Med</th>
+                        <th style="width: 15%; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="medical-history-row">
+                        <td>
+                            <input type="text" class="condition-name" placeholder="Condition name">
+                        </td>
+                        <td>
+                            <input type="date" class="start-date">
+                        </td>
+                        <td>
+                            <input type="date" class="end-date">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="current-condition">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="has-con-med">
+                        </td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="medical-history-row">
+                        <td>
+                            <input type="text" class="condition-name" placeholder="Condition name">
+                        </td>
+                        <td>
+                            <input type="date" class="start-date">
+                        </td>
+                        <td>
+                            <input type="date" class="end-date">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="current-condition">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="has-con-med">
+                        </td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="medical-history-row">
+                        <td>
+                            <input type="text" class="condition-name" placeholder="Condition name">
+                        </td>
+                        <td>
+                            <input type="date" class="start-date">
+                        </td>
+                        <td>
+                            <input type="date" class="end-date">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="current-condition">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="has-con-med">
+                        </td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" id="addMedicalHistoryRow" style="margin-top: 15px; padding: 10px 20px; background: #27AE60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+                + Add Condition
+            </button>
         </div>
 
         <!-- PSYCH Study Specific Section -->
@@ -1417,6 +1535,48 @@
 
             // Add real-time validation
             addValidationListeners();
+
+            // Initialize medical history table
+            // Attach listeners to existing rows
+            document.querySelectorAll('.medical-history-row').forEach(row => {
+                attachMedicalHistoryListeners(row);
+            });
+
+            // Add Medical History Row button
+            document.getElementById('addMedicalHistoryRow').addEventListener('click', function() {
+                const table = document.getElementById('medicalHistoryTable').getElementsByTagName('tbody')[0];
+                const rowCount = table.rows.length;
+
+                if (rowCount >= 50) {
+                    alert('Maximum 50 conditions allowed');
+                    return;
+                }
+
+                const newRow = table.insertRow();
+                newRow.className = 'medical-history-row';
+                newRow.innerHTML = `
+                    <td><input type="text" class="condition-name" placeholder="Condition name"></td>
+                    <td><input type="date" class="start-date"></td>
+                    <td><input type="date" class="end-date"></td>
+                    <td style="text-align: center;"><input type="checkbox" class="current-condition"></td>
+                    <td style="text-align: center;"><input type="checkbox" class="has-con-med"></td>
+                    <td style="text-align: center;">
+                        <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                            Remove
+                        </button>
+                    </td>
+                `;
+
+                // Add event listeners to new row
+                attachMedicalHistoryListeners(newRow);
+
+                // Animate row in
+                newRow.style.opacity = '0';
+                setTimeout(() => {
+                    newRow.style.transition = 'opacity 0.3s ease';
+                    newRow.style.opacity = '1';
+                }, 10);
+            });
         }
 
         function validateCCID() {
@@ -1515,6 +1675,80 @@
             bmiDisplay.classList.add('show');
         }
 
+        // ===== MEDICAL HISTORY TABLE FUNCTIONS =====
+
+        function attachMedicalHistoryListeners(row) {
+            // Remove button
+            const removeBtn = row.querySelector('.remove-row-btn');
+            removeBtn.addEventListener('click', function() {
+                const hasData = Array.from(row.querySelectorAll('input')).some(input =>
+                    input.type === 'checkbox' ? input.checked : input.value.trim() !== ''
+                );
+
+                if (hasData) {
+                    if (confirm('Remove this condition? This cannot be undone.')) {
+                        row.remove();
+                    }
+                } else {
+                    row.remove();
+                }
+
+                // Ensure at least 1 empty row remains
+                const table = document.getElementById('medicalHistoryTable').getElementsByTagName('tbody')[0];
+                if (table.rows.length === 0) {
+                    document.getElementById('addMedicalHistoryRow').click();
+                }
+            });
+
+            // Current condition checkbox logic
+            const currentCheckbox = row.querySelector('.current-condition');
+            const endDateInput = row.querySelector('.end-date');
+
+            currentCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    endDateInput.value = '';
+                    endDateInput.disabled = true;
+                    endDateInput.style.background = '#e2e8f0';
+                } else {
+                    endDateInput.disabled = false;
+                    endDateInput.style.background = 'white';
+                }
+            });
+
+            // Validate: End date must be after start date
+            const startDateInput = row.querySelector('.start-date');
+            endDateInput.addEventListener('change', function() {
+                if (startDateInput.value && endDateInput.value) {
+                    if (new Date(endDateInput.value) < new Date(startDateInput.value)) {
+                        alert('End date must be after start date');
+                        endDateInput.value = '';
+                    }
+                }
+            });
+        }
+
+        // Function to collect medical history data
+        function getMedicalHistoryData() {
+            const data = [];
+            const rows = document.querySelectorAll('.medical-history-row');
+
+            rows.forEach(row => {
+                const condition = row.querySelector('.condition-name').value.trim();
+
+                if (condition) {
+                    data.push({
+                        condition: condition,
+                        startDate: row.querySelector('.start-date').value,
+                        endDate: row.querySelector('.end-date').value,
+                        isCurrent: row.querySelector('.current-condition').checked,
+                        hasConMed: row.querySelector('.has-con-med').checked
+                    });
+                }
+            });
+
+            return data;
+        }
+
         function addValidationListeners() {
             // Add listeners for numeric range validation
             const numericInputs = document.querySelectorAll('input[type="number"]');
@@ -1591,6 +1825,27 @@
                 document.querySelector('.edit-datetime-btn').textContent = 'Edit';
                 document.querySelector('.edit-datetime-btn').style.background = '#4A90E2';
 
+                // Clear medical history table and reset to 3 empty rows
+                const tbody = document.getElementById('medicalHistoryTable').getElementsByTagName('tbody')[0];
+                tbody.innerHTML = '';
+                for (let i = 0; i < 3; i++) {
+                    const row = tbody.insertRow();
+                    row.className = 'medical-history-row';
+                    row.innerHTML = `
+                        <td><input type="text" class="condition-name" placeholder="Condition name"></td>
+                        <td><input type="date" class="start-date"></td>
+                        <td><input type="date" class="end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="current-condition"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="has-con-med"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    `;
+                    attachMedicalHistoryListeners(row);
+                }
+
                 alert('Form cleared successfully!');
             }
         }
@@ -1629,16 +1884,7 @@
                     bmi: document.getElementById('bmiValue').textContent !== '--' ? document.getElementById('bmiValue').textContent : '',
                     bmiCategory: document.getElementById('bmiCategory').textContent !== '--' ? document.getElementById('bmiCategory').textContent : ''
                 },
-                medicalHistory: {
-                    diabetes: document.getElementById('history-diabetes').checked,
-                    hypertension: document.getElementById('history-hypertension').checked,
-                    cardiovascular: document.getElementById('history-cardiovascular').checked,
-                    respiratory: document.getElementById('history-respiratory').checked,
-                    cancer: document.getElementById('history-cancer').checked,
-                    kidney: document.getElementById('history-kidney').checked,
-                    liver: document.getElementById('history-liver').checked,
-                    otherConditions: document.getElementById('other-conditions').value
-                },
+                medicalHistory: getMedicalHistoryData(),
                 exclusions: {
                     pregnant: document.getElementById('pregnant-nursing').checked,
                     otherTrial: document.getElementById('participating-other').checked,
@@ -1766,15 +2012,26 @@
                 ['BMI:', formData.demographics.bmi],
                 ['BMI Category:', formData.demographics.bmiCategory],
                 [''],
-                ['MEDICAL HISTORY'],
-                ['Diabetes:', formData.medicalHistory.diabetes ? 'Yes' : 'No'],
-                ['Hypertension:', formData.medicalHistory.hypertension ? 'Yes' : 'No'],
-                ['Cardiovascular:', formData.medicalHistory.cardiovascular ? 'Yes' : 'No'],
-                ['Respiratory:', formData.medicalHistory.respiratory ? 'Yes' : 'No'],
-                ['Cancer:', formData.medicalHistory.cancer ? 'Yes' : 'No'],
-                ['Kidney:', formData.medicalHistory.kidney ? 'Yes' : 'No'],
-                ['Liver:', formData.medicalHistory.liver ? 'Yes' : 'No'],
-                ['Other Conditions:', formData.medicalHistory.otherConditions],
+                ['MEDICAL HISTORY']
+            ];
+
+            // Add medical history table data
+            if (formData.medicalHistory && formData.medicalHistory.length > 0) {
+                mainData.push(['Condition', 'Start Date', 'End Date', 'Current', 'Taking Medication']);
+                formData.medicalHistory.forEach(condition => {
+                    mainData.push([
+                        condition.condition,
+                        condition.startDate || '',
+                        condition.endDate || '',
+                        condition.isCurrent ? 'Yes' : 'No',
+                        condition.hasConMed ? 'Yes' : 'No'
+                    ]);
+                });
+            } else {
+                mainData.push(['No medical history recorded']);
+            }
+
+            mainData.push(
                 [''],
                 ['EXCLUSION CRITERIA'],
                 ['Pregnant/Nursing:', formData.exclusions.pregnant ? 'Yes' : 'No'],

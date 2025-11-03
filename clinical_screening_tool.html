@@ -916,6 +916,11 @@
             </div>
         </div>
 
+        <!-- Allergy Counter (Fixed Position) -->
+        <div id="allergyCounter" style="display: none; position: fixed; top: 20px; right: 20px; background: #E74C3C; color: white; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; font-weight: 700;">
+            ⚠️ <span id="allergyCount">0</span> Medication Allergies on File
+        </div>
+
         <!-- Demographics Section -->
         <div class="demographics-section">
             <h2>Demographics</h2>
@@ -1335,6 +1340,32 @@
             <button type="button" id="addMedicationRow" style="margin-top: 15px; padding: 10px 20px; background: #9B59B6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
                 + Add Medication
             </button>
+
+            <!-- Medication Allergies Section -->
+            <div class="allergies-section" style="margin-top: 30px; padding: 20px; background: #FFE6E6; border: 2px solid #E74C3C; border-radius: 8px;">
+                <h3 style="color: #C0392B; font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <span>⚠️</span>
+                    <span>Medication Allergies</span>
+                </h3>
+
+                <table class="allergies-table" id="allergiesTable" style="width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%); color: white;">
+                            <th style="padding: 12px; text-align: left;">Medication/Substance</th>
+                            <th style="padding: 12px; text-align: left;">Reaction/Symptoms</th>
+                            <th style="padding: 12px; text-align: left;">Last Reaction Date</th>
+                            <th style="padding: 12px; text-align: center; width: 100px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added dynamically -->
+                    </tbody>
+                </table>
+
+                <button type="button" id="addAllergyRow" style="margin-top: 15px; padding: 10px 20px; background: #C0392B; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+                    + Add Allergy
+                </button>
+            </div>
         </div>
 
         <!-- PSYCH Study Specific Section -->
@@ -2005,6 +2036,56 @@
                     newRow.style.opacity = '1';
                 }, 10);
             });
+
+            // Initialize allergies table
+            // Add Allergy Row button
+            document.getElementById('addAllergyRow').addEventListener('click', function() {
+                const table = document.getElementById('allergiesTable').getElementsByTagName('tbody')[0];
+
+                const newRow = table.insertRow();
+                newRow.className = 'allergy-row';
+                newRow.innerHTML = `
+                    <td><input type="text" class="allergy-name" placeholder="Medication or substance name" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                    <td><input type="text" class="allergy-reaction" placeholder="Describe reaction" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                    <td><input type="date" class="allergy-date" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                    <td style="text-align: center;">
+                        <button type="button" class="remove-allergy-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                            Remove
+                        </button>
+                    </td>
+                `;
+
+                // Add remove listener
+                newRow.querySelector('.remove-allergy-btn').addEventListener('click', function() {
+                    const hasData = newRow.querySelector('.allergy-name').value.trim() !== '';
+
+                    if (hasData) {
+                        if (confirm('Remove this allergy? This cannot be undone.')) {
+                            newRow.remove();
+                            updateAllergyCounter();
+                        }
+                    } else {
+                        newRow.remove();
+                        updateAllergyCounter();
+                    }
+                });
+
+                // Update counter when allergy name changes
+                const allergyNameInput = newRow.querySelector('.allergy-name');
+                allergyNameInput.addEventListener('input', updateAllergyCounter);
+
+                // Animate row in
+                newRow.style.opacity = '0';
+                setTimeout(() => {
+                    newRow.style.transition = 'opacity 0.3s ease';
+                    newRow.style.opacity = '1';
+                }, 10);
+            });
+
+            // Initialize with 2 empty allergy rows
+            for (let i = 0; i < 2; i++) {
+                document.getElementById('addAllergyRow').click();
+            }
         }
 
         function validateCCID() {
@@ -2391,6 +2472,40 @@
             return allMeds.filter(med => med.category === category);
         }
 
+        // ===== ALLERGIES FUNCTIONS =====
+
+        function getAllergiesData() {
+            const data = [];
+            const rows = document.querySelectorAll('.allergy-row');
+
+            rows.forEach(row => {
+                const name = row.querySelector('.allergy-name').value.trim();
+
+                if (name) {
+                    data.push({
+                        medication: name,
+                        reaction: row.querySelector('.allergy-reaction').value,
+                        lastDate: row.querySelector('.allergy-date').value
+                    });
+                }
+            });
+
+            return data;
+        }
+
+        function updateAllergyCounter() {
+            const allergies = getAllergiesData();
+            const counter = document.getElementById('allergyCounter');
+            const count = document.getElementById('allergyCount');
+
+            if (allergies.length > 0) {
+                count.textContent = allergies.length;
+                counter.style.display = 'block';
+            } else {
+                counter.style.display = 'none';
+            }
+        }
+
         function addValidationListeners() {
             // Add listeners for numeric range validation
             const numericInputs = document.querySelectorAll('input[type="number"]');
@@ -2538,6 +2653,16 @@
                     attachMedicationListeners(row);
                 }
 
+                // Reset allergies table to 2 empty rows
+                const allergiesTbody = document.getElementById('allergiesTable').getElementsByTagName('tbody')[0];
+                allergiesTbody.innerHTML = '';
+                for (let i = 0; i < 2; i++) {
+                    document.getElementById('addAllergyRow').click();
+                }
+
+                // Hide allergy counter
+                document.getElementById('allergyCounter').style.display = 'none';
+
                 alert('Form cleared successfully!');
             }
         }
@@ -2579,6 +2704,7 @@
                 medicalHistory: getMedicalHistoryData(),
                 substanceUse: getSubstanceUseData(),
                 medications: getMedicationsData(),
+                allergies: getAllergiesData(),
                 exclusions: {
                     pregnant: document.getElementById('pregnant-nursing').checked,
                     otherTrial: document.getElementById('participating-other').checked,
@@ -2763,6 +2889,21 @@
                 });
             } else {
                 mainData.push(['No medications recorded']);
+            }
+
+            // Add allergies data
+            mainData.push([''], ['MEDICATION ALLERGIES']);
+            if (formData.allergies && formData.allergies.length > 0) {
+                mainData.push(['Medication/Substance', 'Reaction/Symptoms', 'Last Reaction Date']);
+                formData.allergies.forEach(allergy => {
+                    mainData.push([
+                        allergy.medication,
+                        allergy.reaction || '',
+                        allergy.lastDate || ''
+                    ]);
+                });
+            } else {
+                mainData.push(['No medication allergies reported']);
             }
 
             mainData.push(

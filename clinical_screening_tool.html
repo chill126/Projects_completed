@@ -757,6 +757,87 @@
             transition: all 0.2s ease;
         }
 
+        /* ===== MEDICATIONS TABLE ===== */
+        .medications-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .medications-table thead {
+            background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%);
+            color: white;
+        }
+
+        .medications-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .medications-table tbody tr {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .medications-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .medications-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+
+        .medications-table td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .medications-table input[type="text"],
+        .medications-table input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .medications-table input[type="text"]:focus,
+        .medications-table input[type="date"]:focus {
+            outline: none;
+            border-color: #9B59B6;
+        }
+
+        .medications-table input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .medications-table select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .medications-table select:focus {
+            outline: none;
+            border-color: #9B59B6;
+        }
+
+        .medications-table .remove-row-btn:hover {
+            background: #c0392b !important;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
         /* ===== PRINT STYLES ===== */
         @media print {
             body {
@@ -1102,6 +1183,158 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Medications Section -->
+        <div class="section" style="border-left: 4px solid #9B59B6;">
+            <h2 style="color: #2d3748; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
+                Current & Recent Medications
+            </h2>
+
+            <table class="medications-table" id="medicationsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Medication Name</th>
+                        <th style="width: 15%;">Dosage</th>
+                        <th style="width: 15%;">Frequency</th>
+                        <th style="width: 12%;">Start Date</th>
+                        <th style="width: 12%;">End Date</th>
+                        <th style="width: 8%; text-align: center;">Current</th>
+                        <th style="width: 13%; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="medication-row">
+                        <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                        <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                        <td>
+                            <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                                <option value="">Select...</option>
+                                <option value="qd">Once daily (QD)</option>
+                                <option value="bid">Twice daily (BID)</option>
+                                <option value="tid">Three times daily (TID)</option>
+                                <option value="qid">Four times daily (QID)</option>
+                                <option value="prn">As needed (PRN)</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="eod">Every other day</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="medication-start-date"></td>
+                        <td><input type="date" class="medication-end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="medication-row">
+                        <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                        <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                        <td>
+                            <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                                <option value="">Select...</option>
+                                <option value="qd">Once daily (QD)</option>
+                                <option value="bid">Twice daily (BID)</option>
+                                <option value="tid">Three times daily (TID)</option>
+                                <option value="qid">Four times daily (QID)</option>
+                                <option value="prn">As needed (PRN)</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="eod">Every other day</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="medication-start-date"></td>
+                        <td><input type="date" class="medication-end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="medication-row">
+                        <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                        <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                        <td>
+                            <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                                <option value="">Select...</option>
+                                <option value="qd">Once daily (QD)</option>
+                                <option value="bid">Twice daily (BID)</option>
+                                <option value="tid">Three times daily (TID)</option>
+                                <option value="qid">Four times daily (QID)</option>
+                                <option value="prn">As needed (PRN)</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="eod">Every other day</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="medication-start-date"></td>
+                        <td><input type="date" class="medication-end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="medication-row">
+                        <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                        <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                        <td>
+                            <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                                <option value="">Select...</option>
+                                <option value="qd">Once daily (QD)</option>
+                                <option value="bid">Twice daily (BID)</option>
+                                <option value="tid">Three times daily (TID)</option>
+                                <option value="qid">Four times daily (QID)</option>
+                                <option value="prn">As needed (PRN)</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="eod">Every other day</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="medication-start-date"></td>
+                        <td><input type="date" class="medication-end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="medication-row">
+                        <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                        <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                        <td>
+                            <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                                <option value="">Select...</option>
+                                <option value="qd">Once daily (QD)</option>
+                                <option value="bid">Twice daily (BID)</option>
+                                <option value="tid">Three times daily (TID)</option>
+                                <option value="qid">Four times daily (QID)</option>
+                                <option value="prn">As needed (PRN)</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="eod">Every other day</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="medication-start-date"></td>
+                        <td><input type="date" class="medication-end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" id="addMedicationRow" style="margin-top: 15px; padding: 10px 20px; background: #9B59B6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+                + Add Medication
+            </button>
         </div>
 
         <!-- PSYCH Study Specific Section -->
@@ -1718,6 +1951,60 @@
                     }
                 });
             });
+
+            // Initialize medications table
+            // Attach listeners to existing rows
+            document.querySelectorAll('.medication-row').forEach(row => {
+                attachMedicationListeners(row);
+            });
+
+            // Add Medication Row button
+            document.getElementById('addMedicationRow').addEventListener('click', function() {
+                const table = document.getElementById('medicationsTable').getElementsByTagName('tbody')[0];
+                const rowCount = table.rows.length;
+
+                if (rowCount >= 100) {
+                    alert('Maximum 100 medications allowed');
+                    return;
+                }
+
+                const newRow = table.insertRow();
+                newRow.className = 'medication-row';
+                newRow.innerHTML = `
+                    <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                    <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                    <td>
+                        <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                            <option value="">Select...</option>
+                            <option value="qd">Once daily (QD)</option>
+                            <option value="bid">Twice daily (BID)</option>
+                            <option value="tid">Three times daily (TID)</option>
+                            <option value="qid">Four times daily (QID)</option>
+                            <option value="prn">As needed (PRN)</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="eod">Every other day</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </td>
+                    <td><input type="date" class="medication-start-date"></td>
+                    <td><input type="date" class="medication-end-date"></td>
+                    <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                    <td style="text-align: center;">
+                        <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                            Remove
+                        </button>
+                    </td>
+                `;
+
+                attachMedicationListeners(newRow);
+
+                // Animate row in
+                newRow.style.opacity = '0';
+                setTimeout(() => {
+                    newRow.style.transition = 'opacity 0.3s ease';
+                    newRow.style.opacity = '1';
+                }, 10);
+            });
         }
 
         function validateCCID() {
@@ -1954,6 +2241,156 @@
             return data;
         }
 
+        // ===== MEDICATIONS TABLE FUNCTIONS =====
+
+        function categorizeMedication(medName) {
+            const categories = {
+                antidepressants: [
+                    'escitalopram', 'lexapro', 'sertraline', 'zoloft', 'fluoxetine', 'prozac',
+                    'paroxetine', 'paxil', 'citalopram', 'celexa', 'venlafaxine', 'effexor',
+                    'duloxetine', 'cymbalta', 'bupropion', 'wellbutrin', 'mirtazapine', 'remeron',
+                    'trazodone', 'desvenlafaxine', 'pristiq', 'levomilnacipran', 'fetzima',
+                    'vilazodone', 'viibryd', 'vortioxetine', 'trintellix', 'amitriptyline',
+                    'nortriptyline', 'pamelor', 'imipramine', 'tofranil', 'doxepin',
+                    'phenelzine', 'nardil', 'tranylcypromine', 'parnate', 'selegiline', 'emsam'
+                ],
+                anxiolytics: [
+                    'buspirone', 'buspar', 'hydroxyzine', 'vistaril', 'atarax'
+                ],
+                benzodiazepines: [
+                    'alprazolam', 'xanax', 'clonazepam', 'klonopin', 'lorazepam', 'ativan',
+                    'diazepam', 'valium', 'temazepam', 'restoril', 'oxazepam', 'serax',
+                    'chlordiazepoxide', 'librium', 'clorazepate', 'tranxene', 'midazolam',
+                    'versed', 'triazolam', 'halcion'
+                ],
+                antipsychotics: [
+                    'risperidone', 'risperdal', 'olanzapine', 'zyprexa', 'quetiapine', 'seroquel',
+                    'aripiprazole', 'abilify', 'ziprasidone', 'geodon', 'haloperidol', 'haldol',
+                    'paliperidone', 'invega', 'lurasidone', 'latuda', 'asenapine', 'saphris',
+                    'brexpiprazole', 'rexulti', 'cariprazine', 'vraylar', 'clozapine', 'clozaril'
+                ],
+                mood_stabilizers: [
+                    'lithium', 'valproate', 'depakote', 'carbamazepine', 'tegretol', 'lamotrigine',
+                    'lamictal', 'oxcarbazepine', 'trileptal'
+                ],
+                stimulants: [
+                    'methylphenidate', 'ritalin', 'concerta', 'amphetamine', 'adderall',
+                    'dexmethylphenidate', 'focalin', 'lisdexamfetamine', 'vyvanse',
+                    'dextroamphetamine', 'dexedrine', 'modafinil', 'provigil',
+                    'armodafinil', 'nuvigil', 'atomoxetine', 'strattera'
+                ],
+                memory_medications: [
+                    'donepezil', 'aricept', 'rivastigmine', 'exelon', 'galantamine',
+                    'razadyne', 'memantine', 'namenda'
+                ],
+                opioids: [
+                    'hydrocodone', 'oxycodone', 'oxycontin', 'percocet', 'morphine',
+                    'fentanyl', 'tramadol', 'ultram', 'codeine', 'hydromorphone',
+                    'dilaudid', 'buprenorphine', 'suboxone', 'methadone'
+                ],
+                aud_medications: [
+                    'naltrexone', 'revia', 'vivitrol', 'acamprosate', 'campral',
+                    'disulfiram', 'antabuse'
+                ]
+            };
+
+            for (const [category, meds] of Object.entries(categories)) {
+                if (meds.some(med => medName.includes(med))) {
+                    return category;
+                }
+            }
+
+            return 'other';
+        }
+
+        function attachMedicationListeners(row) {
+            // Remove button
+            const removeBtn = row.querySelector('.remove-row-btn');
+            removeBtn.addEventListener('click', function() {
+                const hasData = row.querySelector('.medication-name').value.trim() !== '';
+
+                if (hasData) {
+                    if (confirm('Remove this medication? This cannot be undone.')) {
+                        row.remove();
+                    }
+                } else {
+                    row.remove();
+                }
+            });
+
+            // Current checkbox logic
+            const currentCheckbox = row.querySelector('.medication-current');
+            const endDateInput = row.querySelector('.medication-end-date');
+
+            currentCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    endDateInput.value = '';
+                    endDateInput.disabled = true;
+                    endDateInput.style.background = '#e2e8f0';
+                } else {
+                    endDateInput.disabled = false;
+                    endDateInput.style.background = 'white';
+                }
+            });
+
+            // Auto-categorize medications for eligibility engine
+            const medNameInput = row.querySelector('.medication-name');
+            medNameInput.addEventListener('blur', function() {
+                const medName = this.value.toLowerCase().trim();
+                if (medName) {
+                    const category = categorizeMedication(medName);
+                    row.dataset.category = category;
+
+                    // Visual indicator for psych/memory meds
+                    if (category !== 'other') {
+                        this.style.borderLeft = '4px solid #F39C12';
+                    } else {
+                        this.style.borderLeft = '';
+                    }
+                }
+            });
+        }
+
+        function getMedicationsData() {
+            const data = [];
+            const rows = document.querySelectorAll('.medication-row');
+
+            rows.forEach(row => {
+                const medName = row.querySelector('.medication-name').value.trim();
+
+                if (medName) {
+                    const startDate = row.querySelector('.medication-start-date').value;
+                    const isCurrent = row.querySelector('.medication-current').checked;
+
+                    // Calculate duration if current
+                    let durationMonths = null;
+                    if (startDate && isCurrent) {
+                        const start = new Date(startDate);
+                        const now = new Date();
+                        durationMonths = Math.floor((now - start) / (1000 * 60 * 60 * 24 * 30));
+                    }
+
+                    data.push({
+                        name: medName,
+                        dosage: row.querySelector('.medication-dosage').value,
+                        frequency: row.querySelector('.medication-frequency').value,
+                        startDate: startDate,
+                        endDate: row.querySelector('.medication-end-date').value,
+                        isCurrent: isCurrent,
+                        category: row.dataset.category || 'other',
+                        durationMonths: durationMonths
+                    });
+                }
+            });
+
+            return data;
+        }
+
+        function getMedicationsByCategory(category) {
+            const allMeds = getMedicationsData();
+            return allMeds.filter(med => med.category === category);
+        }
+
         function addValidationListeners() {
             // Add listeners for numeric range validation
             const numericInputs = document.querySelectorAll('input[type="number"]');
@@ -2067,6 +2504,40 @@
                     toggleIcon.textContent = '▼';
                 }
 
+                // Reset medications table to 5 empty rows
+                const medTbody = document.getElementById('medicationsTable').getElementsByTagName('tbody')[0];
+                medTbody.innerHTML = '';
+                for (let i = 0; i < 5; i++) {
+                    const row = medTbody.insertRow();
+                    row.className = 'medication-row';
+                    row.innerHTML = `
+                        <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                        <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                        <td>
+                            <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                                <option value="">Select...</option>
+                                <option value="qd">Once daily (QD)</option>
+                                <option value="bid">Twice daily (BID)</option>
+                                <option value="tid">Three times daily (TID)</option>
+                                <option value="qid">Four times daily (QID)</option>
+                                <option value="prn">As needed (PRN)</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="eod">Every other day</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="medication-start-date"></td>
+                        <td><input type="date" class="medication-end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    `;
+                    attachMedicationListeners(row);
+                }
+
                 alert('Form cleared successfully!');
             }
         }
@@ -2107,6 +2578,7 @@
                 },
                 medicalHistory: getMedicalHistoryData(),
                 substanceUse: getSubstanceUseData(),
+                medications: getMedicationsData(),
                 exclusions: {
                     pregnant: document.getElementById('pregnant-nursing').checked,
                     otherTrial: document.getElementById('participating-other').checked,
@@ -2271,6 +2743,26 @@
                 });
             } else {
                 mainData.push(['No substance use reported']);
+            }
+
+            // Add medications data
+            mainData.push([''], ['CURRENT & RECENT MEDICATIONS']);
+            if (formData.medications && formData.medications.length > 0) {
+                mainData.push(['Medication', 'Dosage', 'Frequency', 'Start Date', 'End Date', 'Current', 'Category', 'Duration (months)']);
+                formData.medications.forEach(med => {
+                    mainData.push([
+                        med.name,
+                        med.dosage || '',
+                        med.frequency || '',
+                        med.startDate || '',
+                        med.endDate || '',
+                        med.isCurrent ? 'Yes' : 'No',
+                        med.category || 'other',
+                        med.durationMonths !== null ? med.durationMonths : ''
+                    ]);
+                });
+            } else {
+                mainData.push(['No medications recorded']);
             }
 
             mainData.push(

@@ -1369,11 +1369,18 @@
         </div>
 
         <!-- PSYCH Study Specific Section -->
-        <div class="section psych-section hidden" id="psych-specific">
-            <h2 class="section-header">
-                <span class="section-icon">🧠</span>
-                Psychiatric Study Criteria
-            </h2>
+        <div id="psychStudySection" class="study-specific-section" style="display: none; margin: 30px 0; padding: 30px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border: 3px solid #4A90E2; border-radius: 12px;">
+
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="color: #1565C0; font-size: 24px; font-weight: 700; margin-bottom: 10px;">
+                    PSYCHIATRIC STUDY-SPECIFIC INFORMATION
+                </h2>
+                <p style="color: #1976D2; font-size: 14px;">
+                    Complete all applicable sections for psychiatric indication screening
+                </p>
+            </div>
+
+            <!-- PSYCH subsections will go here -->
             <div class="form-grid">
                 <div class="input-group">
                     <label for="psych-diagnosis">Primary Diagnosis</label>
@@ -1430,6 +1437,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- NEURO Study Specific Section -->
@@ -2124,21 +2132,51 @@
                 }
             });
 
-            // Hide ALL study-specific sections
-            document.querySelectorAll('.section[id$="-specific"]').forEach(section => {
-                section.classList.add('hidden');
-            });
-
-            // Show ONLY the study-specific section matching the selected indication
-            const studySection = document.getElementById(`${indicationType}-specific`);
-            if (studySection) {
-                studySection.classList.remove('hidden');
-            }
+            // Update study-specific sections visibility
+            updateStudySpecificSections(indicationType);
 
             // Clear/reset the eligibility calculator
             document.getElementById('eligibility-result').className = 'eligibility-result pending';
             document.getElementById('eligibility-result').textContent = 'Eligibility calculator requires protocol configuration';
             document.getElementById('criteria-details').classList.add('hidden');
+        }
+
+        function updateStudySpecificSections(indication) {
+            // Hide all study-specific sections (both old and new format)
+            document.querySelectorAll('.study-specific-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.section[id$="-specific"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected indication section
+            if (indication === 'psych') {
+                const psychSection = document.getElementById('psychStudySection');
+                if (psychSection) {
+                    psychSection.style.display = 'block';
+                }
+            } else if (indication === 'neuro') {
+                const neuroSection = document.getElementById('neuro-specific');
+                if (neuroSection) {
+                    neuroSection.classList.remove('hidden');
+                }
+            } else if (indication === 'aud') {
+                const audSection = document.getElementById('aud-specific');
+                if (audSection) {
+                    audSection.classList.remove('hidden');
+                }
+            } else if (indication === 'fibromyalgia') {
+                const fibroSection = document.getElementById('fibromyalgia-specific');
+                if (fibroSection) {
+                    fibroSection.classList.remove('hidden');
+                }
+            } else if (indication === 'backpain') {
+                const backpainSection = document.getElementById('backpain-specific');
+                if (backpainSection) {
+                    backpainSection.classList.remove('hidden');
+                }
+            }
         }
 
         function calculateBMI() {

@@ -1380,61 +1380,67 @@
                 </p>
             </div>
 
-            <!-- PSYCH subsections will go here -->
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="psych-diagnosis">Primary Diagnosis</label>
-                    <select id="psych-diagnosis">
-                        <option value="">Select diagnosis</option>
-                        <option value="mdd">Major Depressive Disorder</option>
-                        <option value="gad">Generalized Anxiety Disorder</option>
-                        <option value="bipolar">Bipolar Disorder</option>
-                        <option value="schizophrenia">Schizophrenia</option>
-                        <option value="ptsd">PTSD</option>
-                        <option value="ocd">OCD</option>
+            <!-- PSYCH subsections -->
+
+            <!-- Subsection 1: Primary Psychiatric Concern -->
+            <div class="psych-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                <h3 style="color: #2d3748; font-size: 18px; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">
+                    Primary Psychiatric Concern
+                </h3>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: 600; color: #4a5568; margin-bottom: 8px;">
+                        Current Primary Concern <span style="color: #E74C3C;">*</span>
+                    </label>
+                    <select id="primaryPsychConcern" style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px;">
+                        <option value="">Select...</option>
+                        <option value="mdd">Major Depressive Disorder (MDD)</option>
+                        <option value="trd">Treatment-Resistant Depression (TRD)</option>
+                        <option value="bipolar-depression">Bipolar Depression</option>
+                        <option value="gad">Generalized Anxiety Disorder (GAD)</option>
+                        <option value="ptsd">Post-Traumatic Stress Disorder (PTSD)</option>
+                        <option value="ocd">Obsessive-Compulsive Disorder (OCD)</option>
+                        <option value="social-anxiety">Social Anxiety Disorder</option>
+                        <option value="panic">Panic Disorder</option>
                         <option value="other">Other</option>
                     </select>
                 </div>
-                <div class="input-group">
-                    <label for="psych-duration">Duration of Current Episode (months)</label>
-                    <input type="number" id="psych-duration" step="0.1" placeholder="Months">
-                </div>
-                <div class="input-group">
-                    <label for="phq9-score">PHQ-9 Score</label>
-                    <input type="number" id="phq9-score" min="0" max="27" placeholder="0-27">
-                </div>
-                <div class="input-group">
-                    <label for="gad7-score">GAD-7 Score</label>
-                    <input type="number" id="gad7-score" min="0" max="21" placeholder="0-21">
-                </div>
-                <div class="input-group">
-                    <label>Current Psychiatric Medications</label>
-                    <select id="psych-medications" multiple size="5">
-                        <option value="ssri">SSRI</option>
-                        <option value="snri">SNRI</option>
-                        <option value="antipsychotic">Antipsychotic</option>
-                        <option value="mood-stabilizer">Mood Stabilizer</option>
-                        <option value="benzodiazepine">Benzodiazepine</option>
-                        <option value="none">None</option>
-                    </select>
-                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
-                </div>
-                <div class="input-group">
-                    <label>Previous Treatments</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="psych-therapy" value="therapy">
-                            <span>Psychotherapy</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="psych-hospitalization" value="hospitalization">
-                            <span>Psychiatric Hospitalization</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="psych-ect" value="ect">
-                            <span>ECT</span>
-                        </label>
+
+                <!-- Conditional fields for depression -->
+                <div id="depressionFields" style="display: none; border-left: 4px solid #4A90E2; padding-left: 20px; margin-top: 20px;">
+                    <p style="background: #E3F2FD; padding: 12px; border-radius: 6px; margin-bottom: 15px; color: #1565C0; font-weight: 600;">
+                        Depression-Specific Information
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; color: #4a5568; margin-bottom: 8px;">
+                                Current Depressive Episode Duration (months) <span style="color: #E74C3C;">*</span>
+                            </label>
+                            <input type="number" id="currentEpisodeDuration" min="0" step="0.1" placeholder="Months" style="width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                            <p style="font-size: 12px; color: #718096; margin-top: 4px;">
+                                Length of current depressive episode in months
+                            </p>
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-weight: 600; color: #4a5568; margin-bottom: 8px;">
+                                Number of Previous MDD Episodes
+                            </label>
+                            <input type="number" id="previousMDDEpisodes" min="0" placeholder="0" style="width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                            <p style="font-size: 12px; color: #718096; margin-top: 4px;">
+                                Not including current episode
+                            </p>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Other condition text input -->
+                <div id="otherConcernField" style="display: none; margin-top: 15px;">
+                    <label style="display: block; font-weight: 600; color: #4a5568; margin-bottom: 8px;">
+                        Specify Other Concern
+                    </label>
+                    <input type="text" id="otherConcernText" placeholder="Please specify" style="width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;">
                 </div>
             </div>
 
@@ -2093,6 +2099,29 @@
             // Initialize with 2 empty allergy rows
             for (let i = 0; i < 2; i++) {
                 document.getElementById('addAllergyRow').click();
+            }
+
+            // PSYCH: Primary Psychiatric Concern conditional display
+            const primaryPsychConcern = document.getElementById('primaryPsychConcern');
+            if (primaryPsychConcern) {
+                primaryPsychConcern.addEventListener('change', function() {
+                    const value = this.value;
+                    const depressionFields = document.getElementById('depressionFields');
+                    const otherField = document.getElementById('otherConcernField');
+
+                    // Hide all conditional fields first
+                    if (depressionFields) depressionFields.style.display = 'none';
+                    if (otherField) otherField.style.display = 'none';
+
+                    // Show appropriate fields
+                    if (value === 'mdd' || value === 'trd' || value === 'bipolar-depression') {
+                        if (depressionFields) depressionFields.style.display = 'block';
+                    }
+
+                    if (value === 'other') {
+                        if (otherField) otherField.style.display = 'block';
+                    }
+                });
             }
         }
 
@@ -2766,14 +2795,20 @@
 
             switch(indicationType) {
                 case 'psych':
-                    data.diagnosis = document.getElementById('psych-diagnosis').value;
-                    data.duration = document.getElementById('psych-duration').value;
-                    data.phq9Score = document.getElementById('phq9-score').value;
-                    data.gad7Score = document.getElementById('gad7-score').value;
-                    data.medications = Array.from(document.getElementById('psych-medications').selectedOptions).map(opt => opt.value);
-                    data.therapy = document.getElementById('psych-therapy').checked;
-                    data.hospitalization = document.getElementById('psych-hospitalization').checked;
-                    data.ect = document.getElementById('psych-ect').checked;
+                    // Primary Psychiatric Concern
+                    data.primaryConcern = document.getElementById('primaryPsychConcern')?.value || '';
+
+                    // Depression-specific fields
+                    const primaryConcern = document.getElementById('primaryPsychConcern')?.value;
+                    if (primaryConcern === 'mdd' || primaryConcern === 'trd' || primaryConcern === 'bipolar-depression') {
+                        data.currentEpisodeDuration = document.getElementById('currentEpisodeDuration')?.value || '';
+                        data.previousMDDEpisodes = document.getElementById('previousMDDEpisodes')?.value || '';
+                    }
+
+                    // Other concern text
+                    if (primaryConcern === 'other') {
+                        data.otherConcernText = document.getElementById('otherConcernText')?.value || '';
+                    }
                     break;
                 case 'neuro':
                     data.diagnosis = document.getElementById('neuro-diagnosis').value;

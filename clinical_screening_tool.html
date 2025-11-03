@@ -1008,6 +1008,100 @@
             <button type="button" id="addMedicalHistoryRow" style="margin-top: 15px; padding: 10px 20px; background: #27AE60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
                 + Add Condition
             </button>
+
+            <!-- Substance Use History Subsection -->
+            <div class="substance-use-section" style="margin-top: 25px; border: 2px solid #FFF9E6; border-radius: 8px; overflow: hidden;">
+                <div class="substance-header" id="substanceHeader" style="background: #FFF9E6; padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                    <h3 style="color: #856404; font-size: 16px; font-weight: 700; margin: 0;">
+                        Substance Use History
+                    </h3>
+                    <span class="toggle-icon" style="font-size: 20px; color: #856404; transition: transform 0.3s ease;">
+                        ▼
+                    </span>
+                </div>
+                <div class="substance-content" id="substanceContent" style="display: none; padding: 20px; background: white;">
+                    <div class="substance-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+
+                        <!-- Alcohol -->
+                        <div class="substance-item" data-substance="alcohol">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: white;">
+                                <input type="checkbox" class="substance-checkbox" data-substance="alcohol" style="width: 20px; height: 20px;">
+                                <span style="font-weight: 600;">Alcohol</span>
+                            </label>
+                            <div class="substance-details" style="display: none; padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- Conditional fields appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Cannabis/THC -->
+                        <div class="substance-item" data-substance="cannabis">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: white;">
+                                <input type="checkbox" class="substance-checkbox" data-substance="cannabis" style="width: 20px; height: 20px;">
+                                <span style="font-weight: 600;">Cannabis/THC</span>
+                            </label>
+                            <div class="substance-details" style="display: none; padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- Conditional fields appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Opioids -->
+                        <div class="substance-item" data-substance="opioids">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: white;">
+                                <input type="checkbox" class="substance-checkbox" data-substance="opioids" style="width: 20px; height: 20px;">
+                                <span style="font-weight: 600;">Opioids</span>
+                            </label>
+                            <div class="substance-details" style="display: none; padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- Conditional fields appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Benzodiazepines -->
+                        <div class="substance-item" data-substance="benzodiazepines">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: white;">
+                                <input type="checkbox" class="substance-checkbox" data-substance="benzodiazepines" style="width: 20px; height: 20px;">
+                                <span style="font-weight: 600;">Benzodiazepines</span>
+                            </label>
+                            <div class="substance-details" style="display: none; padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- Conditional fields appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Stimulants -->
+                        <div class="substance-item" data-substance="stimulants">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: white;">
+                                <input type="checkbox" class="substance-checkbox" data-substance="stimulants" style="width: 20px; height: 20px;">
+                                <span style="font-weight: 600;">Stimulants</span>
+                            </label>
+                            <div class="substance-details" style="display: none; padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- Conditional fields appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Psychedelics -->
+                        <div class="substance-item" data-substance="psychedelics">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: white;">
+                                <input type="checkbox" class="substance-checkbox" data-substance="psychedelics" style="width: 20px; height: 20px;">
+                                <span style="font-weight: 600;">Psychedelics</span>
+                            </label>
+                            <div class="substance-details" style="display: none; padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- Conditional fields appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Other -->
+                        <div class="substance-item" data-substance="other">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: white;">
+                                <input type="checkbox" class="substance-checkbox" data-substance="other" style="width: 20px; height: 20px;">
+                                <span style="font-weight: 600;">Other</span>
+                            </label>
+                            <div class="substance-details" style="display: none; padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- Conditional fields + substance name input appear here -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- PSYCH Study Specific Section -->
@@ -1577,6 +1671,53 @@
                     newRow.style.opacity = '1';
                 }, 10);
             });
+
+            // Initialize substance use section
+            // Collapse/expand toggle
+            document.getElementById('substanceHeader').addEventListener('click', function() {
+                const content = document.getElementById('substanceContent');
+                const icon = this.querySelector('.toggle-icon');
+
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    icon.style.transform = 'rotate(180deg)';
+                    icon.textContent = '▲';
+                } else {
+                    content.style.display = 'none';
+                    icon.style.transform = 'rotate(0deg)';
+                    icon.textContent = '▼';
+                }
+            });
+
+            // Handle substance checkbox changes
+            document.querySelectorAll('.substance-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const parent = this.closest('.substance-item');
+                    const detailsDiv = parent.querySelector('.substance-details');
+                    const substance = this.dataset.substance;
+
+                    if (this.checked) {
+                        // Show details div
+                        detailsDiv.style.display = 'block';
+
+                        // Animate in
+                        detailsDiv.style.opacity = '0';
+                        setTimeout(() => {
+                            detailsDiv.style.transition = 'opacity 0.3s ease';
+                            detailsDiv.style.opacity = '1';
+                        }, 10);
+
+                        // Generate conditional fields if not already present
+                        if (!detailsDiv.hasChildNodes()) {
+                            detailsDiv.innerHTML = generateSubstanceFields(substance);
+                        }
+                    } else {
+                        // Hide and clear details
+                        detailsDiv.style.display = 'none';
+                        detailsDiv.innerHTML = '';
+                    }
+                });
+            });
         }
 
         function validateCCID() {
@@ -1749,6 +1890,70 @@
             return data;
         }
 
+        // ===== SUBSTANCE USE FUNCTIONS =====
+
+        function generateSubstanceFields(substance) {
+            let html = '';
+
+            // For "other", add substance name field
+            if (substance === 'other') {
+                html += `
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Substance Name</label>
+                        <input type="text" class="substance-name-other" placeholder="Specify substance" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Frequency</label>
+                    <select class="substance-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                        <option value="">Select...</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="occasionally">Occasionally</option>
+                        <option value="past">Past use only</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Last Use Date</label>
+                    <input type="date" class="substance-last-use" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Additional Notes (optional)</label>
+                    <textarea class="substance-notes" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; resize: vertical; min-height: 60px;" placeholder="Any additional details..."></textarea>
+                </div>
+            `;
+
+            return html;
+        }
+
+        function getSubstanceUseData() {
+            const data = {};
+
+            document.querySelectorAll('.substance-checkbox:checked').forEach(checkbox => {
+                const substance = checkbox.dataset.substance;
+                const parent = checkbox.closest('.substance-item');
+
+                data[substance] = {
+                    checked: true,
+                    frequency: parent.querySelector('.substance-frequency')?.value || '',
+                    lastUse: parent.querySelector('.substance-last-use')?.value || '',
+                    notes: parent.querySelector('.substance-notes')?.value || ''
+                };
+
+                if (substance === 'other') {
+                    data[substance].substanceName = parent.querySelector('.substance-name-other')?.value || '';
+                }
+            });
+
+            return data;
+        }
+
         function addValidationListeners() {
             // Add listeners for numeric range validation
             const numericInputs = document.querySelectorAll('input[type="number"]');
@@ -1846,6 +2051,22 @@
                     attachMedicalHistoryListeners(row);
                 }
 
+                // Reset substance use section
+                document.querySelectorAll('.substance-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                document.querySelectorAll('.substance-details').forEach(details => {
+                    details.style.display = 'none';
+                    details.innerHTML = '';
+                });
+                // Collapse substance use section
+                document.getElementById('substanceContent').style.display = 'none';
+                const toggleIcon = document.querySelector('#substanceHeader .toggle-icon');
+                if (toggleIcon) {
+                    toggleIcon.style.transform = 'rotate(0deg)';
+                    toggleIcon.textContent = '▼';
+                }
+
                 alert('Form cleared successfully!');
             }
         }
@@ -1885,6 +2106,7 @@
                     bmiCategory: document.getElementById('bmiCategory').textContent !== '--' ? document.getElementById('bmiCategory').textContent : ''
                 },
                 medicalHistory: getMedicalHistoryData(),
+                substanceUse: getSubstanceUseData(),
                 exclusions: {
                     pregnant: document.getElementById('pregnant-nursing').checked,
                     otherTrial: document.getElementById('participating-other').checked,
@@ -2029,6 +2251,26 @@
                 });
             } else {
                 mainData.push(['No medical history recorded']);
+            }
+
+            // Add substance use data
+            mainData.push([''], ['SUBSTANCE USE HISTORY']);
+            if (formData.substanceUse && Object.keys(formData.substanceUse).length > 0) {
+                Object.entries(formData.substanceUse).forEach(([substance, data]) => {
+                    let substanceName = substance.charAt(0).toUpperCase() + substance.slice(1);
+                    if (substance === 'other' && data.substanceName) {
+                        substanceName = data.substanceName;
+                    }
+                    mainData.push(
+                        [`${substanceName}:`],
+                        ['  Frequency:', data.frequency || 'Not specified'],
+                        ['  Last Use:', data.lastUse || 'Not specified'],
+                        ['  Notes:', data.notes || 'None'],
+                        ['']
+                    );
+                });
+            } else {
+                mainData.push(['No substance use reported']);
             }
 
             mainData.push(

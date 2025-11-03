@@ -258,7 +258,119 @@
             box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
         }
 
-        /* ===== SECTION STYLES ===== */
+        /* ===== DEMOGRAPHICS SECTION ===== */
+        .demographics-section {
+            background: white;
+            padding: 25px;
+            margin: 20px auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #4A90E2;
+        }
+
+        .demographics-section h2 {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .demographics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .demographics-left,
+        .demographics-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bmi-calculator {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .bmi-calculator h3 {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .height-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .bmi-display {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+
+        .bmi-display.show {
+            display: block;
+        }
+
+        .bmi-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .bmi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .bmi-category {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .age-warning {
+            color: #F39C12;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .age-warning.show {
+            display: block;
+        }
+
+        .language-other {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .language-other.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .demographics-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .height-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
         .section {
             background: var(--white);
             border: 2px solid var(--border-color);
@@ -655,59 +767,85 @@
             </div>
         </div>
 
-        <!-- General Information Section -->
-        <div class="section">
-            <h2 class="section-header">
-                <span class="section-icon">👤</span>
-                Demographics
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="age">Age (years) *</label>
-                    <input type="number" id="age" min="0" max="120" placeholder="Enter age">
+        <!-- Demographics Section -->
+        <div class="demographics-section">
+            <h2>Demographics</h2>
+            <div class="demographics-grid">
+                <!-- Left Column -->
+                <div class="demographics-left">
+                    <div class="input-group">
+                        <label for="age">Age (years)<span class="required-asterisk">*</span></label>
+                        <input type="number" id="age" min="0" max="120" placeholder="Enter age" class="ccid-input">
+                        <span id="age-warning" class="age-warning">Most studies require age ≥18</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="gender">Gender<span class="required-asterisk">*</span></label>
+                        <select id="gender" class="ccid-input">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-say">Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="race">Race/Ethnicity</label>
+                        <select id="race" class="ccid-input">
+                            <option value="">Select race/ethnicity</option>
+                            <option value="white">White/Caucasian</option>
+                            <option value="black">Black/African American</option>
+                            <option value="hispanic">Hispanic/Latino</option>
+                            <option value="asian">Asian</option>
+                            <option value="native-american">Native American/Alaska Native</option>
+                            <option value="pacific-islander">Native Hawaiian/Pacific Islander</option>
+                            <option value="multiple">Multiple Races</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-say">Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="language">Primary Language</label>
+                        <select id="language" class="ccid-input">
+                            <option value="">Select language</option>
+                            <option value="english">English</option>
+                            <option value="spanish">Spanish</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div id="language-other-field" class="language-other">
+                            <input type="text" id="languageOther" class="ccid-input" placeholder="Specify other language">
+                        </div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="gender">Gender *</label>
-                    <select id="gender">
-                        <option value="">Select gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="height">Height (cm)</label>
-                    <input type="number" id="height" step="0.1" placeholder="Enter height">
-                </div>
-                <div class="input-group">
-                    <label for="weight">Weight (kg)</label>
-                    <input type="number" id="weight" step="0.1" placeholder="Enter weight">
-                </div>
-                <div class="input-group">
-                    <label for="bmi">BMI (kg/m²)</label>
-                    <input type="number" id="bmi" step="0.1" placeholder="Calculated automatically" readonly>
-                </div>
-                <div class="input-group">
-                    <label for="ethnicity">Ethnicity</label>
-                    <select id="ethnicity">
-                        <option value="">Select ethnicity</option>
-                        <option value="hispanic">Hispanic or Latino</option>
-                        <option value="non-hispanic">Not Hispanic or Latino</option>
-                        <option value="unknown">Unknown/Not Reported</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="race">Race</label>
-                    <select id="race">
-                        <option value="">Select race</option>
-                        <option value="white">White</option>
-                        <option value="black">Black or African American</option>
-                        <option value="asian">Asian</option>
-                        <option value="native-american">American Indian or Alaska Native</option>
-                        <option value="pacific-islander">Native Hawaiian or Pacific Islander</option>
-                        <option value="multiple">Multiple Races</option>
-                        <option value="unknown">Unknown/Not Reported</option>
-                    </select>
+
+                <!-- Right Column - BMI Calculator -->
+                <div class="demographics-right">
+                    <div class="bmi-calculator">
+                        <h3>BMI Calculator</h3>
+
+                        <div class="input-group">
+                            <label>Height</label>
+                            <div class="height-inputs">
+                                <input type="number" id="heightFeet" min="3" max="8" placeholder="ft" class="ccid-input">
+                                <input type="number" id="heightInches" min="0" max="11.9" step="0.1" placeholder="in" class="ccid-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="weight">Weight</label>
+                            <input type="number" id="weight" min="50" max="500" placeholder="Weight (lbs)" class="ccid-input">
+                        </div>
+
+                        <div id="bmiDisplay" class="bmi-display">
+                            <div class="bmi-label">Body Mass Index</div>
+                            <div class="bmi-value">
+                                <span id="bmiValue">--</span>
+                            </div>
+                            <div id="bmiCategory" class="bmi-category">--</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1231,9 +1369,32 @@
                 });
             });
 
-            // Add event listeners for BMI calculation
-            document.getElementById('height').addEventListener('input', calculateBMI);
+            // Add event listeners for BMI calculation (US units)
+            document.getElementById('heightFeet').addEventListener('input', calculateBMI);
+            document.getElementById('heightInches').addEventListener('input', calculateBMI);
             document.getElementById('weight').addEventListener('input', calculateBMI);
+
+            // Add age warning listener
+            document.getElementById('age').addEventListener('input', function() {
+                const age = parseInt(this.value);
+                const warning = document.getElementById('age-warning');
+                if (age > 0 && age < 18) {
+                    warning.classList.add('show');
+                } else {
+                    warning.classList.remove('show');
+                }
+            });
+
+            // Add language "Other" field listener
+            document.getElementById('language').addEventListener('change', function() {
+                const otherField = document.getElementById('language-other-field');
+                if (this.value === 'other') {
+                    otherField.classList.add('show');
+                } else {
+                    otherField.classList.remove('show');
+                    document.getElementById('languageOther').value = '';
+                }
+            });
 
             // Add CCID validation
             const ccidInput = document.getElementById('ccid');
@@ -1312,16 +1473,46 @@
         }
 
         function calculateBMI() {
-            const height = parseFloat(document.getElementById('height').value);
-            const weight = parseFloat(document.getElementById('weight').value);
+            const feet = parseFloat(document.getElementById('heightFeet').value) || 0;
+            const inches = parseFloat(document.getElementById('heightInches').value) || 0;
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
 
-            if (height && weight && height > 0) {
-                const heightInMeters = height / 100;
-                const bmi = weight / (heightInMeters * heightInMeters);
-                document.getElementById('bmi').value = bmi.toFixed(1);
-            } else {
-                document.getElementById('bmi').value = '';
+            const bmiDisplay = document.getElementById('bmiDisplay');
+
+            // Check if all values are provided
+            if (feet === 0 || weight === 0) {
+                bmiDisplay.classList.remove('show');
+                return;
             }
+
+            // Calculate BMI using US formula
+            const totalInches = (feet * 12) + inches;
+            const bmi = (weight * 703) / (totalInches * totalInches);
+
+            // Display BMI value
+            document.getElementById('bmiValue').textContent = bmi.toFixed(1);
+
+            // Set category and color
+            let category, color;
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                color = '#3498DB'; // Blue
+            } else if (bmi < 25) {
+                category = 'Normal';
+                color = '#27AE60'; // Green
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                color = '#F39C12'; // Amber
+            } else {
+                category = 'Obese';
+                color = '#E74C3C'; // Red
+            }
+
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiCategory').style.color = color;
+
+            // Show the BMI display
+            bmiDisplay.classList.add('show');
         }
 
         function addValidationListeners() {
@@ -1429,11 +1620,14 @@
                 demographics: {
                     age: document.getElementById('age').value,
                     gender: document.getElementById('gender').value,
-                    height: document.getElementById('height').value,
+                    race: document.getElementById('race').value,
+                    language: document.getElementById('language').value,
+                    languageOther: document.getElementById('languageOther').value,
+                    heightFeet: document.getElementById('heightFeet').value,
+                    heightInches: document.getElementById('heightInches').value,
                     weight: document.getElementById('weight').value,
-                    bmi: document.getElementById('bmi').value,
-                    ethnicity: document.getElementById('ethnicity').value,
-                    race: document.getElementById('race').value
+                    bmi: document.getElementById('bmiValue').textContent !== '--' ? document.getElementById('bmiValue').textContent : '',
+                    bmiCategory: document.getElementById('bmiCategory').textContent !== '--' ? document.getElementById('bmiCategory').textContent : ''
                 },
                 medicalHistory: {
                     diabetes: document.getElementById('history-diabetes').checked,
@@ -1563,11 +1757,14 @@
                 ['DEMOGRAPHICS'],
                 ['Age:', formData.demographics.age],
                 ['Gender:', formData.demographics.gender],
-                ['Height (cm):', formData.demographics.height],
-                ['Weight (kg):', formData.demographics.weight],
+                ['Race/Ethnicity:', formData.demographics.race],
+                ['Language:', formData.demographics.language],
+                ['Language (Other):', formData.demographics.languageOther],
+                ['Height (Feet):', formData.demographics.heightFeet],
+                ['Height (Inches):', formData.demographics.heightInches],
+                ['Weight (lbs):', formData.demographics.weight],
                 ['BMI:', formData.demographics.bmi],
-                ['Ethnicity:', formData.demographics.ethnicity],
-                ['Race:', formData.demographics.race],
+                ['BMI Category:', formData.demographics.bmiCategory],
                 [''],
                 ['MEDICAL HISTORY'],
                 ['Diabetes:', formData.medicalHistory.diabetes ? 'Yes' : 'No'],

@@ -2066,12 +2066,97 @@
                 </p>
             </div>
 
-            <!-- Drinking Patterns -->
-            <div class="aud-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                <h3>Current Drinking Patterns</h3>
-                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
-                    [Your existing AUD tool drinking pattern fields will be integrated here]
-                </p>
+            <!-- DETAILED AUD DRINKING PATTERNS -->
+            <div class="section-card" style="margin-top: 20px;">
+                <h3 style="color: #2c5282; margin-bottom: 15px;">🍺 Detailed Drinking Patterns</h3>
+
+                <!-- Drinking Frequency -->
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">
+                        How many days per week does the participant typically drink alcohol?
+                    </label>
+                    <input type="number" id="audDrinkingDaysPerWeek" min="0" max="7"
+                           style="width: 150px; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 16px;"
+                           oninput="calculateAUDDrinkingMetrics()" placeholder="0-7">
+                    <span style="margin-left: 10px; color: #666;">days/week</span>
+                </div>
+
+                <!-- Drinks Per Drinking Day -->
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">
+                        On a typical drinking day, how many drinks does the participant consume?
+                    </label>
+                    <input type="number" id="audDrinksPerDay" min="0" step="0.5"
+                           style="width: 150px; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 16px;"
+                           oninput="calculateAUDDrinkingMetrics()" placeholder="Enter number">
+                    <span style="margin-left: 10px; color: #666;">standard drinks</span>
+                    <div style="margin-top: 8px; font-size: 13px; color: #718096;">
+                        <em>1 standard drink = 12oz beer, 5oz wine, 1.5oz spirits</em>
+                    </div>
+                </div>
+
+                <!-- Preferred Drink Types -->
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 12px; font-weight: 600; color: #2d3748;">
+                        Preferred drink type(s): <span style="font-weight: normal; color: #718096;">(check all that apply)</span>
+                    </label>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="audDrinkBeer">
+                            <span>🍺 Beer</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="audDrinkWine">
+                            <span>🍷 Wine</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="audDrinkLiquor">
+                            <span>🥃 Spirits/Liquor</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Heavy Drinking Days -->
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">
+                        In the past 30 days, how many days did the participant have 4+ drinks (women) or 5+ drinks (men)?
+                    </label>
+                    <input type="number" id="audHeavyDrinkingDays" min="0" max="30"
+                           style="width: 150px; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 16px;"
+                           oninput="calculateAUDDrinkingMetrics()" placeholder="0-30">
+                    <span style="margin-left: 10px; color: #666;">days in past 30</span>
+                </div>
+
+                <!-- Calculated Metrics Display -->
+                <div id="audDrinkingMetricsDisplay" style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+                    <h4 style="margin-bottom: 15px; color: white;">📊 Calculated Drinking Metrics</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 5px;">Total Drinks/Week</div>
+                            <div id="audTotalDrinksPerWeek" style="font-size: 28px; font-weight: bold;">--</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 5px;">Est. Drinks/Month</div>
+                            <div id="audTotalDrinksPerMonth" style="font-size: 28px; font-weight: bold;">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gender-Specific Criteria Checker -->
+                <div id="audGenderCriteriaCheck" style="margin-top: 20px; padding: 20px; border-radius: 12px; border: 2px solid #e2e8f0; background: white;">
+                    <h4 style="margin-bottom: 15px; color: #2c5282;">⚠️ Gender-Specific Drinking Guidelines</h4>
+                    <div id="audGenderCriteriaContent">
+                        <p style="color: #718096; font-style: italic;">Enter gender in Demographics section to see guidelines</p>
+                    </div>
+                </div>
+
+                <!-- Real-Time Study Eligibility Indicators -->
+                <div style="margin-top: 20px; padding: 20px; background: #f7fafc; border-radius: 12px; border-left: 4px solid #4299e1;">
+                    <h4 style="margin-bottom: 15px; color: #2c5282;">✓ AUD Study Criteria Quick Check</h4>
+                    <div id="audEligibilityIndicators">
+                        <!-- Will be populated by JavaScript based on drinking patterns and SCID score -->
+                    </div>
+                </div>
             </div>
 
             <!-- Study Criteria Reminder -->
@@ -2312,6 +2397,13 @@
 
         // SCID Global Data
         let scidScore = 0;
+
+        // AUD Drinking Patterns Global Data
+        let audDrinkingDaysPerWeek = null;
+        let audDrinksPerDay = null;
+        let audHeavyDrinkingDays = null;
+        let audTotalDrinksPerWeek = null;
+        let audTotalDrinksPerMonth = null;
 
         // Neuro Risk Stratification Global Data
         let neuroRiskScore = 0;
@@ -4086,6 +4178,184 @@
                 score: scidScore,
                 criteria: checkedCriteria,
                 severity: scidScore >= 6 ? 'severe' : scidScore >= 4 ? 'moderate' : scidScore >= 2 ? 'mild' : 'subclinical'
+            };
+        }
+
+        // ===== AUD DRINKING PATTERNS FUNCTIONS =====
+
+        function calculateAUDDrinkingMetrics() {
+            // Get input values
+            const daysPerWeekInput = document.getElementById('audDrinkingDaysPerWeek');
+            const drinksPerDayInput = document.getElementById('audDrinksPerDay');
+            const heavyDrinkingDaysInput = document.getElementById('audHeavyDrinkingDays');
+
+            audDrinkingDaysPerWeek = parseFloat(daysPerWeekInput?.value);
+            audDrinksPerDay = parseFloat(drinksPerDayInput?.value);
+            audHeavyDrinkingDays = parseFloat(heavyDrinkingDaysInput?.value);
+
+            // Reset if empty
+            if (isNaN(audDrinkingDaysPerWeek) || isNaN(audDrinksPerDay)) {
+                document.getElementById('audTotalDrinksPerWeek').textContent = '--';
+                document.getElementById('audTotalDrinksPerMonth').textContent = '--';
+                audTotalDrinksPerWeek = null;
+                audTotalDrinksPerMonth = null;
+            } else {
+                // Calculate total drinks per week
+                audTotalDrinksPerWeek = audDrinkingDaysPerWeek * audDrinksPerDay;
+                audTotalDrinksPerMonth = audTotalDrinksPerWeek * 4.33; // Average weeks per month
+
+                // Display calculated metrics
+                document.getElementById('audTotalDrinksPerWeek').textContent = audTotalDrinksPerWeek.toFixed(1);
+                document.getElementById('audTotalDrinksPerMonth').textContent = audTotalDrinksPerMonth.toFixed(0);
+            }
+
+            // Update gender-specific criteria
+            updateAUDGenderCriteria();
+
+            // Update eligibility indicators
+            updateAUDEligibilityIndicators();
+        }
+
+        function updateAUDGenderCriteria() {
+            const genderCriteriaContent = document.getElementById('audGenderCriteriaContent');
+            if (!genderCriteriaContent) return;
+
+            // Get gender from demographics
+            const genderInput = document.getElementById('gender');
+            const gender = genderInput?.value?.toLowerCase();
+
+            if (!gender) {
+                genderCriteriaContent.innerHTML = '<p style="color: #718096; font-style: italic;">Enter gender in Demographics section to see guidelines</p>';
+                return;
+            }
+
+            let html = '';
+            let meetsWeeklyCriteria = false;
+            let meetsHeavyDrinkingCriteria = false;
+
+            if (gender === 'male' || gender === 'm') {
+                // Male criteria: ≥20 drinks/week + ≥1 heavy drinking day (≥5 drinks)
+                const weeklyThreshold = 20;
+                const heavyDayThreshold = 5;
+
+                meetsWeeklyCriteria = audTotalDrinksPerWeek !== null && audTotalDrinksPerWeek >= weeklyThreshold;
+                meetsHeavyDrinkingCriteria = audHeavyDrinkingDays !== null && audHeavyDrinkingDays >= 1;
+
+                html += `<div style="margin-bottom: 15px;">
+                    <strong>Study Criteria for Males:</strong>
+                    <ul style="margin-top: 8px; margin-left: 20px;">
+                        <li>≥20 drinks/week <span style="color: ${meetsWeeklyCriteria ? '#48bb78' : '#f56565'}; font-weight: bold;">${meetsWeeklyCriteria ? '✓' : '✗'}</span>
+                            ${audTotalDrinksPerWeek !== null ? `(Current: ${audTotalDrinksPerWeek.toFixed(1)} drinks/week)` : ''}</li>
+                        <li>≥1 heavy drinking day (≥5 drinks) <span style="color: ${meetsHeavyDrinkingCriteria ? '#48bb78' : '#f56565'}; font-weight: bold;">${meetsHeavyDrinkingCriteria ? '✓' : '✗'}</span>
+                            ${audHeavyDrinkingDays !== null ? `(Current: ${audHeavyDrinkingDays} days)` : ''}</li>
+                    </ul>
+                </div>`;
+            } else if (gender === 'female' || gender === 'f') {
+                // Female criteria: ≥10 drinks/week + ≥1 heavy drinking day (≥4 drinks)
+                const weeklyThreshold = 10;
+                const heavyDayThreshold = 4;
+
+                meetsWeeklyCriteria = audTotalDrinksPerWeek !== null && audTotalDrinksPerWeek >= weeklyThreshold;
+                meetsHeavyDrinkingCriteria = audHeavyDrinkingDays !== null && audHeavyDrinkingDays >= 1;
+
+                html += `<div style="margin-bottom: 15px;">
+                    <strong>Study Criteria for Females:</strong>
+                    <ul style="margin-top: 8px; margin-left: 20px;">
+                        <li>≥10 drinks/week <span style="color: ${meetsWeeklyCriteria ? '#48bb78' : '#f56565'}; font-weight: bold;">${meetsWeeklyCriteria ? '✓' : '✗'}</span>
+                            ${audTotalDrinksPerWeek !== null ? `(Current: ${audTotalDrinksPerWeek.toFixed(1)} drinks/week)` : ''}</li>
+                        <li>≥1 heavy drinking day (≥4 drinks) <span style="color: ${meetsHeavyDrinkingCriteria ? '#48bb78' : '#f56565'}; font-weight: bold;">${meetsHeavyDrinkingCriteria ? '✓' : '✗'}</span>
+                            ${audHeavyDrinkingDays !== null ? `(Current: ${audHeavyDrinkingDays} days)` : ''}</li>
+                    </ul>
+                </div>`;
+            } else {
+                html += '<p style="color: #718096; font-style: italic;">Unknown gender. Please select Male or Female in Demographics.</p>';
+            }
+
+            genderCriteriaContent.innerHTML = html;
+        }
+
+        function updateAUDEligibilityIndicators() {
+            const indicatorsDiv = document.getElementById('audEligibilityIndicators');
+            if (!indicatorsDiv) return;
+
+            let html = '';
+
+            // Check SCID score (need ≥2 for mild AUD)
+            const scidData = getSCIDData();
+            const meetsAUDCriteria = scidData.score >= 2;
+
+            html += `<div style="margin-bottom: 15px; padding: 15px; background: ${meetsAUDCriteria ? '#f0fff4' : '#fff5f5'}; border-radius: 8px; border-left: 4px solid ${meetsAUDCriteria ? '#48bb78' : '#f56565'};">
+                <strong style="color: #2d3748;">SCID-AUD Diagnosis:</strong>
+                <span style="color: ${meetsAUDCriteria ? '#48bb78' : '#f56565'}; font-weight: bold; margin-left: 10px;">
+                    ${meetsAUDCriteria ? '✓ ' : '✗ '}${scidData.severity.toUpperCase()}
+                </span>
+                <span style="color: #718096; margin-left: 10px;">(${scidData.score}/11 criteria)</span>
+                ${meetsAUDCriteria ? '' : '<div style="margin-top: 8px; color: #c53030; font-size: 13px;">⚠ Requires ≥2 criteria for mild AUD diagnosis</div>'}
+            </div>`;
+
+            // Check drinking thresholds
+            const genderInput = document.getElementById('gender');
+            const gender = genderInput?.value?.toLowerCase();
+
+            if (gender && (gender === 'male' || gender === 'm' || gender === 'female' || gender === 'f')) {
+                const weeklyThreshold = (gender === 'male' || gender === 'm') ? 20 : 10;
+                const meetsWeeklyCriteria = audTotalDrinksPerWeek !== null && audTotalDrinksPerWeek >= weeklyThreshold;
+                const meetsHeavyDrinkingCriteria = audHeavyDrinkingDays !== null && audHeavyDrinkingDays >= 1;
+                const meetsDrinkingCriteria = meetsWeeklyCriteria && meetsHeavyDrinkingCriteria;
+
+                html += `<div style="margin-bottom: 15px; padding: 15px; background: ${meetsDrinkingCriteria ? '#f0fff4' : '#fff5f5'}; border-radius: 8px; border-left: 4px solid ${meetsDrinkingCriteria ? '#48bb78' : '#f56565'};">
+                    <strong style="color: #2d3748;">Drinking Threshold Criteria:</strong>
+                    <span style="color: ${meetsDrinkingCriteria ? '#48bb78' : '#f56565'}; font-weight: bold; margin-left: 10px;">
+                        ${meetsDrinkingCriteria ? '✓ MEETS' : '✗ DOES NOT MEET'}
+                    </span>
+                    ${!meetsDrinkingCriteria && audTotalDrinksPerWeek !== null ?
+                        `<div style="margin-top: 8px; color: #c53030; font-size: 13px;">⚠ Need ${!meetsWeeklyCriteria ? `≥${weeklyThreshold} drinks/week` : ''}${!meetsWeeklyCriteria && !meetsHeavyDrinkingCriteria ? ' AND ' : ''}${!meetsHeavyDrinkingCriteria ? '≥1 heavy drinking day' : ''}</div>` : ''}
+                </div>`;
+
+                // Overall eligibility summary
+                const overallEligible = meetsAUDCriteria && meetsDrinkingCriteria;
+                html += `<div style="padding: 20px; background: ${overallEligible ? '#c6f6d5' : '#fed7d7'}; border-radius: 8px; border: 3px solid ${overallEligible ? '#48bb78' : '#f56565'}; text-align: center;">
+                    <strong style="font-size: 18px; color: #2d3748;">OVERALL AUD STUDY ELIGIBILITY:</strong><br>
+                    <span style="font-size: 24px; font-weight: bold; color: ${overallEligible ? '#22543d' : '#742a2a'}; margin-top: 10px; display: inline-block;">
+                        ${overallEligible ? '✓ LIKELY ELIGIBLE' : '✗ NOT ELIGIBLE'}
+                    </span>
+                </div>`;
+            } else {
+                html += '<p style="color: #718096; font-style: italic; text-align: center;">Enter gender in Demographics section to check drinking threshold criteria.</p>';
+            }
+
+            indicatorsDiv.innerHTML = html;
+        }
+
+        function getAUDDrinkingData() {
+            // Get drink preferences
+            const drinkPreferences = {
+                beer: document.getElementById('audDrinkBeer')?.checked || false,
+                wine: document.getElementById('audDrinkWine')?.checked || false,
+                liquor: document.getElementById('audDrinkLiquor')?.checked || false
+            };
+
+            // Get gender from demographics
+            const genderInput = document.getElementById('gender');
+            const gender = genderInput?.value?.toLowerCase();
+
+            // Determine if meets criteria
+            let meetsCriteria = false;
+            if (gender && (gender === 'male' || gender === 'm')) {
+                meetsCriteria = audTotalDrinksPerWeek >= 20 && audHeavyDrinkingDays >= 1;
+            } else if (gender && (gender === 'female' || gender === 'f')) {
+                meetsCriteria = audTotalDrinksPerWeek >= 10 && audHeavyDrinkingDays >= 1;
+            }
+
+            return {
+                daysPerWeek: audDrinkingDaysPerWeek,
+                drinksPerDay: audDrinksPerDay,
+                totalDrinksPerWeek: audTotalDrinksPerWeek,
+                totalDrinksPerMonth: audTotalDrinksPerMonth,
+                heavyDrinkingDays: audHeavyDrinkingDays,
+                drinkPreferences: drinkPreferences,
+                hasData: audDrinkingDaysPerWeek !== null && audDrinksPerDay !== null,
+                meetsDrinkingCriteria: meetsCriteria
             };
         }
 

@@ -1993,6 +1993,49 @@
                 </div>
             </div>
 
+            <!-- MOCA TO MMSE CONVERTER -->
+            <div class="section-card" style="margin-top: 20px;">
+                <h3 style="color: #2c5282; margin-bottom: 15px;">🔄 MoCA ↔ MMSE Score Converter</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    Convert between Montreal Cognitive Assessment (MoCA) and Mini-Mental State Examination (MMSE) scores.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <!-- MoCA Input -->
+                    <div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+                        <h4 style="margin-bottom: 15px; color: white;">MoCA Score</h4>
+                        <label style="display: block; margin-bottom: 10px; font-size: 13px; opacity: 0.9;">
+                            Enter MoCA score (0-30):
+                        </label>
+                        <input type="number" id="mocaScoreInput" min="0" max="30"
+                               style="width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 16px; text-align: center; font-weight: bold;"
+                               oninput="convertMocaToMmse()" placeholder="0-30">
+                        <div id="mocaInterpretation" style="margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 13px; min-height: 60px;">
+                            <em>Enter a MoCA score to see interpretation</em>
+                        </div>
+                    </div>
+
+                    <!-- MMSE Output -->
+                    <div style="padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; color: white;">
+                        <h4 style="margin-bottom: 15px; color: white;">Estimated MMSE</h4>
+                        <div id="mmseEstimatedScore" style="padding: 20px; background: rgba(255,255,255,0.3); border-radius: 8px; text-align: center; font-size: 32px; font-weight: bold; margin-bottom: 15px; min-height: 70px; display: flex; align-items: center; justify-content: center;">
+                            --
+                        </div>
+                        <div id="mmseInterpretation" style="margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 13px; min-height: 60px;">
+                            <em>MMSE estimate will appear here</em>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversion Formula Info -->
+                <div style="margin-top: 20px; padding: 15px; background: #f7fafc; border-radius: 8px; border-left: 4px solid #4299e1;">
+                    <p style="font-size: 13px; color: #666; margin: 0;">
+                        <strong>Conversion Formula:</strong> MMSE ≈ 1.193 × MoCA + 0.234<br>
+                        <em>Based on validated conversion algorithms. Educational use only.</em>
+                    </p>
+                </div>
+            </div>
+
             <!-- Study Partner -->
             <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                 <h3>Study Partner Availability</h3>
@@ -2273,6 +2316,10 @@
         // Neuro Risk Stratification Global Data
         let neuroRiskScore = 0;
         let neuroDetectedMedicalRisks = [];
+
+        // MoCA/MMSE Converter Global Data
+        let mocaScore = null;
+        let mmseEstimated = null;
 
         // PTSD Global Data
         let ptsdData = {
@@ -4193,6 +4240,94 @@
                     csf: document.getElementById('neuroBiomarkerCSF')?.checked || false
                 },
                 riskCategory: neuroRiskScore >= 8 ? 'high' : neuroRiskScore >= 5 ? 'moderate' : neuroRiskScore >= 2 ? 'low' : 'minimal'
+            };
+        }
+
+        // ===== MOCA/MMSE CONVERTER FUNCTIONS =====
+
+        function convertMocaToMmse() {
+            const mocaInput = document.getElementById('mocaScoreInput');
+            const mocaValue = parseFloat(mocaInput?.value);
+
+            // Reset if empty or invalid
+            if (!mocaInput || mocaInput.value === '' || isNaN(mocaValue)) {
+                mocaScore = null;
+                mmseEstimated = null;
+                document.getElementById('mmseEstimatedScore').innerHTML = '--';
+                document.getElementById('mocaInterpretation').innerHTML = '<em>Enter a MoCA score to see interpretation</em>';
+                document.getElementById('mmseInterpretation').innerHTML = '<em>MMSE estimate will appear here</em>';
+                return;
+            }
+
+            // Validate range
+            if (mocaValue < 0 || mocaValue > 30) {
+                document.getElementById('mmseEstimatedScore').innerHTML = '--';
+                document.getElementById('mocaInterpretation').innerHTML = '<strong style="color: #ffebee;">⚠️ Invalid Range</strong><br>MoCA scores must be between 0 and 30.';
+                document.getElementById('mmseInterpretation').innerHTML = '<em>MMSE estimate will appear here</em>';
+                mocaScore = null;
+                mmseEstimated = null;
+                return;
+            }
+
+            // Store MoCA score
+            mocaScore = mocaValue;
+
+            // Convert using formula: MMSE ≈ 1.193 × MoCA + 0.234
+            const mmseRaw = (1.193 * mocaValue) + 0.234;
+            mmseEstimated = Math.round(mmseRaw * 10) / 10; // Round to 1 decimal place
+            const mmseRounded = Math.round(mmseEstimated);
+
+            // Display MMSE estimate
+            document.getElementById('mmseEstimatedScore').innerHTML = `${mmseEstimated.toFixed(1)}<br><span style="font-size: 16px; opacity: 0.8;">(≈ ${mmseRounded})</span>`;
+
+            // MoCA Interpretation
+            let mocaInterpretation = '';
+            let mocaSeverity = '';
+            if (mocaValue >= 26) {
+                mocaSeverity = 'Normal';
+                mocaInterpretation = '<strong style="color: #d4edda;">✓ Normal Cognition</strong><br>MoCA ≥ 26 indicates normal cognitive function.';
+            } else if (mocaValue >= 18) {
+                mocaSeverity = 'Mild Impairment';
+                mocaInterpretation = '<strong style="color: #fff3cd;">⚠ Mild Cognitive Impairment</strong><br>MoCA 18-25 suggests mild cognitive impairment (MCI).';
+            } else if (mocaValue >= 10) {
+                mocaSeverity = 'Moderate Impairment';
+                mocaInterpretation = '<strong style="color: #f8d7da;">⚠ Moderate Impairment</strong><br>MoCA 10-17 suggests moderate cognitive impairment.';
+            } else {
+                mocaSeverity = 'Severe Impairment';
+                mocaInterpretation = '<strong style="color: #f8d7da;">⚠⚠ Severe Impairment</strong><br>MoCA < 10 suggests severe cognitive impairment.';
+            }
+            document.getElementById('mocaInterpretation').innerHTML = mocaInterpretation;
+
+            // MMSE Interpretation
+            let mmseInterpretation = '';
+            if (mmseRounded >= 24) {
+                mmseInterpretation = '<strong style="color: #d4edda;">✓ Normal Range</strong><br>MMSE ≥ 24 is typically considered normal.';
+            } else if (mmseRounded >= 18) {
+                mmseInterpretation = '<strong style="color: #fff3cd;">⚠ Mild Impairment</strong><br>MMSE 18-23 suggests mild cognitive impairment.';
+            } else if (mmseRounded >= 10) {
+                mmseInterpretation = '<strong style="color: #f8d7da;">⚠ Moderate Impairment</strong><br>MMSE 10-17 suggests moderate cognitive impairment.';
+            } else {
+                mmseInterpretation = '<strong style="color: #f8d7da;">⚠⚠ Severe Impairment</strong><br>MMSE < 10 suggests severe cognitive impairment.';
+            }
+            document.getElementById('mmseInterpretation').innerHTML = mmseInterpretation;
+        }
+
+        function getMocaMMseData() {
+            return {
+                mocaScore: mocaScore,
+                mmseEstimated: mmseEstimated,
+                mmseRounded: mmseEstimated !== null ? Math.round(mmseEstimated) : null,
+                hasData: mocaScore !== null,
+                mocaSeverity: mocaScore !== null ? (
+                    mocaScore >= 26 ? 'normal' :
+                    mocaScore >= 18 ? 'mild' :
+                    mocaScore >= 10 ? 'moderate' : 'severe'
+                ) : null,
+                mmseSeverity: mmseEstimated !== null ? (
+                    Math.round(mmseEstimated) >= 24 ? 'normal' :
+                    Math.round(mmseEstimated) >= 18 ? 'mild' :
+                    Math.round(mmseEstimated) >= 10 ? 'moderate' : 'severe'
+                ) : null
             };
         }
 

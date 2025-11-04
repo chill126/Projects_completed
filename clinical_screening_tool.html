@@ -1896,12 +1896,101 @@
                 </p>
             </div>
 
-            <!-- Placeholder: Risk Stratification -->
-            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                <h3>Neuro Risk Stratification</h3>
-                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
-                    [Your existing Neuro Prescreen Tool risk scoring will be integrated here]
+            <!-- NEURO RISK STRATIFICATION TOOL -->
+            <div class="neuro-subsection section-card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                <h3 style="color: #2c5282; margin-bottom: 15px;">🧠 Cognitive Risk Stratification</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    Complete all domains to calculate total risk score for cognitive impairment studies.
                 </p>
+
+                <!-- Domain 1: Memory Concerns -->
+                <div class="risk-domain" style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #4299e1;">
+                    <h4 style="margin-bottom: 10px; color: #2c5282;">Domain 1: Memory Concerns</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroMemoryConcernPatient" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>Patient reports memory concerns</span>
+                        </label>
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroMemoryConcernCaregiver" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>Caregiver/family reports concerns</span>
+                        </label>
+                    </div>
+                    <div id="memoryConcernScore" style="margin-top: 10px; font-weight: bold; color: #2c5282;"></div>
+                </div>
+
+                <!-- Domain 2: ADL Impact -->
+                <div class="risk-domain" style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ed8936;">
+                    <h4 style="margin-bottom: 10px; color: #2c5282;">Domain 2: Daily Function Impact</h4>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroADLImpact" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>Cognitive symptoms impact daily activities (ADLs)</span>
+                        </label>
+                    </div>
+                    <div id="adlImpactScore" style="margin-top: 10px; font-weight: bold; color: #2c5282;"></div>
+                </div>
+
+                <!-- Domain 3: Family History -->
+                <div class="risk-domain" style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #9f7aea;">
+                    <h4 style="margin-bottom: 10px; color: #2c5282;">Domain 3: Family History</h4>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroFamilyHistory" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>Family history of dementia/Alzheimer's disease</span>
+                        </label>
+                    </div>
+                    <div id="familyHistoryScore" style="margin-top: 10px; font-weight: bold; color: #2c5282;"></div>
+                </div>
+
+                <!-- Domain 4: Medical Risk Factors -->
+                <div class="risk-domain" style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #f56565;">
+                    <h4 style="margin-bottom: 10px; color: #2c5282;">Domain 4: Medical Risk Factors</h4>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 10px;">
+                        <em>These are automatically detected from Medical History section:</em>
+                    </p>
+                    <div id="neuroMedicalRisks" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                    <button type="button" onclick="detectNeuroMedicalRisks()" style="padding: 8px 16px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                        🔄 Scan Medical History for Risk Factors
+                    </button>
+                    <div id="medicalRiskScore" style="margin-top: 10px; font-weight: bold; color: #2c5282;"></div>
+                </div>
+
+                <!-- Domain 5: Biomarkers -->
+                <div class="risk-domain" style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #48bb78;">
+                    <h4 style="margin-bottom: 10px; color: #2c5282;">Domain 5: Known Biomarkers</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroBiomarkerAPOE4" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>APOE4 positive</span>
+                        </label>
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroBiomarkerAmyloid" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>Amyloid PET positive</span>
+                        </label>
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroBiomarkerTau" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>Tau positive</span>
+                        </label>
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="neuroBiomarkerCSF" onchange="calculateNeuroRisk()" style="width: 18px; height: 18px;">
+                            <span>Abnormal CSF biomarkers</span>
+                        </label>
+                    </div>
+                    <div id="biomarkerScore" style="margin-top: 10px; font-weight: bold; color: #2c5282;"></div>
+                </div>
+
+                <!-- TOTAL RISK SCORE -->
+                <div id="neuroTotalRiskDisplay" style="margin-top: 30px; padding: 25px; border-radius: 12px; text-align: center; font-size: 18px; font-weight: bold; transition: all 0.3s ease;">
+                    <!-- Will be populated by JavaScript with color-coded result -->
+                </div>
+
+                <!-- Risk Category Interpretation -->
+                <div id="neuroRiskInterpretation" style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                    <!-- Will be populated by JavaScript -->
+                </div>
             </div>
 
             <!-- Study Partner -->
@@ -2180,6 +2269,10 @@
 
         // SCID Global Data
         let scidScore = 0;
+
+        // Neuro Risk Stratification Global Data
+        let neuroRiskScore = 0;
+        let neuroDetectedMedicalRisks = [];
 
         // PTSD Global Data
         let ptsdData = {
@@ -3946,6 +4039,160 @@
                 score: scidScore,
                 criteria: checkedCriteria,
                 severity: scidScore >= 6 ? 'severe' : scidScore >= 4 ? 'moderate' : scidScore >= 2 ? 'mild' : 'subclinical'
+            };
+        }
+
+        // ===== NEURO RISK STRATIFICATION FUNCTIONS =====
+
+        function calculateNeuroRisk() {
+            let totalScore = 0;
+            let domainScores = {
+                memoryConcerns: 0,
+                adlImpact: 0,
+                familyHistory: 0,
+                medicalRisks: 0,
+                biomarkers: 0
+            };
+
+            // Domain 1: Memory Concerns (2 points max)
+            const patientConcern = document.getElementById('neuroMemoryConcernPatient')?.checked || false;
+            const caregiverConcern = document.getElementById('neuroMemoryConcernCaregiver')?.checked || false;
+            if (patientConcern) domainScores.memoryConcerns += 1;
+            if (caregiverConcern) domainScores.memoryConcerns += 1;
+            document.getElementById('memoryConcernScore').textContent = `Domain Score: ${domainScores.memoryConcerns}/2`;
+
+            // Domain 2: ADL Impact (3 points max)
+            const adlImpact = document.getElementById('neuroADLImpact')?.checked || false;
+            if (adlImpact) domainScores.adlImpact += 3;
+            document.getElementById('adlImpactScore').textContent = `Domain Score: ${domainScores.adlImpact}/3`;
+
+            // Domain 3: Family History (2 points max)
+            const familyHistory = document.getElementById('neuroFamilyHistory')?.checked || false;
+            if (familyHistory) domainScores.familyHistory += 2;
+            document.getElementById('familyHistoryScore').textContent = `Domain Score: ${domainScores.familyHistory}/2`;
+
+            // Domain 4: Medical Risk Factors (count detected risks)
+            domainScores.medicalRisks = neuroDetectedMedicalRisks.length;
+            document.getElementById('medicalRiskScore').textContent = `Domain Score: ${domainScores.medicalRisks} risk factor(s) detected`;
+
+            // Domain 5: Biomarkers (1 point each, 4 max)
+            const apoe4 = document.getElementById('neuroBiomarkerAPOE4')?.checked || false;
+            const amyloid = document.getElementById('neuroBiomarkerAmyloid')?.checked || false;
+            const tau = document.getElementById('neuroBiomarkerTau')?.checked || false;
+            const csf = document.getElementById('neuroBiomarkerCSF')?.checked || false;
+            if (apoe4) domainScores.biomarkers += 1;
+            if (amyloid) domainScores.biomarkers += 1;
+            if (tau) domainScores.biomarkers += 1;
+            if (csf) domainScores.biomarkers += 1;
+            document.getElementById('biomarkerScore').textContent = `Domain Score: ${domainScores.biomarkers}/4`;
+
+            // Calculate total score
+            totalScore = domainScores.memoryConcerns + domainScores.adlImpact +
+                        domainScores.familyHistory + domainScores.medicalRisks +
+                        domainScores.biomarkers;
+            neuroRiskScore = totalScore;
+
+            // Display total score with color coding
+            const totalDisplay = document.getElementById('neuroTotalRiskDisplay');
+            const interpretationDiv = document.getElementById('neuroRiskInterpretation');
+
+            let riskCategory = '';
+            let backgroundColor = '';
+            let textColor = '';
+            let interpretation = '';
+
+            if (totalScore >= 8) {
+                riskCategory = 'HIGH RISK';
+                backgroundColor = '#FED7D7';
+                textColor = '#9B2C2C';
+                interpretation = '🔴 <strong>High Risk for Cognitive Impairment</strong><br>This participant shows multiple risk factors and may be an excellent candidate for prevention/early intervention studies. Consider comprehensive cognitive testing.';
+            } else if (totalScore >= 5) {
+                riskCategory = 'MODERATE RISK';
+                backgroundColor = '#FED7AA';
+                textColor = '#9C4221';
+                interpretation = '🟡 <strong>Moderate Risk for Cognitive Impairment</strong><br>This participant has some risk factors present. May be suitable for select cognitive studies. Additional screening recommended.';
+            } else if (totalScore >= 2) {
+                riskCategory = 'LOW RISK';
+                backgroundColor = '#FEF3C7';
+                textColor = '#78350F';
+                interpretation = '⚠️ <strong>Low Risk for Cognitive Impairment</strong><br>Minimal risk factors detected. May be suitable as a healthy control or for primary prevention studies.';
+            } else {
+                riskCategory = 'MINIMAL RISK';
+                backgroundColor = '#D1FAE5';
+                textColor = '#065F46';
+                interpretation = '✅ <strong>Minimal Risk for Cognitive Impairment</strong><br>Very few risk factors present. Excellent candidate for healthy control groups.';
+            }
+
+            totalDisplay.style.backgroundColor = backgroundColor;
+            totalDisplay.style.color = textColor;
+            totalDisplay.innerHTML = `Total Risk Score: ${totalScore} - ${riskCategory}`;
+
+            interpretationDiv.innerHTML = interpretation;
+        }
+
+        function detectNeuroMedicalRisks() {
+            neuroDetectedMedicalRisks = [];
+
+            // Risk conditions to search for
+            const riskConditions = [
+                'hypertension', 'diabetes', 'stroke', 'tia', 'head injury', 'traumatic brain',
+                'depression', 'sleep apnea', 'hyperlipidemia', 'atrial fibrillation',
+                'cardiovascular', 'obesity', 'hypercholesterolemia'
+            ];
+
+            // Scan medical history table
+            const medicalHistoryTable = document.getElementById('medicalHistoryTable');
+            if (medicalHistoryTable) {
+                const rows = medicalHistoryTable.getElementsByTagName('tbody')[0]?.getElementsByTagName('tr') || [];
+
+                for (let row of rows) {
+                    const conditionCell = row.cells[0];
+                    if (conditionCell) {
+                        const conditionText = conditionCell.querySelector('input')?.value?.toLowerCase() || '';
+
+                        for (let riskCond of riskConditions) {
+                            if (conditionText.includes(riskCond) && !neuroDetectedMedicalRisks.includes(riskCond)) {
+                                neuroDetectedMedicalRisks.push(riskCond);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Display detected risks
+            const risksDiv = document.getElementById('neuroMedicalRisks');
+            if (neuroDetectedMedicalRisks.length > 0) {
+                risksDiv.innerHTML = neuroDetectedMedicalRisks.map(risk =>
+                    `<div style="padding: 8px; background: #FEE; border: 1px solid #FCC; border-radius: 4px; font-size: 13px;">
+                        ⚠️ ${risk.charAt(0).toUpperCase() + risk.slice(1)}
+                    </div>`
+                ).join('');
+            } else {
+                risksDiv.innerHTML = '<div style="padding: 8px; color: #666; font-size: 13px; font-style: italic;">No risk factors detected. Add conditions to Medical History section.</div>';
+            }
+
+            // Recalculate total risk
+            calculateNeuroRisk();
+        }
+
+        // Function to get Neuro Risk data for eligibility engine
+        function getNeuroRiskData() {
+            return {
+                totalScore: neuroRiskScore,
+                memoryConcerns: {
+                    patient: document.getElementById('neuroMemoryConcernPatient')?.checked || false,
+                    caregiver: document.getElementById('neuroMemoryConcernCaregiver')?.checked || false
+                },
+                adlImpact: document.getElementById('neuroADLImpact')?.checked || false,
+                familyHistory: document.getElementById('neuroFamilyHistory')?.checked || false,
+                medicalRisks: neuroDetectedMedicalRisks,
+                biomarkers: {
+                    apoe4: document.getElementById('neuroBiomarkerAPOE4')?.checked || false,
+                    amyloid: document.getElementById('neuroBiomarkerAmyloid')?.checked || false,
+                    tau: document.getElementById('neuroBiomarkerTau')?.checked || false,
+                    csf: document.getElementById('neuroBiomarkerCSF')?.checked || false
+                },
+                riskCategory: neuroRiskScore >= 8 ? 'high' : neuroRiskScore >= 5 ? 'moderate' : neuroRiskScore >= 2 ? 'low' : 'minimal'
             };
         }
 

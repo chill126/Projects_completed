@@ -855,6 +855,12 @@
                 box-shadow: none;
             }
         }
+
+        /* PHQ-9 Assessment Hover Effects */
+        .phq9-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -1642,13 +1648,17 @@
                     Complete the following standardized assessments as applicable. These scores are used in eligibility determination.
                 </p>
 
-                <!-- PHQ-9 -->
+                <!-- PHQ-9 Assessment Section -->
                 <div style="margin-bottom: 25px;">
                     <button type="button" id="openPHQ9" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;">
                         📋 Complete PHQ-9 Assessment (Depression)
                     </button>
                     <div id="phq9ResultDisplay" style="display: none; margin-top: 15px; padding: 15px; background: #E3F2FD; border-left: 4px solid #4A90E2; border-radius: 6px;">
-                        <!-- PHQ-9 results will display here -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="color: #1565C0;">PHQ-9 Score:</strong>
+                            <span id="phq9Score" style="font-size: 24px; font-weight: 700; color: #1565C0;">--</span>
+                        </div>
+                        <div id="phq9Interpretation" style="color: #424242; font-size: 14px;"></div>
                     </div>
                 </div>
 
@@ -1673,6 +1683,52 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- PHQ-9 Modal -->
+        <div id="phq9Modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; overflow-y: auto; padding: 20px;">
+            <div style="max-width: 800px; margin: 40px auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+                <!-- Modal Header -->
+                <div style="padding: 20px 30px; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border-radius: 12px 12px 0 0;">
+                    <h3 style="font-size: 22px; margin-bottom: 5px;">Patient Health Questionnaire-9 (PHQ-9)</h3>
+                    <p style="font-size: 14px; opacity: 0.9; margin: 0;">Over the last 2 weeks, how often have you been bothered by the following problems?</p>
+                </div>
+
+                <!-- Modal Body -->
+                <div id="phq9Questions" style="padding: 30px; max-height: 60vh; overflow-y: auto;">
+                    <!-- Questions will be inserted here -->
+                </div>
+
+                <!-- Score Display -->
+                <div id="phq9ScoreDisplay" style="display: none; padding: 20px 30px; background: #F8F9FA; border-top: 1px solid #E2E8F0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Total Score</div>
+                            <div style="font-size: 32px; font-weight: 700; color: #2D3748;">
+                                <span id="phq9ScoreValue">0</span><span style="font-size: 20px; color: #718096;">/27</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Interpretation</div>
+                            <div id="phq9InterpretationModal" style="font-size: 18px; font-weight: 700; color: #2D3748;">
+                                <!-- Interpretation will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div style="padding: 20px 30px; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" id="closePHQ9" style="padding: 10px 20px; background: #CBD5E0; color: #2D3748; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="button" id="savePHQ9" style="padding: 10px 20px; background: #27AE60; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        Save Results
+                    </button>
+                </div>
+
+            </div>
         </div>
 
         <!-- NEURO Study Specific Section -->
@@ -1872,6 +1928,23 @@
             hamd: null,
             ptsd: null
         };
+
+        // PHQ-9 Global Data
+        let phq9Data = {};
+        let phq9TotalScore = 0;
+
+        // PHQ-9 Questions
+        const phq9Questions = [
+            "Little interest or pleasure in doing things",
+            "Feeling down, depressed, or hopeless",
+            "Trouble falling or staying asleep, or sleeping too much",
+            "Feeling tired or having little energy",
+            "Poor appetite or overeating",
+            "Feeling bad about yourself - or that you are a failure or have let yourself or your family down",
+            "Trouble concentrating on things, such as reading the newspaper or watching television",
+            "Moving or speaking so slowly that other people could have noticed. Or the opposite - being so fidgety or restless that you have been moving around a lot more than usual",
+            "Thoughts that you would be better off dead, or of hurting yourself in some way"
+        ];
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -2251,12 +2324,139 @@
                 });
             });
 
-            // PSYCH: Assessment tool button placeholders
+            // PSYCH: PHQ-9 Assessment Tool
             const openPHQ9Btn = document.getElementById('openPHQ9');
             if (openPHQ9Btn) {
                 openPHQ9Btn.addEventListener('click', function() {
-                    alert('PHQ-9 Assessment tool will be integrated here.\n\nThis will open a modal or expand section with the full PHQ-9 questionnaire.');
-                    // TODO: Integrate actual PHQ-9 tool
+                    const modal = document.getElementById('phq9Modal');
+                    const questionsDiv = document.getElementById('phq9Questions');
+                    questionsDiv.innerHTML = '';
+                    phq9Data = {};
+                    phq9TotalScore = 0;
+                    document.getElementById('phq9ScoreDisplay').style.display = 'none';
+
+                    // Generate questions
+                    phq9Questions.forEach((question, index) => {
+                        const questionDiv = document.createElement('div');
+                        questionDiv.style.cssText = 'margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #E2E8F0;';
+                        questionDiv.innerHTML = `
+                            <div style="font-weight: 600; color: #2D3748; margin-bottom: 12px; font-size: 15px;">
+                                ${index + 1}. ${question}
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                                ${[0, 1, 2, 3].map(score => `
+                                    <label class="phq9-option" data-question="${index}" data-score="${score}" style="display: block; padding: 12px; border: 2px solid #E2E8F0; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: white;">
+                                        <input type="radio" name="phq9_${index}" value="${score}" style="display: none;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #4A90E2; margin-bottom: 4px;">${score}</div>
+                                        <div style="font-size: 11px; color: #718096;">
+                                            ${score === 0 ? 'Not at all' : score === 1 ? 'Several days' : score === 2 ? 'More than half the days' : 'Nearly every day'}
+                                        </div>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        `;
+                        questionsDiv.appendChild(questionDiv);
+                    });
+
+                    // Add click handlers
+                    document.querySelectorAll('.phq9-option').forEach(option => {
+                        option.addEventListener('click', function() {
+                            const questionIndex = parseInt(this.getAttribute('data-question'));
+                            const score = parseInt(this.getAttribute('data-score'));
+
+                            // Deselect all options for this question
+                            const questionDiv = this.parentElement;
+                            questionDiv.querySelectorAll('.phq9-option').forEach(opt => {
+                                opt.style.borderColor = '#E2E8F0';
+                                opt.style.background = 'white';
+                            });
+
+                            // Select this option
+                            this.style.borderColor = '#4A90E2';
+                            this.style.background = '#E3F2FD';
+                            this.querySelector('input').checked = true;
+
+                            phq9Data[questionIndex] = score;
+
+                            // Calculate total score
+                            const total = Object.values(phq9Data).reduce((sum, val) => sum + val, 0);
+                            phq9TotalScore = total;
+
+                            // Display score
+                            document.getElementById('phq9ScoreDisplay').style.display = 'block';
+                            document.getElementById('phq9ScoreValue').textContent = total;
+
+                            // Interpretation
+                            let interpretation = '';
+                            let color = '';
+                            if (total <= 4) {
+                                interpretation = 'Minimal Depression';
+                                color = '#27AE60';
+                            } else if (total <= 9) {
+                                interpretation = 'Mild Depression';
+                                color = '#F39C12';
+                            } else if (total <= 14) {
+                                interpretation = 'Moderate Depression';
+                                color = '#E67E22';
+                            } else if (total <= 19) {
+                                interpretation = 'Moderately Severe Depression';
+                                color = '#E74C3C';
+                            } else {
+                                interpretation = 'Severe Depression';
+                                color = '#C0392B';
+                            }
+
+                            const interpDiv = document.getElementById('phq9InterpretationModal');
+                            interpDiv.textContent = interpretation;
+                            interpDiv.style.color = color;
+                        });
+                    });
+
+                    modal.style.display = 'block';
+                });
+            }
+
+            // Close PHQ-9 Modal
+            const closePHQ9Btn = document.getElementById('closePHQ9');
+            if (closePHQ9Btn) {
+                closePHQ9Btn.addEventListener('click', function() {
+                    document.getElementById('phq9Modal').style.display = 'none';
+                });
+            }
+
+            // Save PHQ-9 Results
+            const savePHQ9Btn = document.getElementById('savePHQ9');
+            if (savePHQ9Btn) {
+                savePHQ9Btn.addEventListener('click', function() {
+                    if (Object.keys(phq9Data).length < 9) {
+                        alert('Please answer all 9 questions before saving.');
+                        return;
+                    }
+
+                    // Update assessmentScores global
+                    assessmentScores.phq9 = phq9TotalScore;
+
+                    // Display results in main form
+                    const resultDisplay = document.getElementById('phq9ResultDisplay');
+                    document.getElementById('phq9Score').textContent = phq9TotalScore;
+
+                    let interpretation = '';
+                    if (phq9TotalScore <= 4) interpretation = 'Minimal Depression';
+                    else if (phq9TotalScore <= 9) interpretation = 'Mild Depression';
+                    else if (phq9TotalScore <= 14) interpretation = 'Moderate Depression';
+                    else if (phq9TotalScore <= 19) interpretation = 'Moderately Severe Depression';
+                    else interpretation = 'Severe Depression';
+
+                    document.getElementById('phq9ResultDisplay').querySelector('#phq9Interpretation').textContent =
+                        `${interpretation} - Completed on ${new Date().toLocaleDateString()}`;
+
+                    resultDisplay.style.display = 'block';
+
+                    // Close modal
+                    document.getElementById('phq9Modal').style.display = 'none';
+
+                    // Success message
+                    alert('PHQ-9 results saved successfully!');
                 });
             }
 
@@ -2788,12 +2988,20 @@
 
         function getAssessmentScores() {
             return {
-                phq9Score: assessmentScores.phq9?.totalScore || null,
-                phq9Severity: assessmentScores.phq9?.severity || null,
+                phq9Score: assessmentScores.phq9 || null,
                 hamdScore: assessmentScores.hamd?.score || null,
                 hamdSeverity: assessmentScores.hamd?.severity || null,
                 ptsdScore: assessmentScores.ptsd?.score || null,
                 ptsdPositive: assessmentScores.ptsd?.positive || null
+            };
+        }
+
+        // Function to get PHQ-9 data for eligibility engine
+        function getPHQ9Data() {
+            return {
+                score: phq9TotalScore,
+                responses: phq9Data,
+                completed: Object.keys(phq9Data).length === 9
             };
         }
 

@@ -2138,6 +2138,9 @@
                     }
                 });
             }
+
+            // Initialize psych medications summary (will show "no meds" initially)
+            updatePsychMedicationsSummary();
         }
 
         function validateCCID() {
@@ -2199,6 +2202,8 @@
                 const psychSection = document.getElementById('psychStudySection');
                 if (psychSection) {
                     psychSection.style.display = 'block';
+                    // Update psychiatric medications summary
+                    updatePsychMedicationsSummary();
                 }
             } else if (indication === 'neuro') {
                 const neuroSection = document.getElementById('neuro-specific');

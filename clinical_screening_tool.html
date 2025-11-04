@@ -1676,13 +1676,17 @@
                     </div>
                 </div>
 
-                <!-- PTSD Screener -->
+                <!-- PTSD Screener Section -->
                 <div style="margin-bottom: 25px;">
                     <button type="button" id="openPTSD" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;">
                         🔍 PTSD Screener (DSM-5)
                     </button>
                     <div id="ptsdResultDisplay" style="display: none; margin-top: 15px; padding: 15px; background: #FFF9E6; border-left: 4px solid #F39C12; border-radius: 6px;">
-                        <!-- PTSD results will display here -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="color: #C0601D;">PTSD Assessment Result:</strong>
+                            <span id="ptsdResult" style="font-size: 16px; font-weight: 700; color: #C0601D;">--</span>
+                        </div>
+                        <div id="ptsdDetails" style="color: #424242; font-size: 14px;"></div>
                     </div>
                 </div>
             </div>
@@ -1728,6 +1732,66 @@
                         Cancel
                     </button>
                     <button type="button" id="savePHQ9" style="padding: 10px 20px; background: #27AE60; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        Save Results
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PTSD Modal -->
+        <div id="ptsdModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; overflow-y: auto; padding: 20px;">
+            <div style="max-width: 900px; margin: 40px auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+                <!-- Modal Header -->
+                <div style="padding: 20px 30px; background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); color: white; border-radius: 12px 12px 0 0;">
+                    <h3 style="font-size: 22px; margin-bottom: 5px;">PTSD Screener (DSM-5 Criteria)</h3>
+                    <p style="font-size: 14px; opacity: 0.9; margin: 0;">Based on DSM-5 diagnostic criteria for Post-Traumatic Stress Disorder</p>
+                </div>
+
+                <!-- Trauma Exposure Question -->
+                <div style="padding: 30px; background: #FFF9E6; border-bottom: 2px solid #F39C12;">
+                    <div style="font-weight: 700; color: #C0601D; margin-bottom: 15px; font-size: 16px;">
+                        Trauma Exposure (Criterion A)
+                    </div>
+                    <div style="margin-bottom: 15px; color: #4a5568;">
+                        Have you experienced, witnessed, or been confronted with traumatic event(s) involving actual or threatened death, serious injury, or sexual violence?
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; background: white;">
+                            <input type="radio" name="traumaExposure" value="yes" id="traumaYes" style="width: 18px; height: 18px;">
+                            <span style="font-weight: 600;">Yes</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; background: white;">
+                            <input type="radio" name="traumaExposure" value="no" id="traumaNo" style="width: 18px; height: 18px;">
+                            <span style="font-weight: 600;">No</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- PTSD Criteria -->
+                <div id="ptsdCriteria" style="display: none; padding: 30px;">
+                    <div id="ptsdQuestions">
+                        <!-- Questions will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="ptsdResultsSection" style="display: none; padding: 20px 30px; background: #F8F9FA; border-top: 1px solid #E2E8F0;">
+                    <div style="font-size: 18px; font-weight: 700; color: #2D3748; margin-bottom: 10px;">
+                        Screening Result: <span id="ptsdScreenResult"></span>
+                    </div>
+                    <div id="ptsdCriteriaBreakdown" style="font-size: 14px; color: #4a5568;">
+                        <!-- Breakdown will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div style="padding: 20px 30px; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" id="closePTSD" style="padding: 10px 20px; background: #CBD5E0; color: #2D3748; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="button" id="savePTSD" style="display: none; padding: 10px 20px; background: #27AE60; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
                         Save Results
                     </button>
                 </div>
@@ -1939,6 +2003,58 @@
 
         // HAM-D Global Data
         let hamdEstimatedScore = 0;
+
+        // PTSD Global Data
+        let ptsdData = {
+            traumaExposure: null,
+            criterionB: 0, // Intrusion (need 1+)
+            criterionC: 0, // Avoidance (need 1+)
+            criterionD: 0, // Negative alterations (need 2+)
+            criterionE: 0  // Arousal/reactivity (need 2+)
+        };
+
+        const ptsdQuestions = {
+            criterionB: {
+                title: 'Criterion B: Intrusion Symptoms (need at least 1)',
+                questions: [
+                    'Recurrent, involuntary, and intrusive memories of the traumatic event',
+                    'Recurrent distressing dreams related to the traumatic event',
+                    'Flashbacks or feeling as if the traumatic event is recurring',
+                    'Intense psychological distress when exposed to trauma reminders',
+                    'Marked physiological reactions to trauma reminders'
+                ]
+            },
+            criterionC: {
+                title: 'Criterion C: Avoidance (need at least 1)',
+                questions: [
+                    'Avoidance of distressing memories, thoughts, or feelings about the trauma',
+                    'Avoidance of external reminders (people, places, activities, objects) related to the trauma'
+                ]
+            },
+            criterionD: {
+                title: 'Criterion D: Negative Alterations in Cognition and Mood (need at least 2)',
+                questions: [
+                    'Inability to remember important aspects of the traumatic event',
+                    'Persistent negative beliefs about oneself, others, or the world',
+                    'Persistent distorted blame of self or others about the cause of the trauma',
+                    'Persistent negative emotional state (fear, horror, anger, guilt, shame)',
+                    'Markedly diminished interest or participation in significant activities',
+                    'Feelings of detachment or estrangement from others',
+                    'Persistent inability to experience positive emotions'
+                ]
+            },
+            criterionE: {
+                title: 'Criterion E: Arousal and Reactivity (need at least 2)',
+                questions: [
+                    'Irritable behavior and angry outbursts',
+                    'Reckless or self-destructive behavior',
+                    'Hypervigilance',
+                    'Exaggerated startle response',
+                    'Problems with concentration',
+                    'Sleep disturbance'
+                ]
+            }
+        };
 
         // PHQ-9 Questions
         const phq9Questions = [
@@ -2532,13 +2648,187 @@
                 });
             }
 
+            // PSYCH: PTSD Screener
             const openPTSDBtn = document.getElementById('openPTSD');
             if (openPTSDBtn) {
                 openPTSDBtn.addEventListener('click', function() {
-                    alert('PTSD Screener will be integrated here.\n\nThis will open a modal or expand section with the DSM-5 PTSD screening tool.');
-                    // TODO: Integrate actual PTSD screener
+                    document.getElementById('ptsdModal').style.display = 'block';
+                    // Reset
+                    ptsdData = {
+                        traumaExposure: null,
+                        criterionB: 0,
+                        criterionC: 0,
+                        criterionD: 0,
+                        criterionE: 0
+                    };
+                    document.getElementById('ptsdCriteria').style.display = 'none';
+                    document.getElementById('ptsdResultsSection').style.display = 'none';
+                    document.getElementById('savePTSD').style.display = 'none';
+
+                    // Reset radio buttons
+                    document.querySelectorAll('input[name="traumaExposure"]').forEach(radio => {
+                        radio.checked = false;
+                    });
                 });
             }
+
+            // PTSD: Trauma exposure radio buttons
+            document.querySelectorAll('input[name="traumaExposure"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    ptsdData.traumaExposure = this.value === 'yes';
+
+                    if (this.value === 'yes') {
+                        // Show PTSD criteria questions
+                        document.getElementById('ptsdCriteria').style.display = 'block';
+                        generatePTSDQuestions();
+                    } else {
+                        // No trauma exposure = no PTSD
+                        document.getElementById('ptsdCriteria').style.display = 'none';
+                        document.getElementById('ptsdResultsSection').style.display = 'block';
+                        document.getElementById('ptsdScreenResult').textContent = 'Negative for PTSD';
+                        document.getElementById('ptsdScreenResult').style.color = '#27AE60';
+                        document.getElementById('ptsdCriteriaBreakdown').innerHTML = `
+                            <p>No trauma exposure reported. PTSD diagnosis requires exposure to traumatic event(s).</p>
+                        `;
+                        document.getElementById('savePTSD').style.display = 'block';
+                    }
+                });
+            });
+
+            // Close PTSD Modal
+            const closePTSDBtn = document.getElementById('closePTSD');
+            if (closePTSDBtn) {
+                closePTSDBtn.addEventListener('click', function() {
+                    document.getElementById('ptsdModal').style.display = 'none';
+                });
+            }
+
+            // Save PTSD Results
+            const savePTSDBtn = document.getElementById('savePTSD');
+            if (savePTSDBtn) {
+                savePTSDBtn.addEventListener('click', function() {
+                    const meetsB = ptsdData.criterionB >= 1;
+                    const meetsC = ptsdData.criterionC >= 1;
+                    const meetsD = ptsdData.criterionD >= 2;
+                    const meetsE = ptsdData.criterionE >= 2;
+                    const meetsPTSD = ptsdData.traumaExposure && meetsB && meetsC && meetsD && meetsE;
+
+                    // Update assessmentScores global
+                    assessmentScores.ptsd = {
+                        positive: meetsPTSD,
+                        score: ptsdData.criterionB + ptsdData.criterionC + ptsdData.criterionD + ptsdData.criterionE
+                    };
+
+                    // Display in main form
+                    const resultDisplay = document.getElementById('ptsdResultDisplay');
+                    document.getElementById('ptsdResult').textContent = meetsPTSD ? 'Positive Screen' : 'Negative Screen';
+                    document.getElementById('ptsdResult').style.color = meetsPTSD ? '#E74C3C' : '#27AE60';
+
+                    document.getElementById('ptsdDetails').innerHTML = `
+                        <strong>${meetsPTSD ? 'Meets DSM-5 criteria' : 'Does not meet full criteria'}</strong><br>
+                        Trauma Exposure: ${ptsdData.traumaExposure ? 'Yes' : 'No'}<br>
+                        Criteria Met: B(${ptsdData.criterionB}), C(${ptsdData.criterionC}), D(${ptsdData.criterionD}), E(${ptsdData.criterionE})<br>
+                        Completed on ${new Date().toLocaleDateString()}
+                    `;
+
+                    resultDisplay.style.display = 'block';
+
+                    // Close modal
+                    document.getElementById('ptsdModal').style.display = 'none';
+
+                    alert('PTSD screening results saved successfully!');
+                });
+            }
+        }
+
+        function generatePTSDQuestions() {
+            const questionsDiv = document.getElementById('ptsdQuestions');
+            questionsDiv.innerHTML = '';
+
+            Object.keys(ptsdQuestions).forEach(criterion => {
+                const criterionData = ptsdQuestions[criterion];
+
+                const criterionDiv = document.createElement('div');
+                criterionDiv.style.cssText = 'margin-bottom: 30px; padding: 20px; background: #F8F9FA; border-radius: 8px;';
+
+                let html = `
+                    <div style="font-weight: 700; color: #C0601D; margin-bottom: 15px; font-size: 16px;">
+                        ${criterionData.title}
+                    </div>
+                `;
+
+                criterionData.questions.forEach((question, index) => {
+                    html += `
+                        <label style="display: flex; align-items: start; gap: 12px; padding: 12px; margin-bottom: 10px; border: 2px solid #E2E8F0; border-radius: 6px; cursor: pointer; background: white;">
+                            <input type="checkbox" class="ptsd-symptom" data-criterion="${criterion}" style="width: 20px; height: 20px; margin-top: 2px;">
+                            <span style="flex: 1; color: #2D3748;">${question}</span>
+                        </label>
+                    `;
+                });
+
+                criterionDiv.innerHTML = html;
+                questionsDiv.appendChild(criterionDiv);
+            });
+
+            // Add event listeners
+            document.querySelectorAll('.ptsd-symptom').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const criterion = this.getAttribute('data-criterion');
+                    const criterionCheckboxes = document.querySelectorAll(`.ptsd-symptom[data-criterion="${criterion}"]`);
+                    ptsdData[criterion] = Array.from(criterionCheckboxes).filter(cb => cb.checked).length;
+
+                    evaluatePTSD();
+                });
+            });
+        }
+
+        function evaluatePTSD() {
+            // Check if all criteria are met
+            // Criterion B: need 1+
+            // Criterion C: need 1+
+            // Criterion D: need 2+
+            // Criterion E: need 2+
+
+            const meetsB = ptsdData.criterionB >= 1;
+            const meetsC = ptsdData.criterionC >= 1;
+            const meetsD = ptsdData.criterionD >= 2;
+            const meetsE = ptsdData.criterionE >= 2;
+
+            const meetsPTSD = ptsdData.traumaExposure && meetsB && meetsC && meetsD && meetsE;
+
+            // Display results
+            document.getElementById('ptsdResultsSection').style.display = 'block';
+
+            const resultSpan = document.getElementById('ptsdScreenResult');
+            if (meetsPTSD) {
+                resultSpan.textContent = 'Positive for PTSD';
+                resultSpan.style.color = '#E74C3C';
+            } else {
+                resultSpan.textContent = 'Does Not Meet Full PTSD Criteria';
+                resultSpan.style.color = '#F39C12';
+            }
+
+            document.getElementById('ptsdCriteriaBreakdown').innerHTML = `
+                <div style="display: grid; gap: 8px; margin-top: 10px;">
+                    <div style="padding: 8px; background: white; border-radius: 4px;">
+                        ${meetsB ? '✓' : '✗'} Criterion B (Intrusion): ${ptsdData.criterionB} symptoms (need 1+)
+                    </div>
+                    <div style="padding: 8px; background: white; border-radius: 4px;">
+                        ${meetsC ? '✓' : '✗'} Criterion C (Avoidance): ${ptsdData.criterionC} symptoms (need 1+)
+                    </div>
+                    <div style="padding: 8px; background: white; border-radius: 4px;">
+                        ${meetsD ? '✓' : '✗'} Criterion D (Negative Alterations): ${ptsdData.criterionD} symptoms (need 2+)
+                    </div>
+                    <div style="padding: 8px; background: white; border-radius: 4px;">
+                        ${meetsE ? '✓' : '✗'} Criterion E (Arousal/Reactivity): ${ptsdData.criterionE} symptoms (need 2+)
+                    </div>
+                </div>
+                <p style="margin-top: 15px; font-size: 13px; color: #718096;">
+                    Note: This is a screening tool. Clinical diagnosis requires additional evaluation including duration (>1 month), functional impairment, and exclusion of other causes.
+                </p>
+            `;
+
+            document.getElementById('savePTSD').style.display = 'block';
         }
 
         function validateCCID() {
@@ -3074,6 +3364,22 @@
             return {
                 estimatedScore: hamdEstimatedScore,
                 derivedFromPHQ9: true
+            };
+        }
+
+        // Function to get PTSD data for eligibility engine
+        function getPTSDData() {
+            return {
+                traumaExposure: ptsdData.traumaExposure,
+                criterionB: ptsdData.criterionB,
+                criterionC: ptsdData.criterionC,
+                criterionD: ptsdData.criterionD,
+                criterionE: ptsdData.criterionE,
+                meetsCriteria: ptsdData.traumaExposure &&
+                               ptsdData.criterionB >= 1 &&
+                               ptsdData.criterionC >= 1 &&
+                               ptsdData.criterionD >= 2 &&
+                               ptsdData.criterionE >= 2
             };
         }
 

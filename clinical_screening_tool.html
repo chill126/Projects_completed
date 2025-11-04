@@ -4565,131 +4565,190 @@
 
         // ===== NEURO RISK STRATIFICATION FUNCTIONS =====
 
+        const NEURO_RISK_FACTORS = {
+            // Domain-specific medical conditions that increase cognitive risk
+            diabetes: 1,
+            hypertension: 1,
+            'high cholesterol': 1,
+            hyperlipidemia: 1,
+            'cardiovascular disease': 1,
+            'heart disease': 1,
+            stroke: 2,
+            tia: 2,
+            'traumatic brain injury': 2,
+            tbi: 2,
+            'head injury': 1,
+            'sleep apnea': 1,
+            depression: 1,
+            'hearing loss': 1
+        };
+
         function calculateNeuroRisk() {
             let totalScore = 0;
-            let domainScores = {
-                memoryConcerns: 0,
-                adlImpact: 0,
-                familyHistory: 0,
-                medicalRisks: 0,
-                biomarkers: 0
-            };
+            let breakdown = [];
 
-            // Domain 1: Memory Concerns (2 points max)
-            const patientConcern = document.getElementById('neuroMemoryConcernPatient')?.checked || false;
-            const caregiverConcern = document.getElementById('neuroMemoryConcernCaregiver')?.checked || false;
-            if (patientConcern) domainScores.memoryConcerns += 1;
-            if (caregiverConcern) domainScores.memoryConcerns += 1;
-            document.getElementById('memoryConcernScore').textContent = `Domain Score: ${domainScores.memoryConcerns}/2`;
+            // Domain 1: Memory Concerns (0-2 points)
+            let memoryConcernScore = 0;
+            if (document.getElementById('neuroMemoryConcernPatient')?.checked) {
+                memoryConcernScore += 1;
+            }
+            if (document.getElementById('neuroMemoryConcernCaregiver')?.checked) {
+                memoryConcernScore += 1;
+            }
+            totalScore += memoryConcernScore;
+            breakdown.push(`Domain 1 (Memory Concerns): ${memoryConcernScore}/2`);
+            document.getElementById('memoryConcernScore').textContent = `Score: ${memoryConcernScore}/2`;
 
-            // Domain 2: ADL Impact (3 points max)
-            const adlImpact = document.getElementById('neuroADLImpact')?.checked || false;
-            if (adlImpact) domainScores.adlImpact += 3;
-            document.getElementById('adlImpactScore').textContent = `Domain Score: ${domainScores.adlImpact}/3`;
+            // Domain 2: ADL Impact (0-2 points)
+            let adlScore = document.getElementById('neuroADLImpact')?.checked ? 2 : 0;
+            totalScore += adlScore;
+            breakdown.push(`Domain 2 (ADL Impact): ${adlScore}/2`);
+            document.getElementById('adlImpactScore').textContent = `Score: ${adlScore}/2`;
 
-            // Domain 3: Family History (2 points max)
-            const familyHistory = document.getElementById('neuroFamilyHistory')?.checked || false;
-            if (familyHistory) domainScores.familyHistory += 2;
-            document.getElementById('familyHistoryScore').textContent = `Domain Score: ${domainScores.familyHistory}/2`;
+            // Domain 3: Family History (0-1 point)
+            let familyScore = document.getElementById('neuroFamilyHistory')?.checked ? 1 : 0;
+            totalScore += familyScore;
+            breakdown.push(`Domain 3 (Family History): ${familyScore}/1`);
+            document.getElementById('familyHistoryScore').textContent = `Score: ${familyScore}/1`;
 
-            // Domain 4: Medical Risk Factors (count detected risks)
-            domainScores.medicalRisks = neuroDetectedMedicalRisks.length;
-            document.getElementById('medicalRiskScore').textContent = `Domain Score: ${domainScores.medicalRisks} risk factor(s) detected`;
+            // Domain 4: Medical Risk Factors (calculated separately, 0-5 points)
+            let medicalRiskScore = calculateMedicalRiskScore();
+            totalScore += medicalRiskScore;
+            breakdown.push(`Domain 4 (Medical Risks): ${medicalRiskScore}/5`);
 
-            // Domain 5: Biomarkers (1 point each, 4 max)
-            const apoe4 = document.getElementById('neuroBiomarkerAPOE4')?.checked || false;
-            const amyloid = document.getElementById('neuroBiomarkerAmyloid')?.checked || false;
-            const tau = document.getElementById('neuroBiomarkerTau')?.checked || false;
-            const csf = document.getElementById('neuroBiomarkerCSF')?.checked || false;
-            if (apoe4) domainScores.biomarkers += 1;
-            if (amyloid) domainScores.biomarkers += 1;
-            if (tau) domainScores.biomarkers += 1;
-            if (csf) domainScores.biomarkers += 1;
-            document.getElementById('biomarkerScore').textContent = `Domain Score: ${domainScores.biomarkers}/4`;
-
-            // Calculate total score
-            totalScore = domainScores.memoryConcerns + domainScores.adlImpact +
-                        domainScores.familyHistory + domainScores.medicalRisks +
-                        domainScores.biomarkers;
-            neuroRiskScore = totalScore;
+            // Domain 5: Biomarkers (0-4 points, 1 point each)
+            let biomarkerScore = 0;
+            if (document.getElementById('neuroBiomarkerAPOE4')?.checked) biomarkerScore++;
+            if (document.getElementById('neuroBiomarkerAmyloid')?.checked) biomarkerScore++;
+            if (document.getElementById('neuroBiomarkerTau')?.checked) biomarkerScore++;
+            if (document.getElementById('neuroBiomarkerCSF')?.checked) biomarkerScore++;
+            totalScore += biomarkerScore;
+            breakdown.push(`Domain 5 (Biomarkers): ${biomarkerScore}/4`);
+            document.getElementById('biomarkerScore').textContent = `Score: ${biomarkerScore}/4`;
 
             // Display total score with color coding
-            const totalDisplay = document.getElementById('neuroTotalRiskDisplay');
-            const interpretationDiv = document.getElementById('neuroRiskInterpretation');
-
-            let riskCategory = '';
-            let backgroundColor = '';
-            let textColor = '';
-            let interpretation = '';
-
-            if (totalScore >= 8) {
-                riskCategory = 'HIGH RISK';
-                backgroundColor = '#FED7D7';
-                textColor = '#9B2C2C';
-                interpretation = '🔴 <strong>High Risk for Cognitive Impairment</strong><br>This participant shows multiple risk factors and may be an excellent candidate for prevention/early intervention studies. Consider comprehensive cognitive testing.';
-            } else if (totalScore >= 5) {
-                riskCategory = 'MODERATE RISK';
-                backgroundColor = '#FED7AA';
-                textColor = '#9C4221';
-                interpretation = '🟡 <strong>Moderate Risk for Cognitive Impairment</strong><br>This participant has some risk factors present. May be suitable for select cognitive studies. Additional screening recommended.';
-            } else if (totalScore >= 2) {
-                riskCategory = 'LOW RISK';
-                backgroundColor = '#FEF3C7';
-                textColor = '#78350F';
-                interpretation = '⚠️ <strong>Low Risk for Cognitive Impairment</strong><br>Minimal risk factors detected. May be suitable as a healthy control or for primary prevention studies.';
-            } else {
-                riskCategory = 'MINIMAL RISK';
-                backgroundColor = '#D1FAE5';
-                textColor = '#065F46';
-                interpretation = '✅ <strong>Minimal Risk for Cognitive Impairment</strong><br>Very few risk factors present. Excellent candidate for healthy control groups.';
-            }
-
-            totalDisplay.style.backgroundColor = backgroundColor;
-            totalDisplay.style.color = textColor;
-            totalDisplay.innerHTML = `Total Risk Score: ${totalScore} - ${riskCategory}`;
-
-            interpretationDiv.innerHTML = interpretation;
+            displayNeuroRiskScore(totalScore, breakdown);
         }
 
-        function detectNeuroMedicalRisks() {
-            neuroDetectedMedicalRisks = [];
+        function calculateMedicalRiskScore() {
+            // This scans the medical history table for risk factors
+            let score = 0;
+            let maxScore = 5; // Cap at 5 points
 
-            // Risk conditions to search for
-            const riskConditions = [
-                'hypertension', 'diabetes', 'stroke', 'tia', 'head injury', 'traumatic brain',
-                'depression', 'sleep apnea', 'hyperlipidemia', 'atrial fibrillation',
-                'cardiovascular', 'obesity', 'hypercholesterolemia'
-            ];
+            const medHistoryTable = document.getElementById('medicalHistoryTable');
+            if (!medHistoryTable) return 0;
 
-            // Scan medical history table
-            const medicalHistoryTable = document.getElementById('medicalHistoryTable');
-            if (medicalHistoryTable) {
-                const rows = medicalHistoryTable.getElementsByTagName('tbody')[0]?.getElementsByTagName('tr') || [];
-
-                for (let row of rows) {
-                    const conditionCell = row.cells[0];
-                    if (conditionCell) {
-                        const conditionText = conditionCell.querySelector('input')?.value?.toLowerCase() || '';
-
-                        for (let riskCond of riskConditions) {
-                            if (conditionText.includes(riskCond) && !neuroDetectedMedicalRisks.includes(riskCond)) {
-                                neuroDetectedMedicalRisks.push(riskCond);
-                            }
+            const rows = medHistoryTable.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const conditionInput = row.querySelector('input[placeholder="Condition name"]');
+                if (conditionInput && conditionInput.value) {
+                    const condition = conditionInput.value.toLowerCase();
+                    for (const [key, points] of Object.entries(NEURO_RISK_FACTORS)) {
+                        if (condition.includes(key) && score < maxScore) {
+                            score += Math.min(points, maxScore - score);
+                            if (score >= maxScore) break;
                         }
                     }
                 }
+            });
+
+            document.getElementById('medicalRiskScore').textContent = `Score: ${score}/5`;
+            return score;
+        }
+
+        function displayNeuroRiskScore(score, breakdown) {
+            const maxScore = 14; // 2+2+1+5+4
+            const displayDiv = document.getElementById('neuroTotalRiskDisplay');
+            const interpretDiv = document.getElementById('neuroRiskInterpretation');
+
+            // Color coding based on score
+            let color, bgColor, riskLevel, interpretation, studyGuidance;
+
+            if (score <= 3) {
+                color = '#38a169';
+                bgColor = 'linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%)';
+                riskLevel = 'LOW RISK';
+                interpretation = 'Low likelihood of significant cognitive impairment based on current factors.';
+                studyGuidance = 'May be suitable for prevention studies or healthy aging research.';
+            } else if (score <= 6) {
+                color = '#d69e2e';
+                bgColor = 'linear-gradient(135deg, #fefcbf 0%, #faf089 100%)';
+                riskLevel = 'MODERATE RISK';
+                interpretation = 'Some risk factors present. Further cognitive assessment recommended.';
+                studyGuidance = 'Good candidate for early intervention or MCI studies.';
+            } else if (score <= 9) {
+                color = '#dd6b20';
+                bgColor = 'linear-gradient(135deg, #fed7d7 0%, #fc8181 100%)';
+                riskLevel = 'HIGH RISK';
+                interpretation = 'Multiple risk factors present. Comprehensive evaluation strongly recommended.';
+                studyGuidance = 'May qualify for MCI or early AD intervention studies.';
+            } else {
+                color = '#c53030';
+                bgColor = 'linear-gradient(135deg, #fc8181 0%, #f56565 100%)';
+                riskLevel = 'VERY HIGH RISK';
+                interpretation = 'Significant risk factors present. Clinical evaluation urgently recommended.';
+                studyGuidance = 'Likely candidate for AD or dementia treatment studies.';
             }
 
-            // Display detected risks
+            displayDiv.style.background = bgColor;
+            displayDiv.style.color = color;
+            displayDiv.innerHTML = `
+                <div style="font-size: 16px; opacity: 0.9; margin-bottom: 5px;">Total Risk Score</div>
+                <div style="font-size: 42px; font-weight: bold;">${score}/${maxScore}</div>
+                <div style="font-size: 18px; margin-top: 10px; letter-spacing: 2px;">${riskLevel}</div>
+            `;
+
+            interpretDiv.innerHTML = `
+                <h4 style="color: ${color}; margin-bottom: 10px;">Risk Assessment</h4>
+                <p style="margin-bottom: 10px;"><strong>${interpretation}</strong></p>
+                <p style="color: #4299e1; margin-bottom: 15px;"><strong>Study Consideration:</strong> ${studyGuidance}</p>
+                <div style="border-top: 2px solid #e2e8f0; padding-top: 15px; margin-top: 15px;">
+                    <h5 style="margin-bottom: 10px; color: #2c5282;">Score Breakdown:</h5>
+                    ${breakdown.map(item => `<div style="font-size: 14px; color: #666; margin-bottom: 5px;">• ${item}</div>`).join('')}
+                </div>
+            `;
+
+            neuroRiskScore = score;
+        }
+
+        function detectNeuroMedicalRisks() {
             const risksDiv = document.getElementById('neuroMedicalRisks');
-            if (neuroDetectedMedicalRisks.length > 0) {
-                risksDiv.innerHTML = neuroDetectedMedicalRisks.map(risk =>
-                    `<div style="padding: 8px; background: #FEE; border: 1px solid #FCC; border-radius: 4px; font-size: 13px;">
-                        ⚠️ ${risk.charAt(0).toUpperCase() + risk.slice(1)}
-                    </div>`
-                ).join('');
+            risksDiv.innerHTML = '';
+
+            const medHistoryTable = document.getElementById('medicalHistoryTable');
+            if (!medHistoryTable) {
+                risksDiv.innerHTML = '<p style="color: #718096; font-style: italic; grid-column: 1 / -1;">No medical history table found</p>';
+                return;
+            }
+
+            let foundRisks = [];
+            const rows = medHistoryTable.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const conditionInput = row.querySelector('input[placeholder="Condition name"]');
+                if (conditionInput && conditionInput.value) {
+                    const condition = conditionInput.value.toLowerCase();
+                    for (const [key, points] of Object.entries(NEURO_RISK_FACTORS)) {
+                        if (condition.includes(key)) {
+                            foundRisks.push({
+                                condition: conditionInput.value,
+                                factor: key,
+                                points: points
+                            });
+                        }
+                    }
+                }
+            });
+
+            if (foundRisks.length === 0) {
+                risksDiv.innerHTML = '<p style="color: #718096; font-style: italic; grid-column: 1 / -1;">✓ No cognitive risk factors detected in medical history</p>';
             } else {
-                risksDiv.innerHTML = '<div style="padding: 8px; color: #666; font-size: 13px; font-style: italic;">No risk factors detected. Add conditions to Medical History section.</div>';
+                foundRisks.forEach(risk => {
+                    const riskEl = document.createElement('div');
+                    riskEl.style.cssText = 'padding: 8px 12px; background: #fff5f5; border-radius: 6px; border-left: 3px solid #f56565; font-size: 13px;';
+                    riskEl.innerHTML = `<strong>${risk.condition}</strong><br><span style="color: #666;">+${risk.points} point(s)</span>`;
+                    risksDiv.appendChild(riskEl);
+                });
             }
 
             // Recalculate total risk
@@ -4721,69 +4780,67 @@
 
         function convertMocaToMmse() {
             const mocaInput = document.getElementById('mocaScoreInput');
-            const mocaValue = parseFloat(mocaInput?.value);
+            const mocaScoreValue = parseInt(mocaInput.value);
 
-            // Reset if empty or invalid
-            if (!mocaInput || mocaInput.value === '' || isNaN(mocaValue)) {
-                mocaScore = null;
-                mmseEstimated = null;
-                document.getElementById('mmseEstimatedScore').innerHTML = '--';
-                document.getElementById('mocaInterpretation').innerHTML = '<em>Enter a MoCA score to see interpretation</em>';
-                document.getElementById('mmseInterpretation').innerHTML = '<em>MMSE estimate will appear here</em>';
-                return;
-            }
-
-            // Validate range
-            if (mocaValue < 0 || mocaValue > 30) {
-                document.getElementById('mmseEstimatedScore').innerHTML = '--';
-                document.getElementById('mocaInterpretation').innerHTML = '<strong style="color: #ffebee;">⚠️ Invalid Range</strong><br>MoCA scores must be between 0 and 30.';
+            if (isNaN(mocaScoreValue) || mocaScoreValue < 0 || mocaScoreValue > 30) {
+                document.getElementById('mmseEstimatedScore').textContent = '--';
+                document.getElementById('mocaInterpretation').innerHTML = '<em>Enter valid MoCA score (0-30)</em>';
                 document.getElementById('mmseInterpretation').innerHTML = '<em>MMSE estimate will appear here</em>';
                 mocaScore = null;
                 mmseEstimated = null;
                 return;
             }
 
-            // Store MoCA score
-            mocaScore = mocaValue;
+            // Store value
+            mocaScore = mocaScoreValue;
 
-            // Convert using formula: MMSE ≈ 1.193 × MoCA + 0.234
-            const mmseRaw = (1.193 * mocaValue) + 0.234;
-            mmseEstimated = Math.round(mmseRaw * 10) / 10; // Round to 1 decimal place
-            const mmseRounded = Math.round(mmseEstimated);
-
-            // Display MMSE estimate
-            document.getElementById('mmseEstimatedScore').innerHTML = `${mmseEstimated.toFixed(1)}<br><span style="font-size: 16px; opacity: 0.8;">(≈ ${mmseRounded})</span>`;
+            // Conversion formula: MMSE ≈ 1.193 × MoCA + 0.234
+            const mmseScore = Math.round((1.193 * mocaScoreValue) + 0.234);
+            const mmseScoreCapped = Math.max(0, Math.min(30, mmseScore)); // Cap between 0-30
+            mmseEstimated = mmseScoreCapped;
 
             // MoCA Interpretation
-            let mocaInterpretation = '';
-            let mocaSeverity = '';
-            if (mocaValue >= 26) {
-                mocaSeverity = 'Normal';
-                mocaInterpretation = '<strong style="color: #d4edda;">✓ Normal Cognition</strong><br>MoCA ≥ 26 indicates normal cognitive function.';
-            } else if (mocaValue >= 18) {
-                mocaSeverity = 'Mild Impairment';
-                mocaInterpretation = '<strong style="color: #fff3cd;">⚠ Mild Cognitive Impairment</strong><br>MoCA 18-25 suggests mild cognitive impairment (MCI).';
-            } else if (mocaValue >= 10) {
-                mocaSeverity = 'Moderate Impairment';
-                mocaInterpretation = '<strong style="color: #f8d7da;">⚠ Moderate Impairment</strong><br>MoCA 10-17 suggests moderate cognitive impairment.';
+            let mocaInterp, mocaColor;
+            if (mocaScoreValue >= 26) {
+                mocaInterp = 'Normal cognition';
+                mocaColor = '#38a169';
+            } else if (mocaScoreValue >= 18) {
+                mocaInterp = 'Mild cognitive impairment';
+                mocaColor = '#d69e2e';
+            } else if (mocaScoreValue >= 10) {
+                mocaInterp = 'Moderate impairment';
+                mocaColor = '#dd6b20';
             } else {
-                mocaSeverity = 'Severe Impairment';
-                mocaInterpretation = '<strong style="color: #f8d7da;">⚠⚠ Severe Impairment</strong><br>MoCA < 10 suggests severe cognitive impairment.';
+                mocaInterp = 'Severe impairment';
+                mocaColor = '#c53030';
             }
-            document.getElementById('mocaInterpretation').innerHTML = mocaInterpretation;
 
             // MMSE Interpretation
-            let mmseInterpretation = '';
-            if (mmseRounded >= 24) {
-                mmseInterpretation = '<strong style="color: #d4edda;">✓ Normal Range</strong><br>MMSE ≥ 24 is typically considered normal.';
-            } else if (mmseRounded >= 18) {
-                mmseInterpretation = '<strong style="color: #fff3cd;">⚠ Mild Impairment</strong><br>MMSE 18-23 suggests mild cognitive impairment.';
-            } else if (mmseRounded >= 10) {
-                mmseInterpretation = '<strong style="color: #f8d7da;">⚠ Moderate Impairment</strong><br>MMSE 10-17 suggests moderate cognitive impairment.';
+            let mmseInterp, mmseColor;
+            if (mmseScoreCapped >= 24) {
+                mmseInterp = 'No cognitive impairment';
+                mmseColor = '#38a169';
+            } else if (mmseScoreCapped >= 18) {
+                mmseInterp = 'Mild cognitive impairment';
+                mmseColor = '#d69e2e';
+            } else if (mmseScoreCapped >= 10) {
+                mmseInterp = 'Moderate dementia';
+                mmseColor = '#dd6b20';
             } else {
-                mmseInterpretation = '<strong style="color: #f8d7da;">⚠⚠ Severe Impairment</strong><br>MMSE < 10 suggests severe cognitive impairment.';
+                mmseInterp = 'Severe dementia';
+                mmseColor = '#c53030';
             }
-            document.getElementById('mmseInterpretation').innerHTML = mmseInterpretation;
+
+            document.getElementById('mocaInterpretation').innerHTML = `
+                <strong style="color: ${mocaColor};">${mocaInterp}</strong><br>
+                <span style="font-size: 12px;">MoCA Score: ${mocaScoreValue}/30</span>
+            `;
+
+            document.getElementById('mmseEstimatedScore').textContent = mmseScoreCapped;
+            document.getElementById('mmseInterpretation').innerHTML = `
+                <strong style="color: ${mmseColor};">${mmseInterp}</strong><br>
+                <span style="font-size: 12px;">Estimated MMSE: ${mmseScoreCapped}/30</span>
+            `;
         }
 
         function getMocaMMseData() {

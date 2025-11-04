@@ -2036,20 +2036,209 @@
                 </div>
             </div>
 
-            <!-- Study Partner -->
-            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                <h3>Study Partner Availability</h3>
-                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
-                    [Study partner fields]
+            <!-- RAVLT SCORE INPUT -->
+            <div class="section-card" style="margin-top: 20px;">
+                <h3 style="color: #2c5282; margin-bottom: 15px;">📝 RAVLT (Rey Auditory Verbal Learning Test)</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    Enter RAVLT scores if available. This test measures verbal memory and learning.
                 </p>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">
+                            Immediate Recall (Trial 1-5 Total)
+                        </label>
+                        <input type="number" id="ravltImmediateRecall" min="0" max="75"
+                               style="width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;"
+                               oninput="interpretRAVLT()" placeholder="0-75">
+                        <div style="font-size: 12px; color: #718096; margin-top: 5px;">Sum of trials 1-5</div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">
+                            Delayed Recall
+                        </label>
+                        <input type="number" id="ravltDelayedRecall" min="0" max="15"
+                               style="width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;"
+                               oninput="interpretRAVLT()" placeholder="0-15">
+                        <div style="font-size: 12px; color: #718096; margin-top: 5px;">After 20-30 min delay</div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">
+                            Recognition Score
+                        </label>
+                        <input type="number" id="ravltRecognition" min="0" max="15"
+                               style="width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;"
+                               oninput="interpretRAVLT()" placeholder="0-15">
+                        <div style="font-size: 12px; color: #718096; margin-top: 5px;">Recognition trial</div>
+                    </div>
+                </div>
+
+                <!-- RAVLT Interpretation -->
+                <div id="ravltInterpretation" style="padding: 20px; background: #f7fafc; border-radius: 12px; border-left: 4px solid #4299e1;">
+                    <p style="color: #718096; font-style: italic; margin: 0;">Enter RAVLT scores to see interpretation</p>
+                </div>
             </div>
 
-            <!-- MRI Contraindications -->
-            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px;">
-                <h3>MRI Safety Screening</h3>
-                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
-                    [MRI contraindication checkboxes]
+            <!-- MEMORY MEDICATIONS SUMMARY -->
+            <div class="section-card" style="margin-top: 20px;">
+                <h3 style="color: #2c5282; margin-bottom: 15px;">💊 Memory Medications Summary</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                    Medications for cognitive symptoms detected from the Medications section:
                 </p>
+
+                <div id="neuroMemoryMedsSummary" style="padding: 15px; background: #f7fafc; border-radius: 8px; border: 2px solid #e2e8f0; min-height: 100px;">
+                    <p style="color: #718096; font-style: italic;">No memory medications detected. Will auto-populate from Medications section.</p>
+                </div>
+
+                <button onclick="scanForMemoryMedications()" style="margin-top: 15px; padding: 10px 20px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                    🔄 Scan Medications Section
+                </button>
+
+                <!-- Stable Dose Checker -->
+                <div id="neuroStableDoseCheck" style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                    <h4 style="margin-bottom: 10px; color: #2c5282;">Stable Dose Requirements</h4>
+                    <div id="neuroStableDoseContent">
+                        <p style="color: #718096; font-style: italic;">Add memory medications to check stability criteria</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STUDY PARTNER REQUIREMENTS -->
+            <div class="section-card" style="margin-top: 20px;">
+                <h3 style="color: #2c5282; margin-bottom: 15px;">👥 Study Partner Availability</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    Many cognitive studies require a reliable study partner who spends time with the participant weekly.
+                </p>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 12px; font-weight: 600; color: #2d3748;">
+                        Is a study partner available?
+                    </label>
+                    <div style="display: flex; gap: 20px;">
+                        <label class="radio-label">
+                            <input type="radio" name="neuroStudyPartner" value="yes" onchange="updateStudyPartnerInfo()">
+                            <span>✓ Yes</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="neuroStudyPartner" value="no" onchange="updateStudyPartnerInfo()">
+                            <span>✗ No</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="neuroStudyPartner" value="unsure" onchange="updateStudyPartnerInfo()">
+                            <span>? Unsure</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="studyPartnerDetails" style="display: none; padding: 20px; background: #f7fafc; border-radius: 12px; border-left: 4px solid #48bb78;">
+                    <h4 style="margin-bottom: 15px; color: #2c5282;">Study Partner Information</h4>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Relationship to Participant:</label>
+                        <select id="studyPartnerRelationship" style="width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                            <option value="">-- Select --</option>
+                            <option value="spouse">Spouse/Partner</option>
+                            <option value="child">Adult Child</option>
+                            <option value="sibling">Sibling</option>
+                            <option value="friend">Friend</option>
+                            <option value="caregiver">Professional Caregiver</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Hours per week spent with participant:</label>
+                        <input type="number" id="studyPartnerHoursPerWeek" min="0" style="width: 150px; padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px;" placeholder="Hours">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="studyPartnerWillingToAttend">
+                            <span>Study partner willing to attend study visits</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="studyPartnerWarning" style="display: none; margin-top: 15px; padding: 15px; background: #fff5f5; border-radius: 8px; border-left: 4px solid #f56565; color: #c53030;">
+                    <strong>⚠️ Study Partner Required:</strong> Most cognitive impairment studies require a study partner. This may limit study eligibility.
+                </div>
+            </div>
+
+            <!-- MRI CONTRAINDICATIONS CHECKLIST -->
+            <div class="section-card" style="margin-top: 20px;">
+                <h3 style="color: #2c5282; margin-bottom: 15px;">🧲 MRI Safety Screening</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    Check all that apply. Any "Yes" may contraindicate MRI procedures required by some studies.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriPacemaker" onchange="evaluateMRISafety()">
+                        <span>❌ Pacemaker or implantable cardioverter-defibrillator (ICD)</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriNeurostimulator" onchange="evaluateMRISafety()">
+                        <span>❌ Neurostimulator or spinal cord stimulator</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriCochlearImplant" onchange="evaluateMRISafety()">
+                        <span>❌ Cochlear implant</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriMetalImplants" onchange="evaluateMRISafety()">
+                        <span>⚠️ Metal implants, clips, or foreign bodies (specify location in notes)</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriAneurysClip" onchange="evaluateMRISafety()">
+                        <span>❌ Aneurysm clip</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriInsulinPump" onchange="evaluateMRISafety()">
+                        <span>⚠️ Insulin pump or other medication pump</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriMetalWorker" onchange="evaluateMRISafety()">
+                        <span>⚠️ History of metal work (machinist, welder) - possible metal fragments</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriClaustrophobia" onchange="evaluateMRISafety()">
+                        <span>⚠️ Severe claustrophobia</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriPregnant" onchange="evaluateMRISafety()">
+                        <span>⚠️ Currently pregnant or possibly pregnant</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="mriTattoos" onchange="evaluateMRISafety()">
+                        <span>ℹ️ Tattoos or permanent makeup (note for potential heating)</span>
+                    </label>
+                </div>
+
+                <!-- MRI Safety Assessment -->
+                <div id="mriSafetyAssessment" style="margin-top: 20px; padding: 20px; border-radius: 12px;">
+                    <p style="color: #718096; font-style: italic;">MRI safety assessment will appear here</p>
+                </div>
+
+                <!-- MRI Notes -->
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">
+                        Additional MRI screening notes:
+                    </label>
+                    <textarea id="mriScreeningNotes" rows="3"
+                              style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; font-family: inherit; resize: vertical;"
+                              placeholder="Document any details about metal implants, device specifications, or other relevant information..."></textarea>
+                </div>
             </div>
 
         </div>
@@ -2412,6 +2601,21 @@
         // MoCA/MMSE Converter Global Data
         let mocaScore = null;
         let mmseEstimated = null;
+
+        // RAVLT Global Data
+        let ravltImmediateRecall = null;
+        let ravltDelayedRecall = null;
+        let ravltRecognition = null;
+
+        // Memory Medications Global Data
+        let detectedMemoryMeds = [];
+
+        // Study Partner Global Data
+        let studyPartnerAvailable = null;
+
+        // MRI Safety Global Data
+        let mriContraindications = [];
+        let mriSafetyStatus = 'unknown';
 
         // PTSD Global Data
         let ptsdData = {
@@ -4598,6 +4802,359 @@
                     Math.round(mmseEstimated) >= 18 ? 'mild' :
                     Math.round(mmseEstimated) >= 10 ? 'moderate' : 'severe'
                 ) : null
+            };
+        }
+
+        // ===== RAVLT FUNCTIONS =====
+
+        function interpretRAVLT() {
+            const immediateInput = document.getElementById('ravltImmediateRecall');
+            const delayedInput = document.getElementById('ravltDelayedRecall');
+            const recognitionInput = document.getElementById('ravltRecognition');
+
+            ravltImmediateRecall = parseFloat(immediateInput?.value);
+            ravltDelayedRecall = parseFloat(delayedInput?.value);
+            ravltRecognition = parseFloat(recognitionInput?.value);
+
+            const interpretationDiv = document.getElementById('ravltInterpretation');
+            if (!interpretationDiv) return;
+
+            // Check if any values entered
+            if (isNaN(ravltImmediateRecall) && isNaN(ravltDelayedRecall) && isNaN(ravltRecognition)) {
+                interpretationDiv.innerHTML = '<p style="color: #718096; font-style: italic; margin: 0;">Enter RAVLT scores to see interpretation</p>';
+                return;
+            }
+
+            let html = '<div style="display: grid; grid-template-columns: 1fr; gap: 15px;">';
+
+            // Immediate Recall Interpretation (Trials 1-5 Total)
+            if (!isNaN(ravltImmediateRecall)) {
+                let immediateStatus = '';
+                let immediateColor = '';
+                if (ravltImmediateRecall >= 45) {
+                    immediateStatus = 'Normal range';
+                    immediateColor = '#48bb78';
+                } else if (ravltImmediateRecall >= 35) {
+                    immediateStatus = 'Low average';
+                    immediateColor = '#ed8936';
+                } else {
+                    immediateStatus = 'Impaired';
+                    immediateColor = '#f56565';
+                }
+                html += `<div style="padding: 12px; background: rgba(66, 153, 225, 0.1); border-radius: 8px;">
+                    <strong>Immediate Recall (${ravltImmediateRecall}/75):</strong>
+                    <span style="color: ${immediateColor}; font-weight: bold; margin-left: 10px;">${immediateStatus}</span>
+                </div>`;
+            }
+
+            // Delayed Recall Interpretation
+            if (!isNaN(ravltDelayedRecall)) {
+                let delayedStatus = '';
+                let delayedColor = '';
+                if (ravltDelayedRecall >= 9) {
+                    delayedStatus = 'Normal range';
+                    delayedColor = '#48bb78';
+                } else if (ravltDelayedRecall >= 6) {
+                    delayedStatus = 'Low average';
+                    delayedColor = '#ed8936';
+                } else {
+                    delayedStatus = 'Impaired';
+                    delayedColor = '#f56565';
+                }
+                html += `<div style="padding: 12px; background: rgba(66, 153, 225, 0.1); border-radius: 8px;">
+                    <strong>Delayed Recall (${ravltDelayedRecall}/15):</strong>
+                    <span style="color: ${delayedColor}; font-weight: bold; margin-left: 10px;">${delayedStatus}</span>
+                </div>`;
+            }
+
+            // Recognition Interpretation
+            if (!isNaN(ravltRecognition)) {
+                let recognitionStatus = '';
+                let recognitionColor = '';
+                if (ravltRecognition >= 13) {
+                    recognitionStatus = 'Normal range';
+                    recognitionColor = '#48bb78';
+                } else if (ravltRecognition >= 10) {
+                    recognitionStatus = 'Low average';
+                    recognitionColor = '#ed8936';
+                } else {
+                    recognitionStatus = 'Impaired';
+                    recognitionColor = '#f56565';
+                }
+                html += `<div style="padding: 12px; background: rgba(66, 153, 225, 0.1); border-radius: 8px;">
+                    <strong>Recognition (${ravltRecognition}/15):</strong>
+                    <span style="color: ${recognitionColor}; font-weight: bold; margin-left: 10px;">${recognitionStatus}</span>
+                </div>`;
+            }
+
+            // Overall assessment
+            const hasDelayed = !isNaN(ravltDelayedRecall);
+            if (hasDelayed) {
+                const overallImpaired = ravltDelayedRecall < 6;
+                html += `<div style="margin-top: 10px; padding: 15px; background: ${overallImpaired ? '#fff5f5' : '#f0fff4'}; border-radius: 8px; border-left: 4px solid ${overallImpaired ? '#f56565' : '#48bb78'};">
+                    <strong>Memory Status:</strong>
+                    <span style="margin-left: 10px;">${overallImpaired ? '⚠️ Memory impairment indicated' : '✓ Memory within normal limits'}</span>
+                </div>`;
+            }
+
+            html += '</div>';
+            interpretationDiv.innerHTML = html;
+        }
+
+        function getRAVLTData() {
+            return {
+                immediateRecall: ravltImmediateRecall,
+                delayedRecall: ravltDelayedRecall,
+                recognition: ravltRecognition,
+                hasData: !isNaN(ravltImmediateRecall) || !isNaN(ravltDelayedRecall) || !isNaN(ravltRecognition),
+                memoryImpaired: !isNaN(ravltDelayedRecall) && ravltDelayedRecall < 6
+            };
+        }
+
+        // ===== MEMORY MEDICATIONS FUNCTIONS =====
+
+        function scanForMemoryMedications() {
+            detectedMemoryMeds = [];
+
+            // List of memory/cognitive medications
+            const memoryMedications = [
+                'donepezil', 'aricept',
+                'rivastigmine', 'exelon',
+                'galantamine', 'razadyne',
+                'memantine', 'namenda',
+                'aducanumab', 'aduhelm',
+                'lecanemab', 'leqembi'
+            ];
+
+            // Scan medication table (assuming it exists in the medications section)
+            const medicationTable = document.getElementById('medicationTable');
+            if (!medicationTable) {
+                document.getElementById('neuroMemoryMedsSummary').innerHTML =
+                    '<p style="color: #e53e3e;">⚠️ Medication table not found. Please add medications in the Medications section.</p>';
+                return;
+            }
+
+            const rows = medicationTable.getElementsByTagName('tbody')[0]?.getElementsByTagName('tr') || [];
+
+            for (let row of rows) {
+                const medNameCell = row.cells[0]?.querySelector('input');
+                const doseCell = row.cells[1]?.querySelector('input');
+                const startDateCell = row.cells[2]?.querySelector('input');
+
+                if (medNameCell) {
+                    const medName = medNameCell.value.toLowerCase();
+
+                    for (let memMed of memoryMedications) {
+                        if (medName.includes(memMed)) {
+                            detectedMemoryMeds.push({
+                                name: medNameCell.value,
+                                dose: doseCell?.value || 'Not specified',
+                                startDate: startDateCell?.value || 'Not specified'
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Display results
+            const summaryDiv = document.getElementById('neuroMemoryMedsSummary');
+            const stableDoseDiv = document.getElementById('neuroStableDoseContent');
+
+            if (detectedMemoryMeds.length === 0) {
+                summaryDiv.innerHTML = '<p style="color: #718096; font-style: italic;">No memory medications detected in Medications section.</p>';
+                stableDoseDiv.innerHTML = '<p style="color: #718096; font-style: italic;">No memory medications to check</p>';
+            } else {
+                let html = '<div style="display: grid; gap: 10px;">';
+                detectedMemoryMeds.forEach((med, index) => {
+                    html += `<div style="padding: 12px; background: #e6fffa; border-left: 4px solid #38b2ac; border-radius: 6px;">
+                        <strong style="color: #234e52;">${med.name}</strong><br>
+                        <span style="font-size: 13px; color: #2c7a7b;">
+                            Dose: ${med.dose} | Start Date: ${med.startDate}
+                        </span>
+                    </div>`;
+                });
+                html += '</div>';
+                summaryDiv.innerHTML = html;
+
+                // Stable dose checker
+                const today = new Date();
+                let stableHtml = '<div style="display: grid; gap: 10px;">';
+                detectedMemoryMeds.forEach(med => {
+                    if (med.startDate !== 'Not specified') {
+                        const startDate = new Date(med.startDate);
+                        const monthsOnMed = (today - startDate) / (1000 * 60 * 60 * 24 * 30);
+                        const isStable = monthsOnMed >= 3;
+
+                        stableHtml += `<div style="padding: 12px; background: ${isStable ? '#f0fff4' : '#fff5f5'}; border-left: 4px solid ${isStable ? '#48bb78' : '#f56565'}; border-radius: 6px;">
+                            <strong>${med.name}:</strong>
+                            <span style="color: ${isStable ? '#22543d' : '#742a2a'}; margin-left: 10px;">
+                                ${isStable ? '✓' : '✗'} ${monthsOnMed.toFixed(1)} months
+                                ${isStable ? '(Stable ≥3 months)' : '(Need ≥3 months stable)'}
+                            </span>
+                        </div>`;
+                    } else {
+                        stableHtml += `<div style="padding: 12px; background: #fffaf0; border-left: 4px solid #ed8936; border-radius: 6px;">
+                            <strong>${med.name}:</strong>
+                            <span style="color: #7c2d12; margin-left: 10px;">⚠️ No start date - cannot verify stability</span>
+                        </div>`;
+                    }
+                });
+                stableHtml += '</div>';
+                stableDoseDiv.innerHTML = stableHtml;
+            }
+        }
+
+        function getMemoryMedicationsData() {
+            return {
+                medications: detectedMemoryMeds,
+                hasMedications: detectedMemoryMeds.length > 0,
+                count: detectedMemoryMeds.length
+            };
+        }
+
+        // ===== STUDY PARTNER FUNCTIONS =====
+
+        function updateStudyPartnerInfo() {
+            const selectedRadio = document.querySelector('input[name="neuroStudyPartner"]:checked');
+            studyPartnerAvailable = selectedRadio?.value || null;
+
+            const detailsDiv = document.getElementById('studyPartnerDetails');
+            const warningDiv = document.getElementById('studyPartnerWarning');
+
+            if (studyPartnerAvailable === 'yes') {
+                detailsDiv.style.display = 'block';
+                warningDiv.style.display = 'none';
+            } else if (studyPartnerAvailable === 'no') {
+                detailsDiv.style.display = 'none';
+                warningDiv.style.display = 'block';
+            } else if (studyPartnerAvailable === 'unsure') {
+                detailsDiv.style.display = 'none';
+                warningDiv.style.display = 'block';
+            } else {
+                detailsDiv.style.display = 'none';
+                warningDiv.style.display = 'none';
+            }
+        }
+
+        function getStudyPartnerData() {
+            const relationship = document.getElementById('studyPartnerRelationship')?.value;
+            const hoursPerWeek = parseFloat(document.getElementById('studyPartnerHoursPerWeek')?.value);
+            const willingToAttend = document.getElementById('studyPartnerWillingToAttend')?.checked;
+
+            return {
+                available: studyPartnerAvailable,
+                relationship: relationship || null,
+                hoursPerWeek: !isNaN(hoursPerWeek) ? hoursPerWeek : null,
+                willingToAttend: willingToAttend || false,
+                meetsRequirements: studyPartnerAvailable === 'yes' && relationship && !isNaN(hoursPerWeek) && hoursPerWeek >= 10 && willingToAttend
+            };
+        }
+
+        // ===== MRI SAFETY FUNCTIONS =====
+
+        function evaluateMRISafety() {
+            mriContraindications = [];
+
+            const contraIndicators = [
+                { id: 'mriPacemaker', label: 'Pacemaker/ICD', severity: 'absolute' },
+                { id: 'mriNeurostimulator', label: 'Neurostimulator', severity: 'absolute' },
+                { id: 'mriCochlearImplant', label: 'Cochlear Implant', severity: 'absolute' },
+                { id: 'mriAneurysClip', label: 'Aneurysm Clip', severity: 'absolute' },
+                { id: 'mriMetalImplants', label: 'Metal Implants', severity: 'relative' },
+                { id: 'mriInsulinPump', label: 'Insulin Pump', severity: 'relative' },
+                { id: 'mriMetalWorker', label: 'Metal Work History', severity: 'relative' },
+                { id: 'mriClaustrophobia', label: 'Claustrophobia', severity: 'relative' },
+                { id: 'mriPregnant', label: 'Pregnancy', severity: 'relative' },
+                { id: 'mriTattoos', label: 'Tattoos/Permanent Makeup', severity: 'caution' }
+            ];
+
+            contraIndicators.forEach(item => {
+                const checkbox = document.getElementById(item.id);
+                if (checkbox?.checked) {
+                    mriContraindications.push({
+                        id: item.id,
+                        label: item.label,
+                        severity: item.severity
+                    });
+                }
+            });
+
+            // Assess overall MRI safety
+            const assessmentDiv = document.getElementById('mriSafetyAssessment');
+            if (!assessmentDiv) return;
+
+            if (mriContraindications.length === 0) {
+                mriSafetyStatus = 'safe';
+                assessmentDiv.innerHTML = `
+                    <div style="padding: 20px; background: #f0fff4; border-radius: 12px; border: 3px solid #48bb78; text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 10px;">✓</div>
+                        <strong style="font-size: 18px; color: #22543d;">MRI LIKELY SAFE</strong>
+                        <p style="color: #2f855a; margin-top: 10px; font-size: 14px;">
+                            No contraindications identified. Subject may be eligible for MRI studies.
+                        </p>
+                    </div>
+                `;
+            } else {
+                const hasAbsolute = mriContraindications.some(c => c.severity === 'absolute');
+                const hasRelative = mriContraindications.some(c => c.severity === 'relative');
+
+                if (hasAbsolute) {
+                    mriSafetyStatus = 'unsafe';
+                    assessmentDiv.innerHTML = `
+                        <div style="padding: 20px; background: #fff5f5; border-radius: 12px; border: 3px solid #f56565; text-align: center;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">❌</div>
+                            <strong style="font-size: 18px; color: #742a2a;">ABSOLUTE MRI CONTRAINDICATION</strong>
+                            <p style="color: #c53030; margin-top: 10px; font-size: 14px;">
+                                Subject is NOT eligible for MRI studies due to absolute contraindications.
+                            </p>
+                            <div style="margin-top: 15px; text-align: left; padding: 15px; background: white; border-radius: 8px;">
+                                <strong>Contraindications identified:</strong>
+                                <ul style="margin: 10px 0 0 20px; color: #742a2a;">
+                                    ${mriContraindications.filter(c => c.severity === 'absolute').map(c => `<li>${c.label}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                } else if (hasRelative) {
+                    mriSafetyStatus = 'conditional';
+                    assessmentDiv.innerHTML = `
+                        <div style="padding: 20px; background: #fffaf0; border-radius: 12px; border: 3px solid #ed8936; text-align: center;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">⚠️</div>
+                            <strong style="font-size: 18px; color: #7c2d12;">RELATIVE MRI CONTRAINDICATIONS</strong>
+                            <p style="color: #c05621; margin-top: 10px; font-size: 14px;">
+                                MRI may be possible with precautions. Requires further evaluation.
+                            </p>
+                            <div style="margin-top: 15px; text-align: left; padding: 15px; background: white; border-radius: 8px;">
+                                <strong>Items requiring evaluation:</strong>
+                                <ul style="margin: 10px 0 0 20px; color: #7c2d12;">
+                                    ${mriContraindications.filter(c => c.severity === 'relative').map(c => `<li>${c.label}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    mriSafetyStatus = 'caution';
+                    assessmentDiv.innerHTML = `
+                        <div style="padding: 20px; background: #ebf8ff; border-radius: 12px; border: 3px solid #4299e1; text-align: center;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">ℹ️</div>
+                            <strong style="font-size: 18px; color: #2c5282;">CAUTION ITEMS NOTED</strong>
+                            <p style="color: #2b6cb0; margin-top: 10px; font-size: 14px;">
+                                MRI likely safe, but note items for radiologist review.
+                            </p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function getMRISafetyData() {
+            return {
+                contraindications: mriContraindications,
+                safetyStatus: mriSafetyStatus,
+                notes: document.getElementById('mriScreeningNotes')?.value || '',
+                isMRISafe: mriSafetyStatus === 'safe' || mriSafetyStatus === 'caution',
+                hasAbsoluteContraindication: mriContraindications.some(c => c.severity === 'absolute')
             };
         }
 

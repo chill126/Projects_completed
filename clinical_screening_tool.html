@@ -1444,6 +1444,21 @@
                 </div>
             </div>
 
+            <!-- Subsection 2: Current Psychiatric Medications Summary -->
+            <div class="psych-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                <h3 style="color: #2d3748; font-size: 18px; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">
+                    Current Psychiatric Medications
+                </h3>
+
+                <p style="color: #718096; font-size: 14px; margin-bottom: 15px; font-style: italic;">
+                    Auto-populated from Medications section. To add or edit medications, use the Medications table above.
+                </p>
+
+                <div id="psychMedsSummary">
+                    <!-- Auto-populated content -->
+                </div>
+            </div>
+
         </div>
 
         <!-- NEURO Study Specific Section -->
@@ -2460,9 +2475,11 @@
                 if (hasData) {
                     if (confirm('Remove this medication? This cannot be undone.')) {
                         row.remove();
+                        updatePsychMedicationsSummary();
                     }
                 } else {
                     row.remove();
+                    updatePsychMedicationsSummary();
                 }
             });
 
@@ -2479,6 +2496,7 @@
                     endDateInput.disabled = false;
                     endDateInput.style.background = 'white';
                 }
+                updatePsychMedicationsSummary();
             });
 
             // Auto-categorize medications for eligibility engine
@@ -2496,6 +2514,15 @@
                         this.style.borderLeft = '';
                     }
                 }
+                updatePsychMedicationsSummary();
+            });
+
+            // Update psych summary when any medication field changes
+            const allInputs = row.querySelectorAll('input, select');
+            allInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    updatePsychMedicationsSummary();
+                });
             });
         }
 
@@ -2537,6 +2564,88 @@
         function getMedicationsByCategory(category) {
             const allMeds = getMedicationsData();
             return allMeds.filter(med => med.category === category);
+        }
+
+        // ===== PSYCH MEDICATIONS SUMMARY FUNCTIONS =====
+
+        function getFrequencyDisplay(freq) {
+            const freqMap = {
+                'qd': 'Once daily',
+                'bid': 'Twice daily',
+                'tid': 'Three times daily',
+                'qid': 'Four times daily',
+                'prn': 'As needed',
+                'weekly': 'Weekly',
+                'eod': 'Every other day',
+                'other': 'Other'
+            };
+            return freqMap[freq] || freq;
+        }
+
+        function updatePsychMedicationsSummary() {
+            const summaryDiv = document.getElementById('psychMedsSummary');
+            if (!summaryDiv) return;
+
+            // Get psychiatric medications
+            const psychMedCategories = ['antidepressants', 'anxiolytics', 'benzodiazepines', 'antipsychotics', 'mood_stabilizers', 'stimulants'];
+            const allMeds = getMedicationsData();
+            const psychMeds = allMeds.filter(med => psychMedCategories.includes(med.category));
+
+            if (psychMeds.length === 0) {
+                summaryDiv.innerHTML = `
+                    <div style="background: #FFF9E6; border: 2px dashed #F39C12; border-radius: 8px; padding: 20px; text-align: center; color: #856404;">
+                        <p style="font-weight: 600; margin-bottom: 5px;">No psychiatric medications recorded</p>
+                        <p style="font-size: 14px;">Add medications in the Medications section above</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div style="display: grid; gap: 12px;">';
+
+            psychMeds.forEach(med => {
+                const categoryDisplay = med.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const stabilityStatus = med.isCurrent && med.durationMonths >= 4 ? 'STABLE' : 'NOT STABLE';
+                const stabilityColor = stabilityStatus === 'STABLE' ? '#27AE60' : '#F39C12';
+
+                html += `
+                    <div style="background: #f8f9fa; border-left: 4px solid #4A90E2; padding: 15px; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                            <div>
+                                <div style="font-weight: 700; color: #2d3748; font-size: 16px;">${med.name}</div>
+                                <div style="color: #718096; font-size: 14px; margin-top: 4px;">${med.dosage} - ${getFrequencyDisplay(med.frequency)}</div>
+                            </div>
+                            <span style="background: ${stabilityColor}; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;">
+                                ${stabilityStatus}
+                            </span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 13px;">
+                            <div>
+                                <span style="color: #718096;">Category:</span>
+                                <span style="font-weight: 600; color: #4a5568;">${categoryDisplay}</span>
+                            </div>
+                            <div>
+                                <span style="color: #718096;">Start Date:</span>
+                                <span style="font-weight: 600; color: #4a5568;">${med.startDate || 'Not recorded'}</span>
+                            </div>
+                            <div>
+                                <span style="color: #718096;">Duration:</span>
+                                <span style="font-weight: 600; color: #4a5568;">${med.durationMonths !== null ? med.durationMonths + ' months' : 'N/A'}</span>
+                            </div>
+                        </div>
+
+                        ${med.durationMonths !== null && med.durationMonths < 4 ? `
+                            <div style="background: #FFF9E6; padding: 8px; border-radius: 4px; margin-top: 10px; font-size: 12px; color: #856404;">
+                                ⚠️ Note: Most studies require ≥4 weeks stable dosing
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            summaryDiv.innerHTML = html;
         }
 
         // ===== ALLERGIES FUNCTIONS =====

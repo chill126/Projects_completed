@@ -867,6 +867,12 @@
             transform: translateX(2px);
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
+
+        /* SCID Checkbox Hover Effects */
+        .scid-checkbox:hover {
+            transform: translateX(2px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
     </style>
 </head>
 <body>
@@ -1951,12 +1957,121 @@
                 </p>
             </div>
 
-            <!-- SCID for AUD -->
-            <div class="aud-subsection" style="background: white; padding: 20px; border-radius: 8px;">
-                <h3>SCID - Alcohol Use Disorder</h3>
-                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
-                    [Your existing SCID checklist will be integrated here]
+            <!-- SCID for AUD Section -->
+            <div class="aud-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                <h3 style="color: #2d3748; font-size: 18px; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid #F39C12; padding-bottom: 10px;">
+                    SCID - Alcohol Use Disorder Assessment
+                </h3>
+
+                <p style="color: #718096; margin-bottom: 20px; font-size: 14px;">
+                    <strong>For the past 12 months</strong>, have you experienced any of the following related to alcohol use? Check all that apply.
                 </p>
+
+                <div id="scidQuestions" style="display: grid; gap: 12px;">
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="1" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>1.</strong> Have you ended up drinking much more than intended, or for a longer period than intended?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="2" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>2.</strong> Wanted to stop/cut down/control drinking, or had unsuccessful efforts to do so?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="3" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>3.</strong> Spent a lot of time drinking, being drunk, or hung over?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="4" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>4.</strong> Had a strong desire or urge to drink (cravings)?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="5" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>5.</strong> Missed work/school or were late due to intoxication or hangover?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="6" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>6.</strong> Had problems with others (family, friends, coworkers) due to drinking?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="7" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>7.</strong> Reduced time at work/school, with family/friends, or on hobbies because of drinking?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="8" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>8.</strong> Drank before risky tasks (driving/operating machinery)?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="9" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>9.</strong> Continued drinking despite physical or mental problems caused or worsened by drinking?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="10" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>10.</strong> Needed more alcohol to get desired effect (tolerance)?
+                        </span>
+                    </label>
+
+                    <label class="scid-checkbox" style="display: flex; align-items: start; gap: 12px; padding: 15px; border: 2px solid #E2E8F0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;">
+                        <input type="checkbox" class="scid-item" data-criterion="11" style="width: 20px; height: 20px; margin-top: 2px;">
+                        <span style="flex: 1; color: #2D3748;">
+                            <strong>11.</strong> Experienced withdrawal symptoms when cutting down or stopping (tremors, sweating, nausea, anxiety)?
+                        </span>
+                    </label>
+
+                </div>
+
+                <!-- Score Display -->
+                <div id="scidScoreDisplay" style="margin-top: 20px; padding: 20px; background: #F8F9FA; border-radius: 8px; border: 2px solid #E2E8F0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div>
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Criteria Met</div>
+                            <div style="font-size: 32px; font-weight: 700; color: #2D3748;">
+                                <span id="scidScore">0</span><span style="font-size: 20px; color: #718096;">/11</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">DSM-5 Severity</div>
+                            <div id="scidSeverity" style="font-size: 20px; font-weight: 700; color: #2D3748;">
+                                None
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="scidStudyMatch" style="padding: 15px; background: white; border-radius: 6px; border-left: 4px solid #4A90E2;">
+                        <strong style="color: #1565C0;">Study Eligibility:</strong>
+                        <div id="scidStudyText" style="margin-top: 8px; color: #4a5568; font-size: 14px;">
+                            Complete the assessment to determine study eligibility based on AUD severity.
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -2062,6 +2177,9 @@
         // QIDS Global Data
         let qidsData = {};
         let qidsTotalScore = 0;
+
+        // SCID Global Data
+        let scidScore = 0;
 
         // PTSD Global Data
         let ptsdData = {
@@ -3094,6 +3212,59 @@
                     alert('PTSD screening results saved successfully!');
                 });
             }
+
+            // AUD: SCID Checkbox Handling
+            document.querySelectorAll('.scid-item').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // Count checked items
+                    scidScore = document.querySelectorAll('.scid-item:checked').length;
+
+                    // Update score display
+                    document.getElementById('scidScore').textContent = scidScore;
+
+                    // Determine severity
+                    let severity = '';
+                    let severityColor = '';
+                    if (scidScore === 0 || scidScore === 1) {
+                        severity = 'Subclinical';
+                        severityColor = '#718096';
+                    } else if (scidScore >= 2 && scidScore <= 3) {
+                        severity = 'Mild AUD';
+                        severityColor = '#F39C12';
+                    } else if (scidScore >= 4 && scidScore <= 5) {
+                        severity = 'Moderate AUD';
+                        severityColor = '#E67E22';
+                    } else if (scidScore >= 6) {
+                        severity = 'Severe AUD';
+                        severityColor = '#E74C3C';
+                    }
+
+                    document.getElementById('scidSeverity').textContent = severity;
+                    document.getElementById('scidSeverity').style.color = severityColor;
+
+                    // Study matching logic
+                    let studyText = '';
+                    if (scidScore >= 4) {
+                        studyText = '✓ May be eligible for J2S-MC-GZME (Moderate to Severe AUD)';
+                    } else if (scidScore >= 2) {
+                        studyText = '⚠️ Borderline eligibility - additional screening required';
+                    } else {
+                        studyText = '✗ Does not meet minimum criteria for AUD studies';
+                    }
+
+                    document.getElementById('scidStudyText').textContent = studyText;
+
+                    // Visual feedback on checkbox
+                    const label = this.closest('.scid-checkbox');
+                    if (this.checked) {
+                        label.style.borderColor = '#F39C12';
+                        label.style.background = '#FFF9E6';
+                    } else {
+                        label.style.borderColor = '#E2E8F0';
+                        label.style.background = 'white';
+                    }
+                });
+            });
         }
 
         function generatePTSDQuestions() {
@@ -3763,6 +3934,18 @@
                                ptsdData.criterionC >= 1 &&
                                ptsdData.criterionD >= 2 &&
                                ptsdData.criterionE >= 2
+            };
+        }
+
+        // Function to get SCID data for eligibility engine
+        function getSCIDData() {
+            const checkedCriteria = Array.from(document.querySelectorAll('.scid-item:checked'))
+                .map(cb => parseInt(cb.getAttribute('data-criterion')));
+
+            return {
+                score: scidScore,
+                criteria: checkedCriteria,
+                severity: scidScore >= 6 ? 'severe' : scidScore >= 4 ? 'moderate' : scidScore >= 2 ? 'mild' : 'subclinical'
             };
         }
 

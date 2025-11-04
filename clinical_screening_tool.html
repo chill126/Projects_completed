@@ -1632,6 +1632,47 @@
                 </div>
             </div>
 
+            <!-- Subsection 4: Psychiatric Assessment Tools -->
+            <div class="psych-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                <h3 style="color: #2d3748; font-size: 18px; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">
+                    Psychiatric Assessment Tools
+                </h3>
+
+                <p style="color: #718096; margin-bottom: 20px; font-size: 14px;">
+                    Complete the following standardized assessments as applicable. These scores are used in eligibility determination.
+                </p>
+
+                <!-- PHQ-9 -->
+                <div style="margin-bottom: 25px;">
+                    <button type="button" id="openPHQ9" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+                        📋 Complete PHQ-9 Assessment (Depression)
+                    </button>
+                    <div id="phq9ResultDisplay" style="display: none; margin-top: 15px; padding: 15px; background: #E3F2FD; border-left: 4px solid #4A90E2; border-radius: 6px;">
+                        <!-- PHQ-9 results will display here -->
+                    </div>
+                </div>
+
+                <!-- HAM-D Estimator -->
+                <div style="margin-bottom: 25px;">
+                    <button type="button" id="openHAMD" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+                        📊 HAM-D Score Estimator
+                    </button>
+                    <div id="hamdResultDisplay" style="display: none; margin-top: 15px; padding: 15px; background: #F3E5F5; border-left: 4px solid #9B59B6; border-radius: 6px;">
+                        <!-- HAM-D results will display here -->
+                    </div>
+                </div>
+
+                <!-- PTSD Screener -->
+                <div style="margin-bottom: 25px;">
+                    <button type="button" id="openPTSD" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+                        🔍 PTSD Screener (DSM-5)
+                    </button>
+                    <div id="ptsdResultDisplay" style="display: none; margin-top: 15px; padding: 15px; background: #FFF9E6; border-left: 4px solid #F39C12; border-radius: 6px;">
+                        <!-- PTSD results will display here -->
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- NEURO Study Specific Section -->
@@ -1996,6 +2037,13 @@
     <script>
         // Global state
         let selectedIndication = null;
+
+        // Assessment scores (to be populated by integrated tools)
+        let assessmentScores = {
+            phq9: null,
+            hamd: null,
+            ptsd: null
+        };
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -2374,6 +2422,31 @@
                     }
                 });
             });
+
+            // PSYCH: Assessment tool button placeholders
+            const openPHQ9Btn = document.getElementById('openPHQ9');
+            if (openPHQ9Btn) {
+                openPHQ9Btn.addEventListener('click', function() {
+                    alert('PHQ-9 Assessment tool will be integrated here.\n\nThis will open a modal or expand section with the full PHQ-9 questionnaire.');
+                    // TODO: Integrate actual PHQ-9 tool
+                });
+            }
+
+            const openHAMDBtn = document.getElementById('openHAMD');
+            if (openHAMDBtn) {
+                openHAMDBtn.addEventListener('click', function() {
+                    alert('HAM-D Score Estimator will be integrated here.\n\nThis will open a modal or expand section with the HAM-D estimation tool.');
+                    // TODO: Integrate actual HAM-D tool
+                });
+            }
+
+            const openPTSDBtn = document.getElementById('openPTSD');
+            if (openPTSDBtn) {
+                openPTSDBtn.addEventListener('click', function() {
+                    alert('PTSD Screener will be integrated here.\n\nThis will open a modal or expand section with the DSM-5 PTSD screening tool.');
+                    // TODO: Integrate actual PTSD screener
+                });
+            }
         }
 
         function validateCCID() {
@@ -2886,6 +2959,19 @@
             summaryDiv.innerHTML = html;
         }
 
+        // ===== PSYCH ASSESSMENT FUNCTIONS =====
+
+        function getAssessmentScores() {
+            return {
+                phq9Score: assessmentScores.phq9?.totalScore || null,
+                phq9Severity: assessmentScores.phq9?.severity || null,
+                hamdScore: assessmentScores.hamd?.score || null,
+                hamdSeverity: assessmentScores.hamd?.severity || null,
+                ptsdScore: assessmentScores.ptsd?.score || null,
+                ptsdPositive: assessmentScores.ptsd?.positive || null
+            };
+        }
+
         // ===== PSYCH TREATMENT HISTORY FUNCTIONS =====
 
         function getTreatmentHistoryData() {
@@ -3189,6 +3275,9 @@
 
                     // Treatment History
                     data.treatmentHistory = getTreatmentHistoryData();
+
+                    // Assessment Scores
+                    data.assessmentScores = getAssessmentScores();
                     break;
                 case 'neuro':
                     data.diagnosis = document.getElementById('neuro-diagnosis').value;

@@ -1459,6 +1459,179 @@
                 </div>
             </div>
 
+            <!-- Subsection 3: Previous Psychiatric Treatment History -->
+            <div class="psych-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                <h3 style="color: #2d3748; font-size: 18px; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">
+                    Previous Psychiatric Treatment History
+                </h3>
+
+                <p style="color: #718096; font-size: 14px; margin-bottom: 20px;">
+                    Select all treatments the participant has previously received. Provide details for each selected treatment.
+                </p>
+
+                <div style="display: grid; gap: 20px;">
+
+                    <!-- TMS -->
+                    <div class="treatment-item" style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; color: #2d3748;">
+                            <input type="checkbox" id="treatmentTMS" class="treatment-checkbox" style="width: 20px; height: 20px;">
+                            <span>Transcranial Magnetic Stimulation (TMS)</span>
+                        </label>
+                        <div id="tmsDetails" class="treatment-details" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Number of Sessions</label>
+                                    <input type="number" id="tmsSessionsNum" min="0" placeholder="e.g., 36" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Last Treatment Date</label>
+                                    <input type="date" id="tmsLastDate" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Response to Treatment</label>
+                                    <select id="tmsResponse" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                        <option value="">Select...</option>
+                                        <option value="good">Good Response</option>
+                                        <option value="partial">Partial Response</option>
+                                        <option value="none">No Response</option>
+                                        <option value="unknown">Unknown</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VNS -->
+                    <div class="treatment-item" style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; color: #2d3748;">
+                            <input type="checkbox" id="treatmentVNS" class="treatment-checkbox" style="width: 20px; height: 20px;">
+                            <span>Vagus Nerve Stimulation (VNS)</span>
+                        </label>
+                        <div id="vnsDetails" class="treatment-details" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Implant Date</label>
+                                    <input type="date" id="vnsImplantDate" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div style="display: flex; align-items: end;">
+                                    <label style="display: flex; align-items: center; gap: 8px; padding: 8px;">
+                                        <input type="checkbox" id="vnsCurrentlyActive" style="width: 18px; height: 18px;">
+                                        <span style="font-weight: 600; font-size: 14px;">Currently Active</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Response to Treatment</label>
+                                    <select id="vnsResponse" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                        <option value="">Select...</option>
+                                        <option value="good">Good Response</option>
+                                        <option value="partial">Partial Response</option>
+                                        <option value="none">No Response</option>
+                                        <option value="unknown">Unknown</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ECT -->
+                    <div class="treatment-item" style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; color: #2d3748;">
+                            <input type="checkbox" id="treatmentECT" class="treatment-checkbox" style="width: 20px; height: 20px;">
+                            <span>Electroconvulsive Therapy (ECT)</span>
+                        </label>
+                        <div id="ectDetails" class="treatment-details" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Number of Treatments</label>
+                                    <input type="number" id="ectTreatmentsNum" min="0" placeholder="e.g., 12" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Last Treatment Date</label>
+                                    <input type="date" id="ectLastDate" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Response to Treatment</label>
+                                    <select id="ectResponse" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                        <option value="">Select...</option>
+                                        <option value="good">Good Response</option>
+                                        <option value="partial">Partial Response</option>
+                                        <option value="none">No Response</option>
+                                        <option value="unknown">Unknown</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ketamine -->
+                    <div class="treatment-item" style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; color: #2d3748;">
+                            <input type="checkbox" id="treatmentKetamine" class="treatment-checkbox" style="width: 20px; height: 20px;">
+                            <span>Ketamine (IV/IM)</span>
+                        </label>
+                        <div id="ketamineDetails" class="treatment-details" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Number of Infusions</label>
+                                    <input type="number" id="ketamineInfusionsNum" min="0" placeholder="e.g., 6" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Last Infusion Date</label>
+                                    <input type="date" id="ketamineLastDate" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Response to Treatment</label>
+                                    <select id="ketamineResponse" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                        <option value="">Select...</option>
+                                        <option value="good">Good Response</option>
+                                        <option value="partial">Partial Response</option>
+                                        <option value="none">No Response</option>
+                                        <option value="unknown">Unknown</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Esketamine (Spravato) -->
+                    <div class="treatment-item" style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; color: #2d3748;">
+                            <input type="checkbox" id="treatmentEsketamine" class="treatment-checkbox" style="width: 20px; height: 20px;">
+                            <span>Esketamine (Spravato)</span>
+                        </label>
+                        <div id="esketamineDetails" class="treatment-details" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Number of Treatments</label>
+                                    <input type="number" id="esketamineTreatmentsNum" min="0" placeholder="e.g., 8" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Last Treatment Date</label>
+                                    <input type="date" id="esketamineLastDate" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: #718096; margin-bottom: 5px;">Response to Treatment</label>
+                                    <select id="esketamineResponse" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                                        <option value="">Select...</option>
+                                        <option value="good">Good Response</option>
+                                        <option value="partial">Partial Response</option>
+                                        <option value="none">No Response</option>
+                                        <option value="unknown">Unknown</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="margin-top: 12px;">
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="esketamineCurrentTreatment" style="width: 18px; height: 18px;">
+                                    <span style="font-weight: 600; font-size: 14px;">Currently in Treatment</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
         <!-- NEURO Study Specific Section -->
@@ -2171,6 +2344,36 @@
 
             // Initialize psych medications summary (will show "no meds" initially)
             updatePsychMedicationsSummary();
+
+            // PSYCH: Treatment checkbox listeners
+            document.querySelectorAll('.treatment-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const treatmentId = this.id.replace('treatment', '').toLowerCase();
+                    const detailsDiv = document.getElementById(treatmentId + 'Details');
+
+                    if (detailsDiv) {
+                        if (this.checked) {
+                            detailsDiv.style.display = 'block';
+                            // Animate in
+                            detailsDiv.style.opacity = '0';
+                            setTimeout(() => {
+                                detailsDiv.style.transition = 'opacity 0.3s ease';
+                                detailsDiv.style.opacity = '1';
+                            }, 10);
+                        } else {
+                            detailsDiv.style.display = 'none';
+                            // Clear fields
+                            detailsDiv.querySelectorAll('input, select').forEach(input => {
+                                if (input.type === 'checkbox') {
+                                    input.checked = false;
+                                } else {
+                                    input.value = '';
+                                }
+                            });
+                        }
+                    }
+                });
+            });
         }
 
         function validateCCID() {
@@ -2683,6 +2886,44 @@
             summaryDiv.innerHTML = html;
         }
 
+        // ===== PSYCH TREATMENT HISTORY FUNCTIONS =====
+
+        function getTreatmentHistoryData() {
+            const data = {};
+            const treatments = ['TMS', 'VNS', 'ECT', 'Ketamine', 'Esketamine'];
+
+            treatments.forEach(treatment => {
+                const checkboxId = 'treatment' + treatment;
+                const checkbox = document.getElementById(checkboxId);
+
+                if (checkbox && checkbox.checked) {
+                    const prefix = treatment.toLowerCase();
+                    data[treatment] = {
+                        received: true
+                    };
+
+                    // Collect specific fields for each treatment
+                    if (treatment === 'VNS') {
+                        data[treatment].implantDate = document.getElementById(prefix + 'ImplantDate')?.value || '';
+                        data[treatment].currentlyActive = document.getElementById(prefix + 'CurrentlyActive')?.checked || false;
+                        data[treatment].response = document.getElementById(prefix + 'Response')?.value || '';
+                    } else if (treatment === 'Esketamine') {
+                        data[treatment].treatmentsNum = document.getElementById(prefix + 'TreatmentsNum')?.value || '';
+                        data[treatment].lastDate = document.getElementById(prefix + 'LastDate')?.value || '';
+                        data[treatment].response = document.getElementById(prefix + 'Response')?.value || '';
+                        data[treatment].currentTreatment = document.getElementById(prefix + 'CurrentTreatment')?.checked || false;
+                    } else {
+                        const numField = treatment === 'TMS' ? 'SessionsNum' : treatment === 'Ketamine' ? 'InfusionsNum' : 'TreatmentsNum';
+                        data[treatment].number = document.getElementById(prefix + numField)?.value || '';
+                        data[treatment].lastDate = document.getElementById(prefix + 'LastDate')?.value || '';
+                        data[treatment].response = document.getElementById(prefix + 'Response')?.value || '';
+                    }
+                }
+            });
+
+            return data;
+        }
+
         // ===== ALLERGIES FUNCTIONS =====
 
         function getAllergiesData() {
@@ -2945,6 +3186,9 @@
                     if (primaryConcern === 'other') {
                         data.otherConcernText = document.getElementById('otherConcernText')?.value || '';
                     }
+
+                    // Treatment History
+                    data.treatmentHistory = getTreatmentHistoryData();
                     break;
                 case 'neuro':
                     data.diagnosis = document.getElementById('neuro-diagnosis').value;

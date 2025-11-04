@@ -1676,329 +1676,146 @@
         </div>
 
         <!-- NEURO Study Specific Section -->
-        <div class="section neuro-section hidden" id="neuro-specific">
-            <h2 class="section-header">
-                <span class="section-icon">🧬</span>
-                Neurological Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="neuro-diagnosis">Primary Diagnosis</label>
-                    <select id="neuro-diagnosis">
-                        <option value="">Select diagnosis</option>
-                        <option value="parkinsons">Parkinson's Disease</option>
-                        <option value="alzheimers">Alzheimer's Disease</option>
-                        <option value="ms">Multiple Sclerosis</option>
-                        <option value="epilepsy">Epilepsy</option>
-                        <option value="migraine">Migraine</option>
-                        <option value="neuropathy">Peripheral Neuropathy</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="neuro-duration">Disease Duration (years)</label>
-                    <input type="number" id="neuro-duration" step="0.1" placeholder="Years since diagnosis">
-                </div>
-                <div class="input-group">
-                    <label for="moca-score">MoCA Score</label>
-                    <input type="number" id="moca-score" min="0" max="30" placeholder="0-30">
-                </div>
-                <div class="input-group">
-                    <label for="mmse-score">MMSE Score</label>
-                    <input type="number" id="mmse-score" min="0" max="30" placeholder="0-30">
-                </div>
-                <div class="input-group">
-                    <label>Current Neurological Medications</label>
-                    <select id="neuro-medications" multiple size="5">
-                        <option value="levodopa">Levodopa</option>
-                        <option value="anticholinergic">Anticholinergic</option>
-                        <option value="antiepileptic">Antiepileptic</option>
-                        <option value="cholinesterase">Cholinesterase Inhibitor</option>
-                        <option value="immunomodulator">Immunomodulator</option>
-                        <option value="none">None</option>
-                    </select>
-                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
-                </div>
-                <div class="input-group">
-                    <label>Neurological Symptoms</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="neuro-tremor" value="tremor">
-                            <span>Tremor</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="neuro-cognitive" value="cognitive">
-                            <span>Cognitive Impairment</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="neuro-motor" value="motor">
-                            <span>Motor Dysfunction</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="neuro-sensory" value="sensory">
-                            <span>Sensory Changes</span>
-                        </label>
-                    </div>
-                </div>
+        <div id="neuroStudySection" class="study-specific-section" style="display: none; margin: 30px 0; padding: 30px; background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%); border: 3px solid #9B59B6; border-radius: 12px;">
+
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="color: #6A1B9A; font-size: 24px; font-weight: 700; margin-bottom: 10px;">
+                    NEUROLOGY/MEMORY STUDY-SPECIFIC INFORMATION
+                </h2>
+                <p style="color: #7B1FA2; font-size: 14px;">
+                    Complete all applicable sections for cognitive/memory study screening
+                </p>
             </div>
+
+            <!-- Placeholder: MoCA/MMSE Converter -->
+            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>MoCA to MMSE Score Converter</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Your existing MoCA/MMSE converter will be integrated here]
+                </p>
+            </div>
+
+            <!-- Placeholder: RAVLT Score -->
+            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>RAVLT Score</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [RAVLT score input and interpretation]
+                </p>
+            </div>
+
+            <!-- Placeholder: Memory Medications Summary -->
+            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Memory/Cognitive Medications</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Auto-populated from medications section - focus on Aricept, Namenda, etc.]
+                </p>
+            </div>
+
+            <!-- Placeholder: Risk Stratification -->
+            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Neuro Risk Stratification</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Your existing Neuro Prescreen Tool risk scoring will be integrated here]
+                </p>
+            </div>
+
+            <!-- Study Partner -->
+            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Study Partner Availability</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Study partner fields]
+                </p>
+            </div>
+
+            <!-- MRI Contraindications -->
+            <div class="neuro-subsection" style="background: white; padding: 20px; border-radius: 8px;">
+                <h3>MRI Safety Screening</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [MRI contraindication checkboxes]
+                </p>
+            </div>
+
         </div>
 
         <!-- AUD Study Specific Section -->
-        <div class="section aud-section hidden" id="aud-specific">
-            <h2 class="section-header">
-                <span class="section-icon">🍷</span>
-                Alcohol Use Disorder Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="aud-severity">AUD Severity</label>
-                    <select id="aud-severity">
-                        <option value="">Select severity</option>
-                        <option value="mild">Mild (2-3 criteria)</option>
-                        <option value="moderate">Moderate (4-5 criteria)</option>
-                        <option value="severe">Severe (6+ criteria)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="aud-duration">Duration of Problem Drinking (years)</label>
-                    <input type="number" id="aud-duration" step="0.1" placeholder="Years">
-                </div>
-                <div class="input-group">
-                    <label for="audit-score">AUDIT Score</label>
-                    <input type="number" id="audit-score" min="0" max="40" placeholder="0-40">
-                </div>
-                <div class="input-group">
-                    <label for="drinks-per-day">Average Drinks Per Day</label>
-                    <input type="number" id="drinks-per-day" step="0.1" placeholder="Standard drinks">
-                </div>
-                <div class="input-group">
-                    <label for="days-abstinent">Days Abstinent</label>
-                    <input type="number" id="days-abstinent" min="0" placeholder="Days">
-                </div>
-                <div class="input-group">
-                    <label for="last-drink">Date of Last Drink</label>
-                    <input type="date" id="last-drink">
-                </div>
-                <div class="input-group">
-                    <label>Previous Treatment</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="aud-detox" value="detox">
-                            <span>Detoxification</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="aud-inpatient" value="inpatient">
-                            <span>Inpatient Rehab</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="aud-outpatient" value="outpatient">
-                            <span>Outpatient Treatment</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="aud-aa" value="aa">
-                            <span>AA/12-Step Program</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>Current Medications</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="naltrexone" value="naltrexone">
-                            <span>Naltrexone</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="acamprosate" value="acamprosate">
-                            <span>Acamprosate</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="disulfiram" value="disulfiram">
-                            <span>Disulfiram</span>
-                        </label>
-                    </div>
-                </div>
+        <div id="audStudySection" class="study-specific-section" style="display: none; margin: 30px 0; padding: 30px; background: linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%); border: 3px solid #F39C12; border-radius: 12px;">
+
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="color: #E65100; font-size: 24px; font-weight: 700; margin-bottom: 10px;">
+                    ALCOHOL USE DISORDER STUDY-SPECIFIC INFORMATION
+                </h2>
+                <p style="color: #F57C00; font-size: 14px;">
+                    Complete all sections for AUD study screening (GZME/GZMP protocols)
+                </p>
             </div>
+
+            <!-- Drinking Patterns -->
+            <div class="aud-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Current Drinking Patterns</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Your existing AUD tool drinking pattern fields will be integrated here]
+                </p>
+            </div>
+
+            <!-- Study Criteria Reminder -->
+            <div class="aud-subsection" style="background: #FFF9E6; border: 2px solid #F39C12; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Study Entry Criteria - Drinking Thresholds</h3>
+                <p><strong>MALES:</strong> ≥20 drinks/week + ≥1 heavy drinking day (≥5 drinks)</p>
+                <p><strong>FEMALES:</strong> ≥10 drinks/week + ≥1 heavy drinking day (≥4 drinks)</p>
+            </div>
+
+            <!-- PHQ-9 -->
+            <div class="aud-subsection" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>PHQ-9 Assessment</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [PHQ-9 tool embedded]
+                </p>
+            </div>
+
+            <!-- SCID for AUD -->
+            <div class="aud-subsection" style="background: white; padding: 20px; border-radius: 8px;">
+                <h3>SCID - Alcohol Use Disorder</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Your existing SCID checklist will be integrated here]
+                </p>
+            </div>
+
         </div>
 
         <!-- FIBROMYALGIA Study Specific Section -->
-        <div class="section fibromyalgia-section hidden" id="fibromyalgia-specific">
-            <h2 class="section-header">
-                <span class="section-icon">💪</span>
-                Fibromyalgia Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="fibro-diagnosis-date">Date of Diagnosis</label>
-                    <input type="date" id="fibro-diagnosis-date">
-                </div>
-                <div class="input-group">
-                    <label for="fibro-duration">Duration of Symptoms (years)</label>
-                    <input type="number" id="fibro-duration" step="0.1" placeholder="Years">
-                </div>
-                <div class="input-group">
-                    <label for="fibro-pain-score">Average Pain Score (0-10)</label>
-                    <input type="number" id="fibro-pain-score" min="0" max="10" placeholder="0-10">
-                </div>
-                <div class="input-group">
-                    <label for="tender-points">Number of Tender Points</label>
-                    <input type="number" id="tender-points" min="0" max="18" placeholder="0-18">
-                </div>
-                <div class="input-group">
-                    <label for="fiq-score">FIQ Score (Fibromyalgia Impact Questionnaire)</label>
-                    <input type="number" id="fiq-score" min="0" max="100" step="0.1" placeholder="0-100">
-                </div>
-                <div class="input-group">
-                    <label>Primary Symptoms</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="fibro-widespread-pain" value="widespread-pain">
-                            <span>Widespread Pain</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="fibro-fatigue" value="fatigue">
-                            <span>Chronic Fatigue</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="fibro-sleep" value="sleep">
-                            <span>Sleep Disturbance</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="fibro-cognitive" value="cognitive">
-                            <span>Cognitive Difficulties (Fibro Fog)</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>Current Medications</label>
-                    <select id="fibro-medications" multiple size="5">
-                        <option value="duloxetine">Duloxetine</option>
-                        <option value="pregabalin">Pregabalin</option>
-                        <option value="gabapentin">Gabapentin</option>
-                        <option value="amitriptyline">Amitriptyline</option>
-                        <option value="nsaids">NSAIDs</option>
-                        <option value="opioids">Opioids</option>
-                        <option value="none">None</option>
-                    </select>
-                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
-                </div>
-                <div class="input-group">
-                    <label>Previous Treatments</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="fibro-pt" value="pt">
-                            <span>Physical Therapy</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="fibro-cbt" value="cbt">
-                            <span>Cognitive Behavioral Therapy</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="fibro-exercise" value="exercise">
-                            <span>Exercise Program</span>
-                        </label>
-                    </div>
-                </div>
+        <div id="fibroStudySection" class="study-specific-section" style="display: none; margin: 30px 0; padding: 30px; background: linear-gradient(135deg, #B2DFDB 0%, #80CBC4 100%); border: 3px solid #16A085; border-radius: 12px;">
+
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="color: #00695C; font-size: 24px; font-weight: 700; margin-bottom: 10px;">
+                    FIBROMYALGIA STUDY-SPECIFIC INFORMATION
+                </h2>
             </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px;">
+                <h3>Fibromyalgia Diagnostic Criteria</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Widespread Pain Index and Symptom Severity Scale will be added in detailed build]
+                </p>
+            </div>
+
         </div>
 
         <!-- BACK PAIN Study Specific Section -->
-        <div class="section backpain-section hidden" id="backpain-specific">
-            <h2 class="section-header">
-                <span class="section-icon">🔙</span>
-                Chronic Back Pain Study Criteria
-            </h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="back-location">Primary Pain Location</label>
-                    <select id="back-location">
-                        <option value="">Select location</option>
-                        <option value="cervical">Cervical (Neck)</option>
-                        <option value="thoracic">Thoracic (Mid-back)</option>
-                        <option value="lumbar">Lumbar (Lower back)</option>
-                        <option value="sacral">Sacral</option>
-                        <option value="multiple">Multiple Regions</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="back-duration">Duration of Chronic Pain (months)</label>
-                    <input type="number" id="back-duration" step="0.1" placeholder="Months">
-                </div>
-                <div class="input-group">
-                    <label for="back-pain-score">Current Pain Score (0-10)</label>
-                    <input type="number" id="back-pain-score" min="0" max="10" placeholder="0-10">
-                </div>
-                <div class="input-group">
-                    <label for="oswestry-score">Oswestry Disability Index (%)</label>
-                    <input type="number" id="oswestry-score" min="0" max="100" placeholder="0-100%">
-                </div>
-                <div class="input-group">
-                    <label for="back-etiology">Etiology</label>
-                    <select id="back-etiology">
-                        <option value="">Select cause</option>
-                        <option value="degenerative">Degenerative Disc Disease</option>
-                        <option value="herniation">Disc Herniation</option>
-                        <option value="stenosis">Spinal Stenosis</option>
-                        <option value="spondylolisthesis">Spondylolisthesis</option>
-                        <option value="muscular">Muscular/Strain</option>
-                        <option value="unknown">Unknown/Idiopathic</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Radicular Symptoms</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="radicular" value="none">
-                            <span>No Radiculopathy</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="radicular" value="unilateral">
-                            <span>Unilateral Radiculopathy</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="radicular" value="bilateral">
-                            <span>Bilateral Radiculopathy</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>Current Medications</label>
-                    <select id="back-medications" multiple size="5">
-                        <option value="nsaids">NSAIDs</option>
-                        <option value="acetaminophen">Acetaminophen</option>
-                        <option value="muscle-relaxant">Muscle Relaxants</option>
-                        <option value="gabapentin">Gabapentin/Pregabalin</option>
-                        <option value="opioids">Opioids</option>
-                        <option value="none">None</option>
-                    </select>
-                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
-                </div>
-                <div class="input-group">
-                    <label>Previous Treatments</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="back-pt" value="pt">
-                            <span>Physical Therapy</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="back-chiro" value="chiro">
-                            <span>Chiropractic Care</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="back-injections" value="injections">
-                            <span>Spinal Injections</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="back-surgery" value="surgery">
-                            <span>Spine Surgery</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="back-acupuncture" value="acupuncture">
-                            <span>Acupuncture</span>
-                        </label>
-                    </div>
-                </div>
+        <div id="backpainStudySection" class="study-specific-section" style="display: none; margin: 30px 0; padding: 30px; background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%); border: 3px solid #E74C3C; border-radius: 12px;">
+
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="color: #B71C1C; font-size: 24px; font-weight: 700; margin-bottom: 10px;">
+                    BACK PAIN STUDY-SPECIFIC INFORMATION
+                </h2>
             </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px;">
+                <h3>Back Pain Assessment</h3>
+                <p style="color: #718096; font-size: 14px; margin-top: 10px;">
+                    [Pain location, characteristics, functional impact will be added in detailed build]
+                </p>
+            </div>
+
         </div>
 
         <!-- Eligibility Calculator Section (Coming Soon) -->
@@ -2495,12 +2312,9 @@
         }
 
         function updateStudySpecificSections(indication) {
-            // Hide all study-specific sections (both old and new format)
+            // Hide all study-specific sections
             document.querySelectorAll('.study-specific-section').forEach(section => {
                 section.style.display = 'none';
-            });
-            document.querySelectorAll('.section[id$="-specific"]').forEach(section => {
-                section.classList.add('hidden');
             });
 
             // Show selected indication section
@@ -2512,24 +2326,24 @@
                     updatePsychMedicationsSummary();
                 }
             } else if (indication === 'neuro') {
-                const neuroSection = document.getElementById('neuro-specific');
+                const neuroSection = document.getElementById('neuroStudySection');
                 if (neuroSection) {
-                    neuroSection.classList.remove('hidden');
+                    neuroSection.style.display = 'block';
                 }
             } else if (indication === 'aud') {
-                const audSection = document.getElementById('aud-specific');
+                const audSection = document.getElementById('audStudySection');
                 if (audSection) {
-                    audSection.classList.remove('hidden');
+                    audSection.style.display = 'block';
                 }
             } else if (indication === 'fibromyalgia') {
-                const fibroSection = document.getElementById('fibromyalgia-specific');
+                const fibroSection = document.getElementById('fibroStudySection');
                 if (fibroSection) {
-                    fibroSection.classList.remove('hidden');
+                    fibroSection.style.display = 'block';
                 }
             } else if (indication === 'backpain') {
-                const backpainSection = document.getElementById('backpain-specific');
+                const backpainSection = document.getElementById('backpainStudySection');
                 if (backpainSection) {
-                    backpainSection.classList.remove('hidden');
+                    backpainSection.style.display = 'block';
                 }
             }
         }
@@ -3280,59 +3094,20 @@
                     data.assessmentScores = getAssessmentScores();
                     break;
                 case 'neuro':
-                    data.diagnosis = document.getElementById('neuro-diagnosis').value;
-                    data.duration = document.getElementById('neuro-duration').value;
-                    data.mocaScore = document.getElementById('moca-score').value;
-                    data.mmseScore = document.getElementById('mmse-score').value;
-                    data.medications = Array.from(document.getElementById('neuro-medications').selectedOptions).map(opt => opt.value);
-                    data.tremor = document.getElementById('neuro-tremor').checked;
-                    data.cognitive = document.getElementById('neuro-cognitive').checked;
-                    data.motor = document.getElementById('neuro-motor').checked;
-                    data.sensory = document.getElementById('neuro-sensory').checked;
+                    // TODO: Add NEURO data collection when subsections are built
+                    data.placeholder = 'NEURO section data collection pending';
                     break;
                 case 'aud':
-                    data.severity = document.getElementById('aud-severity').value;
-                    data.duration = document.getElementById('aud-duration').value;
-                    data.auditScore = document.getElementById('audit-score').value;
-                    data.drinksPerDay = document.getElementById('drinks-per-day').value;
-                    data.daysAbstinent = document.getElementById('days-abstinent').value;
-                    data.lastDrink = document.getElementById('last-drink').value;
-                    data.detox = document.getElementById('aud-detox').checked;
-                    data.inpatient = document.getElementById('aud-inpatient').checked;
-                    data.outpatient = document.getElementById('aud-outpatient').checked;
-                    data.aa = document.getElementById('aud-aa').checked;
-                    data.naltrexone = document.getElementById('naltrexone').checked;
-                    data.acamprosate = document.getElementById('acamprosate').checked;
-                    data.disulfiram = document.getElementById('disulfiram').checked;
+                    // TODO: Add AUD data collection when subsections are built
+                    data.placeholder = 'AUD section data collection pending';
                     break;
                 case 'fibromyalgia':
-                    data.diagnosisDate = document.getElementById('fibro-diagnosis-date').value;
-                    data.duration = document.getElementById('fibro-duration').value;
-                    data.painScore = document.getElementById('fibro-pain-score').value;
-                    data.tenderPoints = document.getElementById('tender-points').value;
-                    data.fiqScore = document.getElementById('fiq-score').value;
-                    data.widespreadPain = document.getElementById('fibro-widespread-pain').checked;
-                    data.fatigue = document.getElementById('fibro-fatigue').checked;
-                    data.sleep = document.getElementById('fibro-sleep').checked;
-                    data.cognitive = document.getElementById('fibro-cognitive').checked;
-                    data.medications = Array.from(document.getElementById('fibro-medications').selectedOptions).map(opt => opt.value);
-                    data.pt = document.getElementById('fibro-pt').checked;
-                    data.cbt = document.getElementById('fibro-cbt').checked;
-                    data.exercise = document.getElementById('fibro-exercise').checked;
+                    // TODO: Add FIBRO data collection when subsections are built
+                    data.placeholder = 'FIBRO section data collection pending';
                     break;
                 case 'backpain':
-                    data.location = document.getElementById('back-location').value;
-                    data.duration = document.getElementById('back-duration').value;
-                    data.painScore = document.getElementById('back-pain-score').value;
-                    data.oswestryScore = document.getElementById('oswestry-score').value;
-                    data.etiology = document.getElementById('back-etiology').value;
-                    data.radicular = document.querySelector('input[name="radicular"]:checked')?.value;
-                    data.medications = Array.from(document.getElementById('back-medications').selectedOptions).map(opt => opt.value);
-                    data.pt = document.getElementById('back-pt').checked;
-                    data.chiro = document.getElementById('back-chiro').checked;
-                    data.injections = document.getElementById('back-injections').checked;
-                    data.surgery = document.getElementById('back-surgery').checked;
-                    data.acupuncture = document.getElementById('back-acupuncture').checked;
+                    // TODO: Add BACK PAIN data collection when subsections are built
+                    data.placeholder = 'BACK PAIN section data collection pending';
                     break;
             }
 

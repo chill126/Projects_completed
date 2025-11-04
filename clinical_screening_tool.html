@@ -1818,19 +1818,30 @@
 
         </div>
 
-        <!-- Eligibility Calculator Section (Coming Soon) -->
-        <div class="eligibility-section">
-            <h2>📊 Eligibility Assessment</h2>
-            <button class="btn btn-primary" onclick="calculateEligibility()">
-                <span>🔍</span>
-                Calculate Eligibility
-            </button>
-            <div id="eligibility-result" class="eligibility-result pending">
-                Eligibility calculator requires protocol configuration
+        <!-- Eligibility Calculator Section -->
+        <div id="eligibilitySection" style="margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);">
+
+            <h2 style="color: #1565C0; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 20px;">
+                STUDY ELIGIBILITY ASSESSMENT
+            </h2>
+
+            <div id="selectedIndicationDisplay" style="text-align: center; margin-bottom: 25px; padding: 15px; background: white; border-radius: 8px;">
+                <p style="color: #718096; font-size: 14px; margin-bottom: 5px;">Currently evaluating eligibility for:</p>
+                <p id="indicationNameDisplay" style="font-size: 20px; font-weight: 700; color: #1565C0;">
+                    [Select an indication to begin]
+                </p>
             </div>
-            <div id="criteria-details" class="criteria-list hidden">
-                <!-- Criteria will be populated dynamically -->
+
+            <div id="eligibilityResultsContainer">
+                <!-- Study cards will be dynamically generated here -->
             </div>
+
+            <div id="noIndicationSelected" style="text-align: center; padding: 40px; background: #FFF9E6; border: 2px dashed #F39C12; border-radius: 8px;">
+                <p style="color: #856404; font-size: 16px; font-weight: 600;">
+                    ⚠️ Please select a study indication from the left sidebar to view eligibility assessment
+                </p>
+            </div>
+
         </div>
 
         <!-- Action Buttons -->
@@ -2874,27 +2885,240 @@
             });
         }
 
-        function calculateEligibility() {
-            // Eligibility criteria must be configured based on actual study protocols
-            const resultDiv = document.getElementById('eligibility-result');
-            const detailsDiv = document.getElementById('criteria-details');
+        // ===== ELIGIBILITY CALCULATOR FUNCTIONS =====
 
-            resultDiv.className = 'eligibility-result pending';
-            resultDiv.innerHTML = '⚠️ ELIGIBILITY CALCULATOR NOT CONFIGURED';
+        // Create study eligibility card
+        function createStudyCard(studyData) {
+            const card = document.createElement('div');
+            card.className = 'study-card';
 
-            detailsDiv.innerHTML = `
-                <div style="padding: 20px; text-align: center;">
-                    <h3 style="color: var(--warning-color); margin-bottom: 15px;">Configuration Required</h3>
-                    <p style="color: var(--text-dark); line-height: 1.6;">
-                        Eligibility criteria must be configured based on actual study protocols.<br>
-                        Contact your study coordinator to implement protocol-specific eligibility rules.
-                    </p>
-                    <p style="color: var(--text-muted); margin-top: 15px; font-size: 0.9em;">
-                        This tool collects screening data but does not determine eligibility without proper protocol configuration.
-                    </p>
+            // Determine status and color
+            let statusClass, statusText, statusIcon, bgColor;
+            if (studyData.eligible) {
+                statusClass = 'eligible';
+                statusText = 'ELIGIBLE';
+                statusIcon = '✓';
+                bgColor = '#C8E6C9';
+            } else if (studyData.pending) {
+                statusClass = 'pending';
+                statusText = 'POTENTIALLY ELIGIBLE';
+                statusIcon = '⚠️';
+                bgColor = '#FFF9C4';
+            } else {
+                statusClass = 'ineligible';
+                statusText = 'NOT ELIGIBLE';
+                statusIcon = '✗';
+                bgColor = '#FFCDD2';
+            }
+
+            card.innerHTML = `
+                <div style="background: ${bgColor}; border: 2px solid ${statusClass === 'eligible' ? '#27AE60' : statusClass === 'pending' ? '#F39C12' : '#E74C3C'}; border-radius: 8px; padding: 20px; margin-bottom: 15px;">
+
+                    <!-- Card Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; cursor: pointer;" onclick="toggleStudyDetails('${studyData.id}')">
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 700; color: #2d3748; margin-bottom: 5px;">
+                                ${studyData.name}
+                            </h3>
+                            <p style="font-size: 13px; color: #718096;">Protocol: ${studyData.protocol}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 18px; font-weight: 700; color: ${statusClass === 'eligible' ? '#27AE60' : statusClass === 'pending' ? '#C0601D' : '#C0392B'};">
+                                ${statusIcon} ${statusText}
+                            </div>
+                            <span class="expand-icon" id="expandIcon_${studyData.id}" style="font-size: 20px;">▼</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Summary -->
+                    <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                            <div>
+                                <strong>Inclusion Criteria:</strong> ${studyData.inclusionMet}/${studyData.inclusionTotal} met
+                            </div>
+                            <div>
+                                <strong>Exclusion Criteria:</strong> ${studyData.exclusionViolations > 0 ? studyData.exclusionViolations + ' violations' : 'None'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Breakdown (Collapsible) -->
+                    <div id="studyDetails_${studyData.id}" style="display: none;">
+
+                        <!-- Inclusion Criteria -->
+                        ${studyData.inclusionCriteria ? `
+                        <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #2d3748; margin-bottom: 10px;">
+                                Inclusion Criteria Checklist
+                            </h4>
+                            <div style="display: grid; gap: 8px;">
+                                ${studyData.inclusionCriteria.map(criterion => `
+                                    <div style="padding: 8px; border-left: 3px solid ${criterion.met ? '#27AE60' : criterion.missing ? '#F39C12' : '#E74C3C'}; background: #f8f9fa; border-radius: 4px;">
+                                        <span style="font-weight: 600;">${criterion.met ? '✓' : criterion.missing ? '⚠️' : '✗'}</span>
+                                        ${criterion.description}
+                                        ${criterion.value ? `<span style="color: #718096; font-size: 13px;"> [${criterion.value}]</span>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+
+                        <!-- Exclusion Criteria -->
+                        ${studyData.exclusionCriteria && studyData.exclusionCriteria.length > 0 ? `
+                        <div style="background: #FFCDD2; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 2px solid #E74C3C;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #C0392B; margin-bottom: 10px;">
+                                Exclusionary Conditions Present
+                            </h4>
+                            <div style="display: grid; gap: 8px;">
+                                ${studyData.exclusionCriteria.map(exclusion => `
+                                    <div style="padding: 8px; background: white; border-radius: 4px;">
+                                        <span style="color: #E74C3C; font-weight: 700;">✗</span> ${exclusion}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+
+                        <!-- Washout Requirements -->
+                        ${studyData.washoutIssues && studyData.washoutIssues.length > 0 ? `
+                        <div style="background: #FFF9E6; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 2px solid #F39C12;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #C0601D; margin-bottom: 10px;">
+                                Medication Washout Requirements
+                            </h4>
+                            <div style="display: grid; gap: 8px;">
+                                ${studyData.washoutIssues.map(washout => `
+                                    <div style="padding: 8px; background: white; border-radius: 4px;">
+                                        <div style="font-weight: 600;">${washout.medication}</div>
+                                        <div style="font-size: 13px; color: #718096;">
+                                            Required washout: ${washout.requiredDays} days
+                                            ${washout.elapsed ? ` | Elapsed: ${washout.elapsed} days` : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+
+                        <!-- Missing Information -->
+                        ${studyData.missingInfo && studyData.missingInfo.length > 0 ? `
+                        <div style="background: #E3F2FD; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 2px solid #4A90E2;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #1565C0; margin-bottom: 10px;">
+                                Missing Required Information
+                            </h4>
+                            <ul style="margin-left: 20px;">
+                                ${studyData.missingInfo.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                        ` : ''}
+
+                        <!-- Action Buttons -->
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button onclick="viewProtocol('${studyData.id}')" style="flex: 1; padding: 10px; background: #4A90E2; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                View Full Protocol
+                            </button>
+                            <button onclick="generateScreenForm('${studyData.id}')" style="flex: 1; padding: 10px; background: #27AE60; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                Generate Screen Form
+                            </button>
+                        </div>
+
+                    </div>
+
                 </div>
             `;
-            detailsDiv.classList.remove('hidden');
+
+            return card;
+        }
+
+        // Toggle study details
+        function toggleStudyDetails(studyId) {
+            const details = document.getElementById('studyDetails_' + studyId);
+            const icon = document.getElementById('expandIcon_' + studyId);
+
+            if (details && icon) {
+                if (details.style.display === 'none') {
+                    details.style.display = 'block';
+                    icon.textContent = '▲';
+                } else {
+                    details.style.display = 'none';
+                    icon.textContent = '▼';
+                }
+            }
+        }
+
+        // Main eligibility evaluation function
+        function evaluateEligibility() {
+            const indication = selectedIndication;
+
+            if (!indication) {
+                document.getElementById('noIndicationSelected').style.display = 'block';
+                document.getElementById('eligibilityResultsContainer').innerHTML = '';
+                return;
+            }
+
+            document.getElementById('noIndicationSelected').style.display = 'none';
+            document.getElementById('indicationNameDisplay').textContent = indication.toUpperCase();
+
+            // Get all form data
+            const formData = collectFormData();
+
+            // Get studies for this indication
+            const studies = getStudiesForIndication(indication);
+
+            // Evaluate each study
+            const resultsContainer = document.getElementById('eligibilityResultsContainer');
+            resultsContainer.innerHTML = '';
+
+            studies.forEach(study => {
+                const result = evaluateStudyEligibility(study, formData);
+                const card = createStudyCard(result);
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        // Get studies for indication (placeholder - will be configured per protocol)
+        function getStudiesForIndication(indication) {
+            // TODO: Replace with actual study database
+            return [
+                {
+                    id: 'placeholder_001',
+                    name: 'Study Configuration Pending',
+                    protocol: indication.toUpperCase() + '-PENDING',
+                    indication: indication
+                }
+            ];
+        }
+
+        // Evaluate study eligibility (placeholder - will implement protocol-specific logic)
+        function evaluateStudyEligibility(study, formData) {
+            // TODO: Implement protocol-specific eligibility logic
+            return {
+                id: study.id,
+                name: study.name,
+                protocol: study.protocol,
+                eligible: false,
+                pending: true,
+                inclusionMet: 0,
+                inclusionTotal: 0,
+                exclusionViolations: 0,
+                inclusionCriteria: [],
+                exclusionCriteria: [],
+                washoutIssues: [],
+                missingInfo: ['Protocol eligibility criteria not yet configured']
+            };
+        }
+
+        // Placeholder action functions
+        function viewProtocol(studyId) {
+            alert(`View Protocol: ${studyId}\n\nThis will open the full protocol document when configured.`);
+        }
+
+        function generateScreenForm(studyId) {
+            alert(`Generate Screen Form: ${studyId}\n\nThis will generate a study-specific screening form when configured.`);
+        }
+
+        // Old calculateEligibility function (deprecated but kept for compatibility)
+        function calculateEligibility() {
+            evaluateEligibility();
         }
 
         function clearForm() {

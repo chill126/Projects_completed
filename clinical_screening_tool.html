@@ -917,8 +917,8 @@
         </div>
 
         <!-- Allergy Counter (Fixed Position) -->
-        <div id="allergyCounter" style="display: none; position: fixed; top: 20px; right: 20px; background: #E74C3C; color: white; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; font-weight: 700;">
-            ⚠️ <span id="allergyCount">0</span> Medication Allergies on File
+        <div id="allergyCounter" style="display: none; position: fixed; top: 20px; right: 20px; background: #F39C12; color: white; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; font-weight: 700;">
+            ⓘ <span id="allergyCount">0</span> Medication Allergies on File
         </div>
 
         <!-- Demographics Section -->
@@ -1342,15 +1342,15 @@
             </button>
 
             <!-- Medication Allergies Section -->
-            <div class="allergies-section" style="margin-top: 30px; padding: 20px; background: #FFE6E6; border: 2px solid #E74C3C; border-radius: 8px;">
-                <h3 style="color: #C0392B; font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                    <span>⚠️</span>
+            <div class="allergies-section" style="margin-top: 30px; padding: 20px; background: #FFF9F0; border: 2px solid #F39C12; border-radius: 8px;">
+                <h3 style="color: #8B6914; font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <span>ⓘ</span>
                     <span>Medication Allergies</span>
                 </h3>
 
                 <table class="allergies-table" id="allergiesTable" style="width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
                     <thead>
-                        <tr style="background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%); color: white;">
+                        <tr style="background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); color: white;">
                             <th style="padding: 12px; text-align: left;">Medication/Substance</th>
                             <th style="padding: 12px; text-align: left;">Reaction/Symptoms</th>
                             <th style="padding: 12px; text-align: left;">Last Reaction Date</th>
@@ -1362,7 +1362,7 @@
                     </tbody>
                 </table>
 
-                <button type="button" id="addAllergyRow" style="margin-top: 15px; padding: 10px 20px; background: #C0392B; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+                <button type="button" id="addAllergyRow" style="margin-top: 15px; padding: 10px 20px; background: #F39C12; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
                     + Add Allergy
                 </button>
             </div>
@@ -1787,41 +1787,7 @@
             </div>
         </div>
 
-        <!-- Exclusion Criteria Section -->
-        <div class="section">
-            <h2 class="section-header">
-                <span class="section-icon">⛔</span>
-                Exclusion Criteria
-            </h2>
-            <div class="checkbox-group">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="pregnant-nursing">
-                    <span>Pregnant or nursing</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="participating-other">
-                    <span>Currently participating in another clinical trial</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="contraindication">
-                    <span>Has contraindication to study intervention</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="unstable-condition">
-                    <span>Has unstable medical condition</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="unable-consent">
-                    <span>Unable to provide informed consent</span>
-                </label>
-            </div>
-            <div class="input-group mt-2">
-                <label for="other-exclusions">Other Exclusions</label>
-                <textarea id="other-exclusions" rows="3" placeholder="List any other exclusion criteria..."></textarea>
-            </div>
-        </div>
-
-        <!-- Eligibility Calculator Section -->
+        <!-- Eligibility Calculator Section (Coming Soon) -->
         <div class="eligibility-section">
             <h2>📊 Eligibility Assessment</h2>
             <button class="btn btn-primary" onclick="calculateEligibility()">
@@ -1865,7 +1831,10 @@
 
         function initializeApp() {
             // Auto-populate date/time on page load
-            document.getElementById('screeningDateTime').value = new Date().toISOString().slice(0,16);
+            const screeningDateTime = document.getElementById('screeningDateTime');
+            if (screeningDateTime) {
+                screeningDateTime.value = new Date().toISOString().slice(0,16);
+            }
 
             // Add event listeners for indication selection
             document.querySelectorAll('.study-option').forEach(option => {
@@ -1875,50 +1844,71 @@
             });
 
             // Add event listeners for BMI calculation (US units)
-            document.getElementById('heightFeet').addEventListener('input', calculateBMI);
-            document.getElementById('heightInches').addEventListener('input', calculateBMI);
-            document.getElementById('weight').addEventListener('input', calculateBMI);
+            const heightFeet = document.getElementById('heightFeet');
+            const heightInches = document.getElementById('heightInches');
+            const weight = document.getElementById('weight');
+            if (heightFeet) heightFeet.addEventListener('input', calculateBMI);
+            if (heightInches) heightInches.addEventListener('input', calculateBMI);
+            if (weight) weight.addEventListener('input', calculateBMI);
 
             // Add age warning listener
-            document.getElementById('age').addEventListener('input', function() {
-                const age = parseInt(this.value);
-                const warning = document.getElementById('age-warning');
-                if (age > 0 && age < 18) {
-                    warning.classList.add('show');
-                } else {
-                    warning.classList.remove('show');
-                }
-            });
+            const ageInput = document.getElementById('age');
+            if (ageInput) {
+                ageInput.addEventListener('input', function() {
+                    const age = parseInt(this.value);
+                    const warning = document.getElementById('age-warning');
+                    if (warning) {
+                        if (age > 0 && age < 18) {
+                            warning.classList.add('show');
+                        } else {
+                            warning.classList.remove('show');
+                        }
+                    }
+                });
+            }
 
             // Add language "Other" field listener
-            document.getElementById('language').addEventListener('change', function() {
-                const otherField = document.getElementById('language-other-field');
-                if (this.value === 'other') {
-                    otherField.classList.add('show');
-                } else {
-                    otherField.classList.remove('show');
-                    document.getElementById('languageOther').value = '';
-                }
-            });
+            const languageSelect = document.getElementById('language');
+            if (languageSelect) {
+                languageSelect.addEventListener('change', function() {
+                    const otherField = document.getElementById('language-other-field');
+                    if (otherField) {
+                        if (this.value === 'other') {
+                            otherField.classList.add('show');
+                        } else {
+                            otherField.classList.remove('show');
+                            const languageOther = document.getElementById('languageOther');
+                            if (languageOther) languageOther.value = '';
+                        }
+                    }
+                });
+            }
 
             // Add CCID validation
             const ccidInput = document.getElementById('ccid');
-            ccidInput.addEventListener('blur', validateCCID);
-            ccidInput.addEventListener('input', function() {
-                // Remove error styling when user starts typing
-                this.classList.remove('invalid');
-                document.getElementById('ccid-error').classList.remove('show');
-            });
+            if (ccidInput) {
+                ccidInput.addEventListener('blur', validateCCID);
+                ccidInput.addEventListener('input', function() {
+                    // Remove error styling when user starts typing
+                    this.classList.remove('invalid');
+                    const ccidError = document.getElementById('ccid-error');
+                    if (ccidError) ccidError.classList.remove('show');
+                });
+            }
 
             // Make datetime editable with Edit button
             const editBtn = document.querySelector('.edit-datetime-btn');
-            editBtn.addEventListener('click', function() {
-                const datetimeInput = document.getElementById('screeningDateTime');
-                datetimeInput.removeAttribute('readonly');
-                datetimeInput.focus();
-                this.textContent = 'Locked';
-                this.style.background = '#95A5A6';
-            });
+            if (editBtn) {
+                editBtn.addEventListener('click', function() {
+                    const datetimeInput = document.getElementById('screeningDateTime');
+                    if (datetimeInput) {
+                        datetimeInput.removeAttribute('readonly');
+                        datetimeInput.focus();
+                    }
+                    this.textContent = 'Locked';
+                    this.style.background = '#95A5A6';
+                });
+            }
 
             // Add real-time validation
             addValidationListeners();
@@ -1930,63 +1920,80 @@
             });
 
             // Add Medical History Row button
-            document.getElementById('addMedicalHistoryRow').addEventListener('click', function() {
-                const table = document.getElementById('medicalHistoryTable').getElementsByTagName('tbody')[0];
-                const rowCount = table.rows.length;
+            const addMedicalHistoryBtn = document.getElementById('addMedicalHistoryRow');
+            if (addMedicalHistoryBtn) {
+                addMedicalHistoryBtn.addEventListener('click', function() {
+                    const table = document.getElementById('medicalHistoryTable');
+                    if (!table) return;
 
-                if (rowCount >= 50) {
-                    alert('Maximum 50 conditions allowed');
-                    return;
-                }
+                    const tbody = table.getElementsByTagName('tbody')[0];
+                    if (!tbody) return;
 
-                const newRow = table.insertRow();
-                newRow.className = 'medical-history-row';
-                newRow.innerHTML = `
-                    <td><input type="text" class="condition-name" placeholder="Condition name"></td>
-                    <td><input type="date" class="start-date"></td>
-                    <td><input type="date" class="end-date"></td>
-                    <td style="text-align: center;"><input type="checkbox" class="current-condition"></td>
-                    <td style="text-align: center;"><input type="checkbox" class="has-con-med"></td>
-                    <td style="text-align: center;">
-                        <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
-                            Remove
-                        </button>
-                    </td>
-                `;
+                    const rowCount = tbody.rows.length;
 
-                // Add event listeners to new row
-                attachMedicalHistoryListeners(newRow);
+                    if (rowCount >= 50) {
+                        alert('Maximum 50 conditions allowed');
+                        return;
+                    }
 
-                // Animate row in
-                newRow.style.opacity = '0';
-                setTimeout(() => {
-                    newRow.style.transition = 'opacity 0.3s ease';
-                    newRow.style.opacity = '1';
-                }, 10);
-            });
+                    const newRow = tbody.insertRow();
+                    newRow.className = 'medical-history-row';
+                    newRow.innerHTML = `
+                        <td><input type="text" class="condition-name" placeholder="Condition name"></td>
+                        <td><input type="date" class="start-date"></td>
+                        <td><input type="date" class="end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="current-condition"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="has-con-med"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    `;
+
+                    // Add event listeners to new row
+                    attachMedicalHistoryListeners(newRow);
+
+                    // Animate row in
+                    newRow.style.opacity = '0';
+                    setTimeout(() => {
+                        newRow.style.transition = 'opacity 0.3s ease';
+                        newRow.style.opacity = '1';
+                    }, 10);
+                });
+            }
 
             // Initialize substance use section
             // Collapse/expand toggle
-            document.getElementById('substanceHeader').addEventListener('click', function() {
-                const content = document.getElementById('substanceContent');
-                const icon = this.querySelector('.toggle-icon');
+            const substanceHeader = document.getElementById('substanceHeader');
+            if (substanceHeader) {
+                substanceHeader.addEventListener('click', function() {
+                    const content = document.getElementById('substanceContent');
+                    const icon = this.querySelector('.toggle-icon');
 
-                if (content.style.display === 'none') {
-                    content.style.display = 'block';
-                    icon.style.transform = 'rotate(180deg)';
-                    icon.textContent = '▲';
-                } else {
-                    content.style.display = 'none';
-                    icon.style.transform = 'rotate(0deg)';
-                    icon.textContent = '▼';
-                }
-            });
+                    if (content && icon) {
+                        if (content.style.display === 'none') {
+                            content.style.display = 'block';
+                            icon.style.transform = 'rotate(180deg)';
+                            icon.textContent = '▲';
+                        } else {
+                            content.style.display = 'none';
+                            icon.style.transform = 'rotate(0deg)';
+                            icon.textContent = '▼';
+                        }
+                    }
+                });
+            }
 
             // Handle substance checkbox changes
             document.querySelectorAll('.substance-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     const parent = this.closest('.substance-item');
+                    if (!parent) return;
+
                     const detailsDiv = parent.querySelector('.substance-details');
+                    if (!detailsDiv) return;
+
                     const substance = this.dataset.substance;
 
                     if (this.checked) {
@@ -2019,101 +2026,124 @@
             });
 
             // Add Medication Row button
-            document.getElementById('addMedicationRow').addEventListener('click', function() {
-                const table = document.getElementById('medicationsTable').getElementsByTagName('tbody')[0];
-                const rowCount = table.rows.length;
+            const addMedicationBtn = document.getElementById('addMedicationRow');
+            if (addMedicationBtn) {
+                addMedicationBtn.addEventListener('click', function() {
+                    const table = document.getElementById('medicationsTable');
+                    if (!table) return;
 
-                if (rowCount >= 100) {
-                    alert('Maximum 100 medications allowed');
-                    return;
-                }
+                    const tbody = table.getElementsByTagName('tbody')[0];
+                    if (!tbody) return;
 
-                const newRow = table.insertRow();
-                newRow.className = 'medication-row';
-                newRow.innerHTML = `
-                    <td><input type="text" class="medication-name" placeholder="Medication name"></td>
-                    <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
-                    <td>
-                        <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
-                            <option value="">Select...</option>
-                            <option value="qd">Once daily (QD)</option>
-                            <option value="bid">Twice daily (BID)</option>
-                            <option value="tid">Three times daily (TID)</option>
-                            <option value="qid">Four times daily (QID)</option>
-                            <option value="prn">As needed (PRN)</option>
-                            <option value="weekly">Weekly</option>
-                            <option value="eod">Every other day</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </td>
-                    <td><input type="date" class="medication-start-date"></td>
-                    <td><input type="date" class="medication-end-date"></td>
-                    <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
-                    <td style="text-align: center;">
-                        <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
-                            Remove
-                        </button>
-                    </td>
-                `;
+                    const rowCount = tbody.rows.length;
 
-                attachMedicationListeners(newRow);
+                    if (rowCount >= 100) {
+                        alert('Maximum 100 medications allowed');
+                        return;
+                    }
 
-                // Animate row in
-                newRow.style.opacity = '0';
-                setTimeout(() => {
-                    newRow.style.transition = 'opacity 0.3s ease';
-                    newRow.style.opacity = '1';
-                }, 10);
-            });
+                    const newRow = tbody.insertRow();
+                    newRow.className = 'medication-row';
+                    newRow.innerHTML = `
+                        <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                        <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                        <td>
+                            <select class="medication-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                                <option value="">Select...</option>
+                                <option value="qd">Once daily (QD)</option>
+                                <option value="bid">Twice daily (BID)</option>
+                                <option value="tid">Three times daily (TID)</option>
+                                <option value="qid">Four times daily (QID)</option>
+                                <option value="prn">As needed (PRN)</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="eod">Every other day</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="medication-start-date"></td>
+                        <td><input type="date" class="medication-end-date"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-row-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    `;
+
+                    attachMedicationListeners(newRow);
+
+                    // Animate row in
+                    newRow.style.opacity = '0';
+                    setTimeout(() => {
+                        newRow.style.transition = 'opacity 0.3s ease';
+                        newRow.style.opacity = '1';
+                    }, 10);
+                });
+            }
 
             // Initialize allergies table
             // Add Allergy Row button
-            document.getElementById('addAllergyRow').addEventListener('click', function() {
-                const table = document.getElementById('allergiesTable').getElementsByTagName('tbody')[0];
+            const addAllergyBtn = document.getElementById('addAllergyRow');
+            if (addAllergyBtn) {
+                addAllergyBtn.addEventListener('click', function() {
+                    const table = document.getElementById('allergiesTable');
+                    if (!table) return;
 
-                const newRow = table.insertRow();
-                newRow.className = 'allergy-row';
-                newRow.innerHTML = `
-                    <td><input type="text" class="allergy-name" placeholder="Medication or substance name" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
-                    <td><input type="text" class="allergy-reaction" placeholder="Describe reaction" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
-                    <td><input type="date" class="allergy-date" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
-                    <td style="text-align: center;">
-                        <button type="button" class="remove-allergy-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
-                            Remove
-                        </button>
-                    </td>
-                `;
+                    const tbody = table.getElementsByTagName('tbody')[0];
+                    if (!tbody) return;
 
-                // Add remove listener
-                newRow.querySelector('.remove-allergy-btn').addEventListener('click', function() {
-                    const hasData = newRow.querySelector('.allergy-name').value.trim() !== '';
+                    const newRow = tbody.insertRow();
+                    newRow.className = 'allergy-row';
+                    newRow.innerHTML = `
+                        <td><input type="text" class="allergy-name" placeholder="Medication or substance name" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                        <td><input type="text" class="allergy-reaction" placeholder="Describe reaction" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                        <td><input type="date" class="allergy-date" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="remove-allergy-btn" style="background: #E74C3C; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Remove
+                            </button>
+                        </td>
+                    `;
 
-                    if (hasData) {
-                        if (confirm('Remove this allergy? This cannot be undone.')) {
-                            newRow.remove();
-                            updateAllergyCounter();
-                        }
-                    } else {
-                        newRow.remove();
-                        updateAllergyCounter();
+                    // Add remove listener
+                    const removeBtn = newRow.querySelector('.remove-allergy-btn');
+                    if (removeBtn) {
+                        removeBtn.addEventListener('click', function() {
+                            const allergyNameInput = newRow.querySelector('.allergy-name');
+                            const hasData = allergyNameInput ? allergyNameInput.value.trim() !== '' : false;
+
+                            if (hasData) {
+                                if (confirm('Remove this allergy? This cannot be undone.')) {
+                                    newRow.remove();
+                                    updateAllergyCounter();
+                                }
+                            } else {
+                                newRow.remove();
+                                updateAllergyCounter();
+                            }
+                        });
                     }
+
+                    // Update counter when allergy name changes
+                    const allergyNameInput = newRow.querySelector('.allergy-name');
+                    if (allergyNameInput) {
+                        allergyNameInput.addEventListener('input', updateAllergyCounter);
+                    }
+
+                    // Animate row in
+                    newRow.style.opacity = '0';
+                    setTimeout(() => {
+                        newRow.style.transition = 'opacity 0.3s ease';
+                        newRow.style.opacity = '1';
+                    }, 10);
                 });
-
-                // Update counter when allergy name changes
-                const allergyNameInput = newRow.querySelector('.allergy-name');
-                allergyNameInput.addEventListener('input', updateAllergyCounter);
-
-                // Animate row in
-                newRow.style.opacity = '0';
-                setTimeout(() => {
-                    newRow.style.transition = 'opacity 0.3s ease';
-                    newRow.style.opacity = '1';
-                }, 10);
-            });
+            }
 
             // Initialize with 2 empty allergy rows
-            for (let i = 0; i < 2; i++) {
-                document.getElementById('addAllergyRow').click();
+            if (addAllergyBtn) {
+                for (let i = 0; i < 2; i++) {
+                    addAllergyBtn.click();
+                }
             }
 
             // PSYCH: Primary Psychiatric Concern conditional display
@@ -2885,15 +2915,7 @@
                 medicalHistory: getMedicalHistoryData(),
                 substanceUse: getSubstanceUseData(),
                 medications: getMedicationsData(),
-                allergies: getAllergiesData(),
-                exclusions: {
-                    pregnant: document.getElementById('pregnant-nursing').checked,
-                    otherTrial: document.getElementById('participating-other').checked,
-                    contraindication: document.getElementById('contraindication').checked,
-                    unstable: document.getElementById('unstable-condition').checked,
-                    unableConsent: document.getElementById('unable-consent').checked,
-                    other: document.getElementById('other-exclusions').value
-                }
+                allergies: getAllergiesData()
             };
 
             // Add indication-specific data if applicable
@@ -3093,16 +3115,6 @@
                 mainData.push(['No medication allergies reported']);
             }
 
-            mainData.push(
-                [''],
-                ['EXCLUSION CRITERIA'],
-                ['Pregnant/Nursing:', formData.exclusions.pregnant ? 'Yes' : 'No'],
-                ['Other Trial:', formData.exclusions.otherTrial ? 'Yes' : 'No'],
-                ['Contraindication:', formData.exclusions.contraindication ? 'Yes' : 'No'],
-                ['Unstable Condition:', formData.exclusions.unstable ? 'Yes' : 'No'],
-                ['Unable to Consent:', formData.exclusions.unableConsent ? 'Yes' : 'No'],
-                ['Other Exclusions:', formData.exclusions.other]
-            ];
 
             // Add indication-specific data if available
             if (formData.indicationSpecific) {

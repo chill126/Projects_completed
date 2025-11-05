@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clinical Research Screening Tool</title>
+
+    <!-- XLSX Library for Excel Export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <style>
+        /* ===== DESIGN SYSTEM & GLOBAL STYLES ===== */
+        :root {
+            --primary-color: #4A90E2;
+            --success-color: #27AE60;
+            --warning-color: #F39C12;
+            --danger-color: #E74C3C;
+            --neutral-gray: #95A5A6;
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --border-color: #e0e0e0;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* ===== STUDY INDICATION SELECTOR (FLOATING LEFT SIDEBAR) ===== */
+        .study-selector {
+            position: fixed;
+            left: 0;
+            top: 120px;
+            width: 85px;
+            background: var(--white);
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 10px 7.5px;
+            border-radius: 0 12px 12px 0;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .study-option {
+            width: 70px;
+            height: 70px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .study-option:hover {
+            transform: scale(1.05);
+        }
+
+        .study-option.selected {
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .study-option.unselected {
+            opacity: 0.5;
+        }
+
+        .study-option.psych {
+            background: #4A90E2;
+        }
+
+        .study-option.neuro {
+            background: #9B59B6;
+        }
+
+        .study-option.aud {
+            background: #F39C12;
+        }
+
+        .study-option.fibromyalgia {
+            background: #16A085;
+        }
+
+        .study-option.backpain {
+            background: #E74C3C;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            margin-left: 120px;
+            max-width: 1200px;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+
+        /* ===== HEADER SECTION ===== */
+        .page-header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        /* ===== CCID & DATE SECTION ===== */
+        .ccid-section {
+            background: #E3F2FD;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .ccid-group,
+        .datetime-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ccid-group label,
+        .datetime-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            color: var(--text-dark);
+        }
+
+        .required-asterisk {
+            color: #E74C3C;
+            margin-left: 4px;
+        }
+
+        .ccid-input,
+        .datetime-input {
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .ccid-input:focus,
+        .datetime-input:focus {
+            outline: none;
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .ccid-input.invalid {
+            border-color: #E74C3C;
+        }
+
+        .error-message {
+            color: #E74C3C;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .datetime-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .datetime-wrapper input {
+            flex: 1;
+        }
+
+        .edit-datetime-btn {
+            padding: 12px 20px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .edit-datetime-btn:hover {
+            background: #357ABD;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        /* ===== DEMOGRAPHICS SECTION ===== */
+        .demographics-section {
+            background: white;
+            padding: 25px;
+            margin: 20px auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #4A90E2;
+        }
+
+        .demographics-section h2 {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .demographics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .demographics-left,
+        .demographics-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bmi-calculator {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .bmi-calculator h3 {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .height-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .bmi-display {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+
+        .bmi-display.show {
+            display: block;
+        }
+
+        .bmi-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .bmi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .bmi-category {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .age-warning {
+            color: #F39C12;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .age-warning.show {
+            display: block;
+        }
+
+        .language-other {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .language-other.show {
+            display: block;
+        }
+
+        .section-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width: 768px) {
+            .demographics-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .height-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+        .section {
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .section-header {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.2em;
+        }
+
+        /* Study-Specific Section Colors */
+        .section.psych-section {
+            border-color: #4A90E2;
+        }
+
+        .section.psych-section .section-header {
+            color: #4A90E2;
+            border-color: #4A90E2;
+        }
+
+        .section.neuro-section {
+            border-color: #9B59B6;
+        }
+
+        .section.neuro-section .section-header {
+            color: #9B59B6;
+            border-color: #9B59B6;
+        }
+
+        .section.aud-section {
+            border-color: #F39C12;
+        }
+
+        .section.aud-section .section-header {
+            color: #F39C12;
+            border-color: #F39C12;
+        }
+
+        .section.fibromyalgia-section {
+            border-color: #16A085;
+        }
+
+        .section.fibromyalgia-section .section-header {
+            color: #16A085;
+            border-color: #16A085;
+        }
+
+        .section.backpain-section {
+            border-color: #E74C3C;
+        }
+
+        .section.backpain-section .section-header {
+            color: #E74C3C;
+            border-color: #E74C3C;
+        }
+
+        /* ===== FORM LAYOUT ===== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* ===== CHECKBOX AND RADIO STYLES ===== */
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-label,
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-label:hover,
+        .radio-label:hover {
+            background: var(--light-gray);
+        }
+
+        .checkbox-label input[type="checkbox"],
+        .radio-label input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* ===== ELIGIBILITY CALCULATOR ===== */
+        .eligibility-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 3px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .eligibility-section h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .eligibility-result {
+            font-size: 2.5em;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .eligibility-result.eligible {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .eligibility-result.not-eligible {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .eligibility-result.pending {
+            background: var(--neutral-gray);
+            color: white;
+        }
+
+        .criteria-list {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .criteria-item {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .criteria-item.met {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .criteria-item.not-met {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .criteria-item.pending {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+
+        .criteria-icon {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: var(--text-light);
+        }
+
+        .mt-1 { margin-top: 10px; }
+        .mt-2 { margin-top: 20px; }
+        .mt-3 { margin-top: 30px; }
+        .mb-1 { margin-bottom: 10px; }
+        .mb-2 { margin-bottom: 20px; }
+        .mb-3 { margin-bottom: 30px; }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .study-selector {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                padding: 10px;
+                border-radius: 0;
+                justify-content: center;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .main-container {
+                margin-left: 0;
+                margin-top: 110px;
+            }
+
+            body {
+                padding-top: 0;
+            }
+
+            .ccid-section {
+                grid-template-columns: 1fr;
+            }
+
+            .datetime-wrapper {
+                flex-direction: column;
+            }
+
+            .edit-datetime-btn {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ===== MEDICAL HISTORY TABLE ===== */
+        .medical-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .medical-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .medical-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .medical-table tbody tr {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .medical-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .medical-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+
+        .medical-table td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .medical-table input[type="text"],
+        .medical-table input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .medical-table input[type="text"]:focus,
+        .medical-table input[type="date"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .medical-table input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .medical-table .remove-row-btn:hover {
+            background: #c0392b !important;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        /* ===== MEDICATIONS TABLE ===== */
+        .medications-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .medications-table thead {
+            background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%);
+            color: white;
+        }
+
+        .medications-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .medications-table tbody tr {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .medications-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .medications-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+
+        .medications-table td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .medications-table input[type="text"],
+        .medications-table input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .medications-table input[type="text"]:focus,
+        .medications-table input[type="date"]:focus {
+            outline: none;
+            border-color: #9B59B6;
+        }
+
+        .medications-table input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .medications-table select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .medications-table select:focus {
+            outline: none;
+            border-color: #9B59B6;
+        }
+
+        .medications-table .remove-row-btn:hover {
+            background: #c0392b !important;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .study-selector,
+            .action-buttons {
+                display: none;
+            }
+
+            .main-container {
+                margin-left: 0;
+                box-shadow: none;
+            }
+        }
+
+        /* PHQ-9 Assessment Hover Effects */
+        .phq9-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* QIDS Assessment Hover Effects */
+        .qids-option:hover {
+            transform: translateX(2px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* SCID Checkbox Hover Effects */
+        .scid-checkbox:hover {
+            transform: translateX(2px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+    <!-- Study Indication Selector (Floating Left Sidebar) -->
+    <div class="study-selector">
+        <div class="study-option psych" data-indication="psych">
+            PSYCH
+        </div>
+        <div class="study-option neuro" data-indication="neuro">
+            NEURO
+        </div>
+        <div class="study-option aud" data-indication="aud">
+            AUD
+        </div>
+        <div class="study-option fibromyalgia" data-indication="fibromyalgia">
+            FIBRO
+        </div>
+        <div class="study-option backpain" data-indication="backpain">
+            BACK
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Clinical Research Screening Tool</h1>
+            <p>Comprehensive Multi-Indication Eligibility Assessment</p>
+        </div>
+
+        <!-- CCID & Date Section -->
+        <div class="ccid-section">
+            <div class="ccid-group">
+                <label for="ccid">
+                    Clinical Case ID (CCID)<span class="required-asterisk">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="ccid"
+                    class="ccid-input"
+                    placeholder="Enter CCID"
+                    required
+                    maxlength="20"
+                    pattern="[A-Za-z0-9-]+"
+                >
+                <span id="ccid-error" class="error-message">CCID is required</span>
+            </div>
+            <div class="datetime-group">
+                <label for="screeningDateTime">Screening Date & Time</label>
+                <div class="datetime-wrapper">
+                    <input
+                        type="datetime-local"
+                        id="screeningDateTime"
+                        class="datetime-input"
+                        readonly
+                    >
+                    <button type="button" class="edit-datetime-btn">Edit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demographics Section -->
+        <div class="demographics-section">
+            <h2>Demographics</h2>
+            <div class="demographics-grid">
+                <!-- Left Column -->
+                <div class="demographics-left">
+                    <div class="input-group">
+                        <label for="age">Age (years)<span class="required-asterisk">*</span></label>
+                        <input type="number" id="age" min="0" max="120" placeholder="Enter age" class="ccid-input">
+                        <span id="age-warning" class="age-warning">Most studies require age ≥18</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="gender">Gender<span class="required-asterisk">*</span></label>
+                        <select id="gender" class="ccid-input">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-say">Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="race">Race/Ethnicity</label>
+                        <select id="race" class="ccid-input">
+                            <option value="">Select race/ethnicity</option>
+                            <option value="white">White/Caucasian</option>
+                            <option value="black">Black/African American</option>
+                            <option value="hispanic">Hispanic/Latino</option>
+                            <option value="asian">Asian</option>
+                            <option value="native-american">Native American/Alaska Native</option>
+                            <option value="pacific-islander">Native Hawaiian/Pacific Islander</option>
+                            <option value="multiple">Multiple Races</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-say">Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="language">Primary Language</label>
+                        <select id="language" class="ccid-input">
+                            <option value="">Select language</option>
+                            <option value="english">English</option>
+                            <option value="spanish">Spanish</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div id="language-other-field" class="language-other">
+                            <input type="text" id="languageOther" class="ccid-input" placeholder="Specify other language">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - BMI Calculator -->
+                <div class="demographics-right">
+                    <div class="bmi-calculator">
+                        <h3>BMI Calculator</h3>
+
+                        <div class="input-group">
+                            <label>Height</label>
+                            <div class="height-inputs">
+                                <input type="number" id="heightFeet" min="3" max="8" placeholder="ft" class="ccid-input">
+                                <input type="number" id="heightInches" min="0" max="11.9" step="0.1" placeholder="in" class="ccid-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="weight">Weight</label>
+                            <input type="number" id="weight" min="50" max="500" placeholder="Weight (lbs)" class="ccid-input">
+                        </div>
+
+                        <div id="bmiDisplay" class="bmi-display">
+                            <div class="bmi-label">Body Mass Index</div>
+                            <div class="bmi-value">
+                                <span id="bmiValue">--</span>
+                            </div>
+                            <div id="bmiCategory" class="bmi-category">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simple test message -->
+        <div id="testMessage" style="background: #27AE60; color: white; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
+            <h2>✓ Tool Loaded Successfully!</h2>
+            <p>Select a study indication from the left sidebar to begin screening.</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-danger" onclick="clearForm()">
+                <span>🗑️</span>
+                Clear Form
+            </button>
+            <button class="btn btn-success" onclick="alert('Save functionality working!')">
+                <span>💾</span>
+                Save Data
+            </button>
+            <button class="btn btn-warning" onclick="alert('Export functionality working!')">
+                <span>📊</span>
+                Export to Excel
+            </button>
+        </div>
+    </div>
+
+    <!-- Minimal JavaScript to test -->
+    <script>
+        // Global state
+        let selectedIndication = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Clinical Research Screening Tool loaded successfully!');
+
+            // Auto-populate date/time
+            const screeningDateTime = document.getElementById('screeningDateTime');
+            if (screeningDateTime) {
+                screeningDateTime.value = new Date().toISOString().slice(0,16);
+            }
+
+            // Add event listeners for indication selection
+            document.querySelectorAll('.study-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectIndication(this.dataset.indication);
+                });
+            });
+
+            // Add BMI calculation listeners
+            const heightFeet = document.getElementById('heightFeet');
+            const heightInches = document.getElementById('heightInches');
+            const weight = document.getElementById('weight');
+            if (heightFeet) heightFeet.addEventListener('input', calculateBMI);
+            if (heightInches) heightInches.addEventListener('input', calculateBMI);
+            if (weight) weight.addEventListener('input', calculateBMI);
+
+            // Age warning
+            const ageInput = document.getElementById('age');
+            if (ageInput) {
+                ageInput.addEventListener('input', function() {
+                    const age = parseInt(this.value);
+                    const warning = document.getElementById('age-warning');
+                    if (warning) {
+                        if (age > 0 && age < 18) {
+                            warning.classList.add('show');
+                        } else {
+                            warning.classList.remove('show');
+                        }
+                    }
+                });
+            }
+
+            // Language "Other" field
+            const languageSelect = document.getElementById('language');
+            if (languageSelect) {
+                languageSelect.addEventListener('change', function() {
+                    const otherField = document.getElementById('language-other-field');
+                    if (otherField) {
+                        if (this.value === 'other') {
+                            otherField.classList.add('show');
+                        } else {
+                            otherField.classList.remove('show');
+                        }
+                    }
+                });
+            }
+
+            // Edit datetime button
+            const editBtn = document.querySelector('.edit-datetime-btn');
+            if (editBtn) {
+                editBtn.addEventListener('click', function() {
+                    const datetimeInput = document.getElementById('screeningDateTime');
+                    if (datetimeInput) {
+                        datetimeInput.removeAttribute('readonly');
+                        datetimeInput.focus();
+                    }
+                    this.textContent = 'Locked';
+                    this.style.background = '#95A5A6';
+                });
+            }
+        });
+
+        function selectIndication(indicationType) {
+            selectedIndication = indicationType;
+
+            // Visual feedback
+            document.querySelectorAll('.study-option').forEach(option => {
+                option.classList.remove('selected', 'unselected');
+            });
+
+            const selectedButton = document.querySelector(`[data-indication="${indicationType}"]`);
+            selectedButton.classList.add('selected');
+
+            document.querySelectorAll('.study-option').forEach(option => {
+                if (option.dataset.indication !== indicationType) {
+                    option.classList.add('unselected');
+                }
+            });
+
+            // Update test message
+            const testMessage = document.getElementById('testMessage');
+            if (testMessage) {
+                testMessage.innerHTML = `
+                    <h2>✓ ${indicationType.toUpperCase()} Study Selected</h2>
+                    <p>Study-specific sections will appear here when fully implemented.</p>
+                `;
+                testMessage.style.background = '#4A90E2';
+            }
+        }
+
+        function calculateBMI() {
+            const feet = parseFloat(document.getElementById('heightFeet').value) || 0;
+            const inches = parseFloat(document.getElementById('heightInches').value) || 0;
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+
+            const bmiDisplay = document.getElementById('bmiDisplay');
+
+            if (feet === 0 || weight === 0) {
+                bmiDisplay.classList.remove('show');
+                return;
+            }
+
+            const totalInches = (feet * 12) + inches;
+            const bmi = (weight * 703) / (totalInches * totalInches);
+
+            document.getElementById('bmiValue').textContent = bmi.toFixed(1);
+
+            let category, color;
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                color = '#3498DB';
+            } else if (bmi < 25) {
+                category = 'Normal';
+                color = '#27AE60';
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                color = '#F39C12';
+            } else {
+                category = 'Obese';
+                color = '#E74C3C';
+            }
+
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiCategory').style.color = color;
+
+            bmiDisplay.classList.add('show');
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all form data?')) {
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -664,6 +664,124 @@
             border-radius: 8px;
         }
 
+        /* ===== ASSESSMENT TOOL BUTTONS ===== */
+        .assessment-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .assessment-btn {
+            padding: 15px 20px;
+            background: white;
+            border: 3px solid #cbd5e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
+            color: #2d3748;
+            position: relative;
+        }
+
+        .assessment-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .assessment-btn.active {
+            border-color: #4A90E2;
+            background: #E3F2FD;
+        }
+
+        .assessment-btn.completed {
+            border-color: #27AE60;
+            background: #D5F5E3;
+        }
+
+        .assessment-btn.completed::after {
+            content: "✓";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #27AE60;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .assessment-content {
+            display: none;
+            padding: 25px;
+            background: white;
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .assessment-content.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .assessment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .assessment-close-btn {
+            background: #E74C3C;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .assessment-close-btn:hover {
+            background: #C0392B;
+        }
+
+        .assessment-submit-btn {
+            background: #27AE60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .assessment-submit-btn:hover {
+            background: #229954;
+        }
+
+        .assessment-submit-btn:disabled {
+            background: #95A5A6;
+            cursor: not-allowed;
+        }
+
         /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: flex;
@@ -1131,11 +1249,30 @@
                     PSYCHIATRY STUDY - ASSESSMENT TOOLS
                 </h2>
 
-                <!-- PHQ-9 Depression Screener -->
-                <div class="assessment-tool" style="margin-bottom: 30px; padding: 25px; background: white; border: 2px solid #4A90E2; border-radius: 12px;">
-                    <h3 style="color: #1565C0; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
-                        PHQ-9 - Patient Health Questionnaire
-                    </h3>
+                <!-- Assessment Tool Buttons -->
+                <div class="assessment-buttons">
+                    <button class="assessment-btn" data-assessment="phq9" onclick="openAssessment('phq9')">
+                        PHQ-9<br><small style="font-weight: 400; font-size: 12px;">Depression Screener</small>
+                    </button>
+                    <button class="assessment-btn" data-assessment="gad7" onclick="openAssessment('gad7')">
+                        GAD-7<br><small style="font-weight: 400; font-size: 12px;">Anxiety Screener</small>
+                    </button>
+                    <button class="assessment-btn" data-assessment="qids" onclick="openAssessment('qids')">
+                        QIDS-SR16<br><small style="font-weight: 400; font-size: 12px;">Depression Inventory</small>
+                    </button>
+                    <button class="assessment-btn" data-assessment="hamd" onclick="openAssessment('hamd')">
+                        HAM-D Estimator<br><small style="font-weight: 400; font-size: 12px;">From PHQ-9/QIDS</small>
+                    </button>
+                </div>
+
+                <!-- PHQ-9 Assessment Content -->
+                <div id="phq9-content" class="assessment-content">
+                    <div class="assessment-header">
+                        <h3 style="color: #1565C0; font-size: 20px; font-weight: 700; margin: 0;">
+                            PHQ-9 - Patient Health Questionnaire
+                        </h3>
+                        <button class="assessment-close-btn" onclick="closeAssessment('phq9')">Close</button>
+                    </div>
                     <p style="color: #666; margin-bottom: 20px; font-style: italic;">
                         Over the last 2 weeks, how often have you been bothered by any of the following problems?
                     </p>
@@ -1264,13 +1401,18 @@
                         <div style="font-size: 48px; font-weight: 700; color: #0D47A1;" id="phq9-score">0</div>
                         <div style="font-size: 18px; font-weight: 600; margin-top: 10px;" id="phq9-severity">--</div>
                     </div>
+
+                    <button class="assessment-submit-btn" onclick="submitPHQ9()">Complete PHQ-9</button>
                 </div>
 
-                <!-- GAD-7 Anxiety Screener -->
-                <div class="assessment-tool" style="margin-bottom: 30px; padding: 25px; background: white; border: 2px solid #9C27B0; border-radius: 12px;">
-                    <h3 style="color: #7B1FA2; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
-                        GAD-7 - Generalized Anxiety Disorder
-                    </h3>
+                <!-- GAD-7 Assessment Content -->
+                <div id="gad7-content" class="assessment-content">
+                    <div class="assessment-header">
+                        <h3 style="color: #7B1FA2; font-size: 20px; font-weight: 700; margin: 0;">
+                            GAD-7 - Generalized Anxiety Disorder
+                        </h3>
+                        <button class="assessment-close-btn" onclick="closeAssessment('gad7')">Close</button>
+                    </div>
                     <p style="color: #666; margin-bottom: 20px; font-style: italic;">
                         Over the last 2 weeks, how often have you been bothered by the following problems?
                     </p>
@@ -1373,36 +1515,18 @@
                         <div style="font-size: 48px; font-weight: 700; color: #4A148C;" id="gad7-score">0</div>
                         <div style="font-size: 18px; font-weight: 600; margin-top: 10px;" id="gad7-severity">--</div>
                     </div>
+
+                    <button class="assessment-submit-btn" onclick="submitGAD7()">Complete GAD-7</button>
                 </div>
 
-                <!-- HAM-D Estimator -->
-                <div class="assessment-tool" style="margin-bottom: 30px; padding: 25px; background: white; border: 2px solid #FF9800; border-radius: 12px;">
-                    <h3 style="color: #E65100; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
-                        HAM-D Estimator (Clinician-Administered)
-                    </h3>
-                    <p style="color: #666; margin-bottom: 20px; font-style: italic;">
-                        Estimated Hamilton Depression Rating Scale score based on clinical interview
-                    </p>
-
-                    <div class="input-group">
-                        <label for="hamd-score" style="font-weight: 600; margin-bottom: 10px; display: block; color: #2d3748;">
-                            Enter HAM-D Score (0-52)
-                        </label>
-                        <input type="number" id="hamd-score" min="0" max="52" placeholder="Enter score" style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 16px;">
+                <!-- QIDS Assessment Content -->
+                <div id="qids-content" class="assessment-content">
+                    <div class="assessment-header">
+                        <h3 style="color: #00838F; font-size: 20px; font-weight: 700; margin: 0;">
+                            QIDS-SR16 - Quick Inventory of Depressive Symptomatology
+                        </h3>
+                        <button class="assessment-close-btn" onclick="closeAssessment('qids')">Close</button>
                     </div>
-
-                    <div id="hamd-result" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 12px; text-align: center; display: none;">
-                        <div style="font-size: 16px; font-weight: 600; color: #E65100; margin-bottom: 10px;">HAM-D Interpretation</div>
-                        <div style="font-size: 48px; font-weight: 700; color: #BF360C;" id="hamd-display-score">0</div>
-                        <div style="font-size: 18px; font-weight: 600; margin-top: 10px;" id="hamd-severity">--</div>
-                    </div>
-                </div>
-
-                <!-- QIDS Quick Inventory -->
-                <div class="assessment-tool" style="margin-bottom: 30px; padding: 25px; background: white; border: 2px solid #00BCD4; border-radius: 12px;">
-                    <h3 style="color: #00838F; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
-                        QIDS-SR16 - Quick Inventory of Depressive Symptomatology
-                    </h3>
                     <p style="color: #666; margin-bottom: 20px; font-style: italic;">
                         Please select the answer for each item that best describes you for the past 7 days
                     </p>
@@ -1466,6 +1590,58 @@
                         <div style="font-size: 48px; font-weight: 700; color: #006064;" id="qids-score">0</div>
                         <div style="font-size: 18px; font-weight: 600; margin-top: 10px;" id="qids-severity">--</div>
                     </div>
+
+                    <button class="assessment-submit-btn" onclick="submitQIDS()">Complete QIDS</button>
+                </div>
+
+                <!-- HAM-D Estimator Content -->
+                <div id="hamd-content" class="assessment-content">
+                    <div class="assessment-header">
+                        <h3 style="color: #E65100; font-size: 20px; font-weight: 700; margin: 0;">
+                            HAM-D Estimator
+                        </h3>
+                        <button class="assessment-close-btn" onclick="closeAssessment('hamd')">Close</button>
+                    </div>
+                    <p style="color: #666; margin-bottom: 20px; font-style: italic;">
+                        Estimate Hamilton Depression Rating Scale (HAM-D) from PHQ-9 and/or QIDS scores
+                    </p>
+
+                    <div style="background: #FFF9E6; padding: 20px; border-radius: 8px; border: 2px solid #FFE082; margin-bottom: 25px;">
+                        <h4 style="color: #F57C00; margin-bottom: 15px;">Method 1: Use PHQ-9 Score</h4>
+                        <div id="hamd-from-phq9" style="padding: 15px; background: white; border-radius: 6px;">
+                            <p style="margin-bottom: 10px; color: #666;">PHQ-9 Score: <strong id="hamd-phq9-display">Not completed</strong></p>
+                            <p style="margin-bottom: 10px; color: #666;">Estimated HAM-D: <strong id="hamd-from-phq9-score">--</strong></p>
+                            <button class="btn" style="background: #4A90E2; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;" onclick="openAssessment('phq9')">Complete PHQ-9 First</button>
+                        </div>
+                    </div>
+
+                    <div style="background: #E0F7FA; padding: 20px; border-radius: 8px; border: 2px solid #80DEEA; margin-bottom: 25px;">
+                        <h4 style="color: #00838F; margin-bottom: 15px;">Method 2: Use QIDS Score</h4>
+                        <div id="hamd-from-qids" style="padding: 15px; background: white; border-radius: 6px;">
+                            <p style="margin-bottom: 10px; color: #666;">QIDS Score: <strong id="hamd-qids-display">Not completed</strong></p>
+                            <p style="margin-bottom: 10px; color: #666;">Estimated HAM-D: <strong id="hamd-from-qids-score">--</strong></p>
+                            <button class="btn" style="background: #00BCD4; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;" onclick="openAssessment('qids')">Complete QIDS First</button>
+                        </div>
+                    </div>
+
+                    <div style="background: #FFE0B2; padding: 20px; border-radius: 8px; border: 2px solid #FF9800; margin-bottom: 25px;">
+                        <h4 style="color: #E65100; margin-bottom: 15px;">Method 3: Enter Direct HAM-D Score (if available)</h4>
+                        <div class="input-group">
+                            <label for="hamd-direct-score" style="font-weight: 600; margin-bottom: 10px; display: block; color: #2d3748;">
+                                Direct HAM-D Score (0-52)
+                            </label>
+                            <input type="number" id="hamd-direct-score" min="0" max="52" placeholder="Enter clinician-administered HAM-D score" style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 16px;" oninput="interpretDirectHAMD()">
+                        </div>
+                    </div>
+
+                    <div id="hamd-final-result" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 12px; text-align: center; display: none;">
+                        <div style="font-size: 16px; font-weight: 600; color: #E65100; margin-bottom: 10px;">HAM-D Score</div>
+                        <div style="font-size: 48px; font-weight: 700; color: #BF360C;" id="hamd-final-score">0</div>
+                        <div style="font-size: 18px; font-weight: 600; margin-top: 10px;" id="hamd-final-severity">--</div>
+                        <div style="font-size: 14px; margin-top: 10px; color: #666;" id="hamd-method">--</div>
+                    </div>
+
+                    <button class="assessment-submit-btn" onclick="submitHAMD()">Complete HAM-D Estimation</button>
                 </div>
             </div>
         </div>
@@ -1521,10 +1697,21 @@
                     ALCOHOL USE DISORDER STUDY - SCID ASSESSMENT
                 </h2>
 
-                <div class="assessment-tool" style="padding: 25px; background: white; border: 2px solid #F39C12; border-radius: 12px;">
-                    <h3 style="color: #F57C00; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
-                        SCID - Structured Clinical Interview for DSM-5 (AUD Module)
-                    </h3>
+                <!-- Assessment Tool Button -->
+                <div class="assessment-buttons">
+                    <button class="assessment-btn" data-assessment="scid" onclick="openAssessment('scid')">
+                        SCID - DSM-5 AUD<br><small style="font-weight: 400; font-size: 12px;">11 Diagnostic Criteria</small>
+                    </button>
+                </div>
+
+                <!-- SCID Assessment Content -->
+                <div id="scid-content" class="assessment-content">
+                    <div class="assessment-header">
+                        <h3 style="color: #F57C00; font-size: 20px; font-weight: 700; margin: 0;">
+                            SCID - Structured Clinical Interview for DSM-5 (AUD Module)
+                        </h3>
+                        <button class="assessment-close-btn" onclick="closeAssessment('scid')">Close</button>
+                    </div>
                     <p style="color: #666; margin-bottom: 20px; font-style: italic;">
                         In the past 12 months, has the patient experienced...
                     </p>
@@ -1616,6 +1803,8 @@
                             (2-3 = Mild, 4-5 = Moderate, 6+ = Severe)
                         </div>
                     </div>
+
+                    <button class="assessment-submit-btn" onclick="submitSCID()">Complete SCID</button>
                 </div>
             </div>
         </div>
@@ -2141,6 +2330,315 @@
             severityElement.style.color = color;
 
             document.getElementById('scid-result').style.display = 'block';
+        }
+
+        // ===== ASSESSMENT BUTTON MANAGEMENT =====
+
+        // Global storage for completed assessments
+        let assessmentScores = {
+            phq9: null,
+            gad7: null,
+            qids: null,
+            hamd: null,
+            scid: null
+        };
+
+        function openAssessment(assessmentId) {
+            // Close all assessments first
+            document.querySelectorAll('.assessment-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.assessment-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Open the selected assessment
+            const content = document.getElementById(`${assessmentId}-content`);
+            if (content) {
+                content.classList.add('active');
+
+                // Scroll to the content
+                setTimeout(() => {
+                    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+
+            // Mark button as active
+            const button = document.querySelector(`[data-assessment="${assessmentId}"]`);
+            if (button) {
+                button.classList.add('active');
+            }
+
+            // If opening HAM-D, update the display with current scores
+            if (assessmentId === 'hamd') {
+                updateHAMDDisplay();
+            }
+        }
+
+        function closeAssessment(assessmentId) {
+            const content = document.getElementById(`${assessmentId}-content`);
+            if (content) {
+                content.classList.remove('active');
+            }
+
+            // Remove active class from button
+            const button = document.querySelector(`[data-assessment="${assessmentId}"]`);
+            if (button) {
+                button.classList.remove('active');
+            }
+        }
+
+        function submitPHQ9() {
+            let total = 0;
+            let allAnswered = true;
+
+            document.querySelectorAll('.phq9-item').forEach(item => {
+                const value = item.value;
+                if (value === '') {
+                    allAnswered = false;
+                } else {
+                    total += parseInt(value);
+                }
+            });
+
+            if (!allAnswered) {
+                alert('Please answer all PHQ-9 questions before submitting.');
+                return;
+            }
+
+            // Calculate and display score
+            calculatePHQ9();
+
+            // Store score
+            assessmentScores.phq9 = total;
+
+            // Mark button as completed
+            const button = document.querySelector('[data-assessment="phq9"]');
+            if (button) {
+                button.classList.add('completed');
+            }
+
+            // Close the assessment
+            setTimeout(() => {
+                closeAssessment('phq9');
+                alert(`PHQ-9 completed! Score: ${total}`);
+            }, 1000);
+        }
+
+        function submitGAD7() {
+            let total = 0;
+            let allAnswered = true;
+
+            document.querySelectorAll('.gad7-item').forEach(item => {
+                const value = item.value;
+                if (value === '') {
+                    allAnswered = false;
+                } else {
+                    total += parseInt(value);
+                }
+            });
+
+            if (!allAnswered) {
+                alert('Please answer all GAD-7 questions before submitting.');
+                return;
+            }
+
+            // Calculate and display score
+            calculateGAD7();
+
+            // Store score
+            assessmentScores.gad7 = total;
+
+            // Mark button as completed
+            const button = document.querySelector('[data-assessment="gad7"]');
+            if (button) {
+                button.classList.add('completed');
+            }
+
+            // Close the assessment
+            setTimeout(() => {
+                closeAssessment('gad7');
+                alert(`GAD-7 completed! Score: ${total}`);
+            }, 1000);
+        }
+
+        function submitQIDS() {
+            let total = 0;
+            let allAnswered = true;
+
+            document.querySelectorAll('.qids-item').forEach(item => {
+                const value = item.value;
+                if (value === '') {
+                    allAnswered = false;
+                } else {
+                    total += parseInt(value);
+                }
+            });
+
+            if (!allAnswered) {
+                alert('Please answer all QIDS questions before submitting.');
+                return;
+            }
+
+            // Calculate and display score
+            calculateQIDS();
+
+            // Store score
+            assessmentScores.qids = total;
+
+            // Mark button as completed
+            const button = document.querySelector('[data-assessment="qids"]');
+            if (button) {
+                button.classList.add('completed');
+            }
+
+            // Close the assessment
+            setTimeout(() => {
+                closeAssessment('qids');
+                alert(`QIDS completed! Score: ${total}`);
+            }, 1000);
+        }
+
+        function updateHAMDDisplay() {
+            // Update PHQ-9 section
+            if (assessmentScores.phq9 !== null) {
+                document.getElementById('hamd-phq9-display').textContent = assessmentScores.phq9;
+                const estimatedHAMD = Math.round(assessmentScores.phq9 * 1.48 + 2.1);
+                document.getElementById('hamd-from-phq9-score').textContent = estimatedHAMD;
+            }
+
+            // Update QIDS section
+            if (assessmentScores.qids !== null) {
+                document.getElementById('hamd-qids-display').textContent = assessmentScores.qids;
+                const estimatedHAMD = Math.round(assessmentScores.qids * 1.45 + 2.5);
+                document.getElementById('hamd-from-qids-score').textContent = estimatedHAMD;
+            }
+        }
+
+        function interpretDirectHAMD() {
+            const score = parseInt(document.getElementById('hamd-direct-score').value);
+
+            if (isNaN(score) || score < 0) {
+                document.getElementById('hamd-final-result').style.display = 'none';
+                return;
+            }
+
+            displayHAMDResult(score, 'Direct clinician-administered score');
+        }
+
+        function displayHAMDResult(score, method) {
+            document.getElementById('hamd-final-score').textContent = score;
+            document.getElementById('hamd-method').textContent = `Method: ${method}`;
+
+            let severity = '';
+            let color = '';
+            if (score <= 7) {
+                severity = 'Normal / Remission';
+                color = '#27AE60';
+            } else if (score <= 13) {
+                severity = 'Mild Depression';
+                color = '#F39C12';
+            } else if (score <= 18) {
+                severity = 'Moderate Depression';
+                color = '#E67E22';
+            } else if (score <= 22) {
+                severity = 'Severe Depression';
+                color = '#D35400';
+            } else {
+                severity = 'Very Severe Depression';
+                color = '#E74C3C';
+            }
+
+            const severityElement = document.getElementById('hamd-final-severity');
+            severityElement.textContent = severity;
+            severityElement.style.color = color;
+
+            document.getElementById('hamd-final-result').style.display = 'block';
+        }
+
+        function submitHAMD() {
+            let hamdScore = null;
+            let method = '';
+
+            // Check if direct score was entered
+            const directScore = parseInt(document.getElementById('hamd-direct-score').value);
+            if (!isNaN(directScore) && directScore >= 0) {
+                hamdScore = directScore;
+                method = 'Direct clinician-administered score';
+            }
+            // Otherwise use PHQ-9 if available
+            else if (assessmentScores.phq9 !== null) {
+                hamdScore = Math.round(assessmentScores.phq9 * 1.48 + 2.1);
+                method = 'Estimated from PHQ-9';
+            }
+            // Otherwise use QIDS if available
+            else if (assessmentScores.qids !== null) {
+                hamdScore = Math.round(assessmentScores.qids * 1.45 + 2.5);
+                method = 'Estimated from QIDS';
+            }
+            else {
+                alert('Please complete PHQ-9, QIDS, or enter a direct HAM-D score first.');
+                return;
+            }
+
+            // Display result
+            displayHAMDResult(hamdScore, method);
+
+            // Store score
+            assessmentScores.hamd = hamdScore;
+
+            // Mark button as completed
+            const button = document.querySelector('[data-assessment="hamd"]');
+            if (button) {
+                button.classList.add('completed');
+            }
+
+            // Close the assessment
+            setTimeout(() => {
+                closeAssessment('hamd');
+                alert(`HAM-D estimation completed! Score: ${hamdScore}\nMethod: ${method}`);
+            }, 1000);
+        }
+
+        function submitSCID() {
+            // Calculate and display results
+            calculateSCID();
+
+            let count = 0;
+            document.querySelectorAll('.scid-checkbox').forEach(checkbox => {
+                if (checkbox.checked) {
+                    count++;
+                }
+            });
+
+            // Store score
+            assessmentScores.scid = count;
+
+            // Mark button as completed
+            const button = document.querySelector('[data-assessment="scid"]');
+            if (button) {
+                button.classList.add('completed');
+            }
+
+            // Determine severity
+            let severity = '';
+            if (count < 2) {
+                severity = 'Does Not Meet AUD Criteria';
+            } else if (count <= 3) {
+                severity = 'Mild AUD';
+            } else if (count <= 5) {
+                severity = 'Moderate AUD';
+            } else {
+                severity = 'Severe AUD';
+            }
+
+            // Close the assessment
+            setTimeout(() => {
+                closeAssessment('scid');
+                alert(`SCID completed! Criteria Met: ${count}\nSeverity: ${severity}`);
+            }, 1000);
         }
 
         // ===== TABLE INITIALIZATION FUNCTIONS =====

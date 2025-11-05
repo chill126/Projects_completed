@@ -145,20 +145,32 @@
         .ccid-section {
             background: #E3F2FD;
             padding: 25px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
             margin-bottom: 30px;
         }
 
+        .ccid-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .name-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
         .ccid-group,
-        .datetime-group {
+        .datetime-group,
+        .name-group {
             display: flex;
             flex-direction: column;
         }
 
         .ccid-group label,
-        .datetime-group label {
+        .datetime-group label,
+        .name-group label {
             font-weight: 600;
             margin-bottom: 8px;
             font-size: 0.95em;
@@ -361,24 +373,6 @@
             display: block;
         }
 
-        .section-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        }
-
-        @media (max-width: 768px) {
-            .demographics-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-
-            .height-inputs {
-                grid-template-columns: 1fr;
-            }
-        }
         .section {
             background: var(--white);
             border: 2px solid var(--border-color);
@@ -387,314 +381,6 @@
             margin-bottom: 25px;
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
-        }
-
-        .section:hover {
-            box-shadow: var(--shadow-hover);
-        }
-
-        .section-header {
-            color: var(--primary-color);
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-icon {
-            font-size: 1.2em;
-        }
-
-        /* Study-Specific Section Colors */
-        .section.psych-section {
-            border-color: #4A90E2;
-        }
-
-        .section.psych-section .section-header {
-            color: #4A90E2;
-            border-color: #4A90E2;
-        }
-
-        .section.neuro-section {
-            border-color: #9B59B6;
-        }
-
-        .section.neuro-section .section-header {
-            color: #9B59B6;
-            border-color: #9B59B6;
-        }
-
-        .section.aud-section {
-            border-color: #F39C12;
-        }
-
-        .section.aud-section .section-header {
-            color: #F39C12;
-            border-color: #F39C12;
-        }
-
-        .section.fibromyalgia-section {
-            border-color: #16A085;
-        }
-
-        .section.fibromyalgia-section .section-header {
-            color: #16A085;
-            border-color: #16A085;
-        }
-
-        .section.backpain-section {
-            border-color: #E74C3C;
-        }
-
-        .section.backpain-section .section-header {
-            color: #E74C3C;
-            border-color: #E74C3C;
-        }
-
-        /* ===== FORM LAYOUT ===== */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        /* ===== CHECKBOX AND RADIO STYLES ===== */
-        .checkbox-group,
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .checkbox-label,
-        .radio-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 6px;
-            transition: background 0.2s ease;
-        }
-
-        .checkbox-label:hover,
-        .radio-label:hover {
-            background: var(--light-gray);
-        }
-
-        .checkbox-label input[type="checkbox"],
-        .radio-label input[type="radio"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        /* ===== ELIGIBILITY CALCULATOR ===== */
-        .eligibility-section {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border: 3px solid var(--primary-color);
-            border-radius: 10px;
-            padding: 30px;
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .eligibility-section h2 {
-            color: var(--primary-color);
-            font-size: 1.8em;
-            margin-bottom: 20px;
-        }
-
-        .eligibility-result {
-            font-size: 2.5em;
-            font-weight: bold;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .eligibility-result.eligible {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .eligibility-result.not-eligible {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .eligibility-result.pending {
-            background: var(--neutral-gray);
-            color: white;
-        }
-
-        .criteria-list {
-            text-align: left;
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-        }
-
-        .criteria-item {
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .criteria-item.met {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .criteria-item.not-met {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .criteria-item.pending {
-            background: #e9ecef;
-            color: #6c757d;
-        }
-
-        .criteria-icon {
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-
-        /* ===== ACTION BUTTONS ===== */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            font-size: 1.1em;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--warning-color);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        /* ===== UTILITY CLASSES ===== */
-        .hidden {
-            display: none !important;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-muted {
-            color: var(--text-light);
-        }
-
-        .mt-1 { margin-top: 10px; }
-        .mt-2 { margin-top: 20px; }
-        .mt-3 { margin-top: 30px; }
-        .mb-1 { margin-bottom: 10px; }
-        .mb-2 { margin-bottom: 20px; }
-        .mb-3 { margin-bottom: 30px; }
-
-        /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 768px) {
-            .study-selector {
-                position: fixed;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: auto;
-                flex-direction: row;
-                padding: 10px;
-                border-radius: 0;
-                justify-content: center;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            }
-
-            .main-container {
-                margin-left: 0;
-                margin-top: 110px;
-            }
-
-            body {
-                padding-top: 0;
-            }
-
-            .ccid-section {
-                grid-template-columns: 1fr;
-            }
-
-            .datetime-wrapper {
-                flex-direction: column;
-            }
-
-            .edit-datetime-btn {
-                width: 100%;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
         }
 
         /* ===== MEDICAL HISTORY TABLE ===== */
@@ -759,10 +445,20 @@
             cursor: pointer;
         }
 
-        .medical-table .remove-row-btn:hover {
-            background: #c0392b !important;
-            transform: scale(1.05);
+        .remove-row-btn {
+            background: #E74C3C;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
             transition: all 0.2s ease;
+        }
+
+        .remove-row-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
         }
 
         /* ===== MEDICATIONS TABLE ===== */
@@ -840,46 +536,244 @@
             border-color: #9B59B6;
         }
 
-        .medications-table .remove-row-btn:hover {
-            background: #c0392b !important;
-            transform: scale(1.05);
+        /* ===== ALLERGIES TABLE ===== */
+        .allergies-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .allergies-table thead {
+            background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+            color: white;
+        }
+
+        .allergies-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .allergies-table tbody tr {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .allergies-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+
+        .allergies-table td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .allergies-table input[type="text"],
+        .allergies-table input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* ===== SUBSTANCE USE SECTION ===== */
+        .substance-use-section {
+            margin-top: 25px;
+            border: 2px solid #FFF9E6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .substance-header {
+            background: #FFF9E6;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .substance-header:hover {
+            background: #FFF3CC;
+        }
+
+        .substance-header h3 {
+            color: #856404;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .toggle-icon {
+            font-size: 20px;
+            color: #856404;
+            transition: transform 0.3s ease;
+        }
+
+        .substance-content {
+            display: none;
+            padding: 20px;
+            background: white;
+        }
+
+        .substance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .substance-item {
+            margin-bottom: 10px;
+        }
+
+        .substance-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            background: white;
             transition: all 0.2s ease;
         }
 
-        /* ===== PRINT STYLES ===== */
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
+        .substance-item label:hover {
+            border-color: #cbd5e0;
+            background: #f8f9fa;
+        }
 
-            .study-selector,
-            .action-buttons {
-                display: none;
+        .substance-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .substance-details {
+            display: none;
+            padding: 15px;
+            margin-top: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .study-selector {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                padding: 10px;
+                border-radius: 0;
+                justify-content: center;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             }
 
             .main-container {
                 margin-left: 0;
-                box-shadow: none;
+                margin-top: 110px;
             }
-        }
 
-        /* PHQ-9 Assessment Hover Effects */
-        .phq9-option:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+            body {
+                padding-top: 0;
+            }
 
-        /* QIDS Assessment Hover Effects */
-        .qids-option:hover {
-            transform: translateX(2px);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
+            .ccid-grid,
+            .name-grid {
+                grid-template-columns: 1fr;
+            }
 
-        /* SCID Checkbox Hover Effects */
-        .scid-checkbox:hover {
-            transform: translateX(2px);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            .datetime-wrapper {
+                flex-direction: column;
+            }
+
+            .edit-datetime-btn {
+                width: 100%;
+            }
+
+            .demographics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .height-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -913,31 +807,61 @@
 
         <!-- CCID & Date Section -->
         <div class="ccid-section">
-            <div class="ccid-group">
-                <label for="ccid">
-                    Clinical Case ID (CCID)<span class="required-asterisk">*</span>
-                </label>
-                <input
-                    type="text"
-                    id="ccid"
-                    class="ccid-input"
-                    placeholder="Enter CCID"
-                    required
-                    maxlength="20"
-                    pattern="[A-Za-z0-9-]+"
-                >
-                <span id="ccid-error" class="error-message">CCID is required</span>
-            </div>
-            <div class="datetime-group">
-                <label for="screeningDateTime">Screening Date & Time</label>
-                <div class="datetime-wrapper">
+            <div class="ccid-grid">
+                <div class="ccid-group">
+                    <label for="ccid">
+                        Clinical Case ID (CCID)<span class="required-asterisk">*</span>
+                    </label>
                     <input
-                        type="datetime-local"
-                        id="screeningDateTime"
-                        class="datetime-input"
-                        readonly
+                        type="text"
+                        id="ccid"
+                        class="ccid-input"
+                        placeholder="Enter CCID"
+                        required
+                        maxlength="20"
+                        pattern="[A-Za-z0-9-]+"
                     >
-                    <button type="button" class="edit-datetime-btn">Edit</button>
+                    <span id="ccid-error" class="error-message">CCID is required</span>
+                </div>
+                <div class="datetime-group">
+                    <label for="screeningDateTime">Screening Date & Time</label>
+                    <div class="datetime-wrapper">
+                        <input
+                            type="datetime-local"
+                            id="screeningDateTime"
+                            class="datetime-input"
+                            readonly
+                        >
+                        <button type="button" class="edit-datetime-btn">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Name Fields -->
+            <div class="name-grid">
+                <div class="name-group">
+                    <label for="firstName">
+                        First Name<span class="required-asterisk">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="firstName"
+                        class="ccid-input"
+                        placeholder="Enter first name"
+                        required
+                    >
+                </div>
+                <div class="name-group">
+                    <label for="lastName">
+                        Last Name<span class="required-asterisk">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="lastName"
+                        class="ccid-input"
+                        placeholder="Enter last name"
+                        required
+                    >
                 </div>
             </div>
         </div>
@@ -1025,10 +949,175 @@
             </div>
         </div>
 
-        <!-- Simple test message -->
-        <div id="testMessage" style="background: #27AE60; color: white; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
-            <h2>✓ Tool Loaded Successfully!</h2>
-            <p>Select a study indication from the left sidebar to begin screening.</p>
+        <!-- Medical History Section -->
+        <div class="section" style="border-left: 4px solid #E74C3C;">
+            <h2 style="color: #2d3748; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
+                Medical History
+            </h2>
+
+            <table class="medical-table" id="medicalHistoryTable">
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Condition Name</th>
+                        <th style="width: 15%;">Start Date</th>
+                        <th style="width: 15%;">End Date</th>
+                        <th style="width: 10%; text-align: center;">Current</th>
+                        <th style="width: 15%; text-align: center;">Con Med</th>
+                        <th style="width: 15%; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Will be populated with 1 row by JavaScript -->
+                </tbody>
+            </table>
+
+            <button type="button" id="addMedicalHistoryRow" style="margin-top: 15px; padding: 10px 20px; background: #27AE60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+                + Add Condition
+            </button>
+
+            <!-- Substance Use History Subsection -->
+            <div class="substance-use-section">
+                <div class="substance-header" id="substanceHeader">
+                    <h3>Substance Use History</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="substance-content" id="substanceContent">
+                    <div class="substance-grid">
+
+                        <!-- Alcohol -->
+                        <div class="substance-item" data-substance="alcohol">
+                            <label>
+                                <input type="checkbox" class="substance-checkbox" data-substance="alcohol">
+                                <span style="font-weight: 600;">Alcohol</span>
+                            </label>
+                            <div class="substance-details">
+                                <!-- Fields populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Cannabis/THC -->
+                        <div class="substance-item" data-substance="cannabis">
+                            <label>
+                                <input type="checkbox" class="substance-checkbox" data-substance="cannabis">
+                                <span style="font-weight: 600;">Cannabis/THC</span>
+                            </label>
+                            <div class="substance-details">
+                                <!-- Fields populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Opioids -->
+                        <div class="substance-item" data-substance="opioids">
+                            <label>
+                                <input type="checkbox" class="substance-checkbox" data-substance="opioids">
+                                <span style="font-weight: 600;">Opioids</span>
+                            </label>
+                            <div class="substance-details">
+                                <!-- Fields populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Benzodiazepines -->
+                        <div class="substance-item" data-substance="benzodiazepines">
+                            <label>
+                                <input type="checkbox" class="substance-checkbox" data-substance="benzodiazepines">
+                                <span style="font-weight: 600;">Benzodiazepines</span>
+                            </label>
+                            <div class="substance-details">
+                                <!-- Fields populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Stimulants -->
+                        <div class="substance-item" data-substance="stimulants">
+                            <label>
+                                <input type="checkbox" class="substance-checkbox" data-substance="stimulants">
+                                <span style="font-weight: 600;">Stimulants</span>
+                            </label>
+                            <div class="substance-details">
+                                <!-- Fields populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Psychedelics -->
+                        <div class="substance-item" data-substance="psychedelics">
+                            <label>
+                                <input type="checkbox" class="substance-checkbox" data-substance="psychedelics">
+                                <span style="font-weight: 600;">Psychedelics</span>
+                            </label>
+                            <div class="substance-details">
+                                <!-- Fields populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Other -->
+                        <div class="substance-item" data-substance="other">
+                            <label>
+                                <input type="checkbox" class="substance-checkbox" data-substance="other">
+                                <span style="font-weight: 600;">Other</span>
+                            </label>
+                            <div class="substance-details">
+                                <!-- Fields populated by JavaScript -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medications Section -->
+        <div class="section" style="border-left: 4px solid #9B59B6;">
+            <h2 style="color: #2d3748; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
+                Current & Recent Medications
+            </h2>
+
+            <table class="medications-table" id="medicationsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Medication Name</th>
+                        <th style="width: 15%;">Dosage</th>
+                        <th style="width: 15%;">Frequency</th>
+                        <th style="width: 12%;">Start Date</th>
+                        <th style="width: 12%;">End Date</th>
+                        <th style="width: 8%; text-align: center;">Current</th>
+                        <th style="width: 13%; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Will be populated with 1 row by JavaScript -->
+                </tbody>
+            </table>
+
+            <button type="button" id="addMedicationRow" style="margin-top: 15px; padding: 10px 20px; background: #9B59B6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+                + Add Medication
+            </button>
+
+            <!-- Medication Allergies Section -->
+            <div class="allergies-section" style="margin-top: 30px; padding: 20px; background: #FFF9F0; border: 2px solid #F39C12; border-radius: 8px;">
+                <h3 style="color: #8B6914; font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <span>ⓘ</span>
+                    <span>Medication Allergies</span>
+                </h3>
+
+                <table class="allergies-table" id="allergiesTable">
+                    <thead>
+                        <tr>
+                            <th style="padding: 12px;">Medication/Substance</th>
+                            <th style="padding: 12px;">Reaction/Symptoms</th>
+                            <th style="padding: 12px;">Last Reaction Date</th>
+                            <th style="padding: 12px; text-align: center; width: 100px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated with 1 row by JavaScript -->
+                    </tbody>
+                </table>
+
+                <button type="button" id="addAllergyRow" style="margin-top: 15px; padding: 10px 20px; background: #F39C12; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+                    + Add Allergy
+                </button>
+            </div>
         </div>
 
         <!-- Action Buttons -->
@@ -1048,7 +1137,6 @@
         </div>
     </div>
 
-    <!-- Minimal JavaScript to test -->
     <script>
         // Global state
         let selectedIndication = null;
@@ -1062,6 +1150,11 @@
             if (screeningDateTime) {
                 screeningDateTime.value = new Date().toISOString().slice(0,16);
             }
+
+            // Initialize all tables with 1 empty row
+            initializeMedicalHistoryTable();
+            initializeMedicationsTable();
+            initializeAllergiesTable();
 
             // Add event listeners for indication selection
             document.querySelectorAll('.study-option').forEach(option => {
@@ -1122,7 +1215,252 @@
                     this.style.background = '#95A5A6';
                 });
             }
+
+            // Substance use toggle
+            const substanceHeader = document.getElementById('substanceHeader');
+            if (substanceHeader) {
+                substanceHeader.addEventListener('click', function() {
+                    const content = document.getElementById('substanceContent');
+                    const icon = this.querySelector('.toggle-icon');
+
+                    if (content && icon) {
+                        if (content.style.display === 'none' || !content.style.display) {
+                            content.style.display = 'block';
+                            icon.style.transform = 'rotate(180deg)';
+                            icon.textContent = '▲';
+                        } else {
+                            content.style.display = 'none';
+                            icon.style.transform = 'rotate(0deg)';
+                            icon.textContent = '▼';
+                        }
+                    }
+                });
+            }
+
+            // Substance use checkboxes - FIX: Generate HTML BEFORE showing
+            document.querySelectorAll('.substance-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const parent = this.closest('.substance-item');
+                    if (!parent) return;
+
+                    const detailsDiv = parent.querySelector('.substance-details');
+                    if (!detailsDiv) return;
+
+                    const substance = this.dataset.substance;
+
+                    if (this.checked) {
+                        // FIX: Generate HTML FIRST, then display
+                        detailsDiv.innerHTML = generateSubstanceFields(substance);
+                        detailsDiv.style.display = 'block';
+                    } else {
+                        // Hide and clear details
+                        detailsDiv.style.display = 'none';
+                        detailsDiv.innerHTML = '';
+                    }
+                });
+            });
         });
+
+        // ===== TABLE INITIALIZATION FUNCTIONS =====
+
+        function initializeMedicalHistoryTable() {
+            const tbody = document.querySelector('#medicalHistoryTable tbody');
+            if (!tbody) return;
+
+            addMedicalHistoryRow();
+
+            // Add row button listener
+            const addBtn = document.getElementById('addMedicalHistoryRow');
+            if (addBtn) {
+                addBtn.addEventListener('click', addMedicalHistoryRow);
+            }
+        }
+
+        function addMedicalHistoryRow() {
+            const tbody = document.querySelector('#medicalHistoryTable tbody');
+            if (!tbody) return;
+
+            const row = tbody.insertRow();
+            row.className = 'medical-history-row';
+            row.innerHTML = `
+                <td><input type="text" class="condition-name" placeholder="Condition name"></td>
+                <td><input type="date" class="start-date"></td>
+                <td><input type="date" class="end-date"></td>
+                <td style="text-align: center;"><input type="checkbox" class="current-condition"></td>
+                <td style="text-align: center;"><input type="checkbox" class="has-con-med"></td>
+                <td style="text-align: center;">
+                    <button type="button" class="remove-row-btn">Remove</button>
+                </td>
+            `;
+
+            // Add listeners
+            const currentCheckbox = row.querySelector('.current-condition');
+            const endDateInput = row.querySelector('.end-date');
+
+            currentCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    endDateInput.value = '';
+                    endDateInput.disabled = true;
+                    endDateInput.style.background = '#e2e8f0';
+                } else {
+                    endDateInput.disabled = false;
+                    endDateInput.style.background = 'white';
+                }
+            });
+
+            const removeBtn = row.querySelector('.remove-row-btn');
+            removeBtn.addEventListener('click', function() {
+                if (confirm('Remove this condition?')) {
+                    row.remove();
+                }
+            });
+        }
+
+        function initializeMedicationsTable() {
+            const tbody = document.querySelector('#medicationsTable tbody');
+            if (!tbody) return;
+
+            addMedicationRow();
+
+            // Add row button listener
+            const addBtn = document.getElementById('addMedicationRow');
+            if (addBtn) {
+                addBtn.addEventListener('click', addMedicationRow);
+            }
+        }
+
+        function addMedicationRow() {
+            const tbody = document.querySelector('#medicationsTable tbody');
+            if (!tbody) return;
+
+            const row = tbody.insertRow();
+            row.className = 'medication-row';
+            row.innerHTML = `
+                <td><input type="text" class="medication-name" placeholder="Medication name"></td>
+                <td><input type="text" class="medication-dosage" placeholder="e.g., 10mg"></td>
+                <td>
+                    <select class="medication-frequency">
+                        <option value="">Select...</option>
+                        <option value="qd">Once daily (QD)</option>
+                        <option value="bid">Twice daily (BID)</option>
+                        <option value="tid">Three times daily (TID)</option>
+                        <option value="qid">Four times daily (QID)</option>
+                        <option value="prn">As needed (PRN)</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="eod">Every other day</option>
+                        <option value="other">Other</option>
+                    </select>
+                </td>
+                <td><input type="date" class="medication-start-date"></td>
+                <td><input type="date" class="medication-end-date"></td>
+                <td style="text-align: center;"><input type="checkbox" class="medication-current"></td>
+                <td style="text-align: center;">
+                    <button type="button" class="remove-row-btn">Remove</button>
+                </td>
+            `;
+
+            // Add listeners
+            const currentCheckbox = row.querySelector('.medication-current');
+            const endDateInput = row.querySelector('.medication-end-date');
+
+            currentCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    endDateInput.value = '';
+                    endDateInput.disabled = true;
+                    endDateInput.style.background = '#e2e8f0';
+                } else {
+                    endDateInput.disabled = false;
+                    endDateInput.style.background = 'white';
+                }
+            });
+
+            const removeBtn = row.querySelector('.remove-row-btn');
+            removeBtn.addEventListener('click', function() {
+                if (confirm('Remove this medication?')) {
+                    row.remove();
+                }
+            });
+        }
+
+        function initializeAllergiesTable() {
+            const tbody = document.querySelector('#allergiesTable tbody');
+            if (!tbody) return;
+
+            addAllergyRow();
+
+            // Add row button listener
+            const addBtn = document.getElementById('addAllergyRow');
+            if (addBtn) {
+                addBtn.addEventListener('click', addAllergyRow);
+            }
+        }
+
+        function addAllergyRow() {
+            const tbody = document.querySelector('#allergiesTable tbody');
+            if (!tbody) return;
+
+            const row = tbody.insertRow();
+            row.className = 'allergy-row';
+            row.innerHTML = `
+                <td><input type="text" class="allergy-name" placeholder="Medication or substance name" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                <td><input type="text" class="allergy-reaction" placeholder="Describe reaction" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                <td><input type="date" class="allergy-date" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;"></td>
+                <td style="text-align: center;">
+                    <button type="button" class="remove-row-btn">Remove</button>
+                </td>
+            `;
+
+            const removeBtn = row.querySelector('.remove-row-btn');
+            removeBtn.addEventListener('click', function() {
+                if (confirm('Remove this allergy?')) {
+                    row.remove();
+                }
+            });
+        }
+
+        // ===== SUBSTANCE USE HELPER FUNCTION =====
+
+        function generateSubstanceFields(substance) {
+            let html = '';
+
+            // For "other", add substance name field
+            if (substance === 'other') {
+                html += `
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Substance Name</label>
+                        <input type="text" class="substance-name-other" placeholder="Specify substance" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Frequency</label>
+                    <select class="substance-frequency" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                        <option value="">Select...</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="occasionally">Occasionally</option>
+                        <option value="past">Past use only</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Last Use Date</label>
+                    <input type="date" class="substance-last-use" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #4a5568;">Additional Notes (optional)</label>
+                    <textarea class="substance-notes" style="width: 100%; padding: 8px; border: 2px solid #cbd5e0; border-radius: 6px; resize: vertical; min-height: 60px;" placeholder="Any additional details..."></textarea>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // ===== OTHER FUNCTIONS =====
 
         function selectIndication(indicationType) {
             selectedIndication = indicationType;
@@ -1141,15 +1479,8 @@
                 }
             });
 
-            // Update test message
-            const testMessage = document.getElementById('testMessage');
-            if (testMessage) {
-                testMessage.innerHTML = `
-                    <h2>✓ ${indicationType.toUpperCase()} Study Selected</h2>
-                    <p>Study-specific sections will appear here when fully implemented.</p>
-                `;
-                testMessage.style.background = '#4A90E2';
-            }
+            console.log(`Selected indication: ${indicationType.toUpperCase()}`);
+            alert(`${indicationType.toUpperCase()} study selected. Study-specific sections will be added next.`);
         }
 
         function calculateBMI() {

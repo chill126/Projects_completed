@@ -1257,13 +1257,10 @@
                     <button class="assessment-btn" data-assessment="gad7" onclick="openGAD7Modal()">
                         GAD-7<br><small style="font-weight: 400; font-size: 12px;">Anxiety Screener</small>
                     </button>
-                    <button class="assessment-btn" data-assessment="qids" onclick="openQIDSModal()">
-                        QIDS-SR16<br><small style="font-weight: 400; font-size: 12px;">Depression Inventory</small>
-                    </button>
                     </div>
 
                 <!-- Results Display Cards -->
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 25px;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 25px;">
                     <div id="phq9ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
                         <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PHQ-9 Score</div>
                         <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="phq9CardScore">--</div>
@@ -1274,18 +1271,6 @@
                         <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">GAD-7 Score</div>
                         <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="gad7CardScore">--</div>
                         <div style="font-size: 12px; color: #718096;" id="gad7CardSeverity">Not completed</div>
-                    </div>
-
-                    <div id="qidsResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
-                        <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">QIDS Score</div>
-                        <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="qidsCardScore">--</div>
-                        <div style="font-size: 12px; color: #718096;" id="qidsCardSeverity">Not completed</div>
-                    </div>
-
-                    <div id="hamdResultCard" style="padding: 20px; background: #fff3e0; border-radius: 12px; border: 2px solid #ffb74d; text-align: center; display: none;">
-                        <div style="font-size: 14px; color: #e65100; margin-bottom: 5px;">HAM-D Estimate</div>
-                        <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold; color: #e65100;" id="hamdCardScore">--</div>
-                        <div style="font-size: 11px; color: #f57c00;" id="hamdCardMethod">Auto-calculated</div>
                     </div>
                 </div>
 
@@ -1894,179 +1879,6 @@
             </div>
         </div>
 
-        <!-- QIDS ASSESSMENT MODAL -->
-        <div id="qidsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow-y: auto; padding: 20px;">
-            <div style="max-width: 900px; margin: 50px auto; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-
-                <!-- Modal Header -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 3px solid #00838F; padding-bottom: 20px;">
-                    <h2 style="color: #00838F; margin: 0;">QIDS-SR16 - Quick Inventory of Depressive Symptomatology</h2>
-                    <button onclick="closeQIDSModal()" style="background: none; border: none; font-size: 32px; cursor: pointer; color: #718096; line-height: 1;">&times;</button>
-                </div>
-
-                <!-- Instructions -->
-                <div style="background: #e0f7fa; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #00838F;">
-                    <p style="margin: 0; color: #2d3748; line-height: 1.6;">Please select the answer for each item that best describes you <strong>for the past 7 days</strong>.</p>
-                </div>
-
-                <!-- Questions - Simplified 4 key questions -->
-                <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px;">
-                    <div style="padding: 20px; background: #f7fafc; border-radius: 10px; border-left: 3px solid #00838F;">
-                        <div style="font-weight: 600; margin-bottom: 15px; display: block; color: #2d3748;">1. Sleep Quality</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q1" value="0" class="qids-modal-item" data-question="1" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Never takes longer than 30 minutes to fall asleep</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q1" value="1" class="qids-modal-item" data-question="1" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Takes at least 30 minutes, less than half the time</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q1" value="2" class="qids-modal-item" data-question="1" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Takes at least 30 minutes, more than half the time</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q1" value="3" class="qids-modal-item" data-question="1" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Takes more than 60 minutes, more than half the time</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div style="padding: 20px; background: #f7fafc; border-radius: 10px; border-left: 3px solid #00838F;">
-                        <div style="font-weight: 600; margin-bottom: 15px; display: block; color: #2d3748;">2. Sad Mood</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q2" value="0" class="qids-modal-item" data-question="2" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Does not feel sad</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q2" value="1" class="qids-modal-item" data-question="2" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Feels sad less than half the time</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q2" value="2" class="qids-modal-item" data-question="2" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Feels sad more than half the time</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q2" value="3" class="qids-modal-item" data-question="2" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Feels intensely sad virtually all the time</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div style="padding: 20px; background: #f7fafc; border-radius: 10px; border-left: 3px solid #00838F;">
-                        <div style="font-weight: 600; margin-bottom: 15px; display: block; color: #2d3748;">3. Appetite</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q3" value="0" class="qids-modal-item" data-question="3" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">No change in usual appetite</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q3" value="1" class="qids-modal-item" data-question="3" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Eats somewhat less/more often than usual</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q3" value="2" class="qids-modal-item" data-question="3" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Eats much less/more often than usual</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q3" value="3" class="qids-modal-item" data-question="3" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Rarely eats, only with extreme personal effort</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div style="padding: 20px; background: #f7fafc; border-radius: 10px; border-left: 3px solid #00838F;">
-                        <div style="font-weight: 600; margin-bottom: 15px; display: block; color: #2d3748;">4. Concentration/Decision Making</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q4" value="0" class="qids-modal-item" data-question="4" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">No change in usual capacity</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q4" value="1" class="qids-modal-item" data-question="4" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Occasionally feels indecisive or concentration impaired</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q4" value="2" class="qids-modal-item" data-question="4" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Most of the time struggles to focus or make decisions</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q4" value="3" class="qids-modal-item" data-question="4" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Cannot concentrate well enough to read or make decisions</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div style="padding: 20px; background: #f7fafc; border-radius: 10px; border-left: 3px solid #00838F;">
-                        <div style="font-weight: 600; margin-bottom: 15px; display: block; color: #2d3748;">5. Energy Level</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q5" value="0" class="qids-modal-item" data-question="5" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">No change in usual level of energy</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q5" value="1" class="qids-modal-item" data-question="5" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Tires more easily than usual</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q5" value="2" class="qids-modal-item" data-question="5" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Makes significant personal effort to initiate activities</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q5" value="3" class="qids-modal-item" data-question="5" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Unable to carry out most activities</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div style="padding: 20px; background: #f7fafc; border-radius: 10px; border-left: 3px solid #00838F;">
-                        <div style="font-weight: 600; margin-bottom: 15px; display: block; color: #2d3748;">6. Interest in Activities</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q6" value="0" class="qids-modal-item" data-question="6" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">No change from usual level of interest</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q6" value="1" class="qids-modal-item" data-question="6" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Notices a reduction in interests or enjoyment</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q6" value="2" class="qids-modal-item" data-question="6" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Finds only one or two activities interesting</span>
-                            </label>
-                            <label style="display: flex; align-items: center; padding: 14px; background: white; border: 2px solid #cbd5e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#00838F'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#cbd5e0'">
-                                <input type="radio" name="qids_q6" value="3" class="qids-modal-item" data-question="6" onchange="calculateQIDSModal(); this.parentElement.parentElement.querySelectorAll('label').forEach(l => {l.style.borderColor='#cbd5e0'; l.style.background='white';});  this.parentElement.style.borderColor='#00838F'; this.parentElement.style.background='#00838F22';" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                                <span style="font-size: 15px; color: #2d3748;">Has virtually no interest in activities</span>
-                            </label>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Score Display -->
-                <div style="background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px;">
-                    <div style="font-size: 16px; color: #00838F; margin-bottom: 8px; font-weight: 600;">Total Score</div>
-                    <div style="font-size: 56px; font-weight: 700; color: #006064; margin-bottom: 8px;" id="qidsModalScore">0</div>
-                    <div style="font-size: 18px; font-weight: 600; color: #00838F;" id="qidsModalSeverity">Not yet assessed</div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                    <button onclick="saveQIDSAssessment()" style="padding: 15px 40px; background: #00BCD4; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
-                        Save Assessment
-                    </button>
-                    <button onclick="resetQIDSModal()" style="padding: 15px 40px; background: #718096; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
-                        Reset
-                    </button>
-                    <button onclick="closeQIDSModal()" style="padding: 15px 40px; background: #e2e8f0; color: #2d3748; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- SCID ASSESSMENT MODAL -->
         <div id="scidModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow-y: auto; padding: 20px;">
             <div style="max-width: 900px; margin: 50px auto; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
@@ -2198,39 +2010,361 @@
                 <!-- Instructions -->
                 <div style="background: #e3f2fd; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #2196F3;">
                     <h4 style="color: #1565c0; margin-bottom: 10px; margin-top: 0;">📋 Test Instructions:</h4>
-                    <p style="margin: 0 0 10px 0; color: #2d3748; line-height: 1.6;">
-                        Read the following 15 words to the patient at a rate of one word per second. After reading all 15 words, ask the patient to recall as many words as possible in any order. Record the number of correctly recalled words for each trial.
-                    </p>
-                    <p style="margin: 0; color: #2d3748; font-weight: 600;">
-                        <strong>Word List:</strong> Drum, Curtain, Bell, Coffee, School, Parent, Moon, Garden, Hat, Farmer, Nose, Turkey, Color, House, River
+                    <p style="margin: 0; color: #2d3748; line-height: 1.6;">
+                        Read the following 15 words to the patient at a rate of one word per second. After reading all 15 words, ask the patient to recall as many words as possible in any order. Check off each word the patient recalls correctly for each trial.
                     </p>
                 </div>
 
-                <!-- Trial Inputs -->
+                <!-- Trial Checklists -->
                 <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px;">
+                    <!-- Trial 1 -->
                     <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
-                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 1 - First Presentation</label>
-                        <input type="number" id="ravlt_trial1" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <label style="font-weight: 600; color: #7B1FA2; margin: 0;">Trial 1 - First Presentation</label>
+                            <div style="font-size: 18px; font-weight: 700; color: #7B1FA2; background: white; padding: 8px 16px; border-radius: 8px; border: 2px solid #9B59B6;" id="trial1_count">0/15</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Drum</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Curtain</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Bell</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Coffee</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>School</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Parent</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Moon</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Garden</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Hat</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Farmer</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Nose</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Turkey</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Color</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>House</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial1-word" onchange="calculateRAVLTTrial(1)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>River</span>
+                            </label>
+                        </div>
                     </div>
 
+                    <!-- Trial 2 -->
                     <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
-                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 2 - Second Presentation</label>
-                        <input type="number" id="ravlt_trial2" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <label style="font-weight: 600; color: #7B1FA2; margin: 0;">Trial 2 - Second Presentation</label>
+                            <div style="font-size: 18px; font-weight: 700; color: #7B1FA2; background: white; padding: 8px 16px; border-radius: 8px; border: 2px solid #9B59B6;" id="trial2_count">0/15</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Drum</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Curtain</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Bell</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Coffee</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>School</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Parent</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Moon</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Garden</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Hat</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Farmer</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Nose</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Turkey</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Color</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>House</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial2-word" onchange="calculateRAVLTTrial(2)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>River</span>
+                            </label>
+                        </div>
                     </div>
 
+                    <!-- Trial 3 -->
                     <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
-                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 3 - Third Presentation</label>
-                        <input type="number" id="ravlt_trial3" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <label style="font-weight: 600; color: #7B1FA2; margin: 0;">Trial 3 - Third Presentation</label>
+                            <div style="font-size: 18px; font-weight: 700; color: #7B1FA2; background: white; padding: 8px 16px; border-radius: 8px; border: 2px solid #9B59B6;" id="trial3_count">0/15</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Drum</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Curtain</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Bell</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Coffee</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>School</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Parent</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Moon</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Garden</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Hat</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Farmer</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Nose</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Turkey</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Color</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>House</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial3-word" onchange="calculateRAVLTTrial(3)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>River</span>
+                            </label>
+                        </div>
                     </div>
 
+                    <!-- Trial 4 -->
                     <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
-                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 4 - Fourth Presentation</label>
-                        <input type="number" id="ravlt_trial4" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <label style="font-weight: 600; color: #7B1FA2; margin: 0;">Trial 4 - Fourth Presentation</label>
+                            <div style="font-size: 18px; font-weight: 700; color: #7B1FA2; background: white; padding: 8px 16px; border-radius: 8px; border: 2px solid #9B59B6;" id="trial4_count">0/15</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Drum</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Curtain</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Bell</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Coffee</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>School</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Parent</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Moon</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Garden</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Hat</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Farmer</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Nose</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Turkey</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Color</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>House</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial4-word" onchange="calculateRAVLTTrial(4)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>River</span>
+                            </label>
+                        </div>
                     </div>
 
+                    <!-- Trial 5 -->
                     <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
-                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 5 - Fifth Presentation</label>
-                        <input type="number" id="ravlt_trial5" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <label style="font-weight: 600; color: #7B1FA2; margin: 0;">Trial 5 - Fifth Presentation</label>
+                            <div style="font-size: 18px; font-weight: 700; color: #7B1FA2; background: white; padding: 8px 16px; border-radius: 8px; border: 2px solid #9B59B6;" id="trial5_count">0/15</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Drum</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Curtain</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Bell</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Coffee</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>School</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Parent</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Moon</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Garden</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Hat</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Farmer</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Nose</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Turkey</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>Color</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>House</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px 12px; background: white; border: 2px solid #cbd5e0; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                <input type="checkbox" class="ravlt-trial5-word" onchange="calculateRAVLTTrial(5)" style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <span>River</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -3326,9 +3460,6 @@
 
             closePHQ9Modal();
 
-            // Auto-calculate HAM-D estimate
-            calculateHAMDEstimate();
-
             // Scroll to results
             document.getElementById('phq9ResultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
@@ -3414,127 +3545,6 @@
         }
 
         // ========================================
-        // QIDS MODAL FUNCTIONS
-        // ========================================
-        let qidsModalData = {
-            score: 0,
-            severity: ''
-        };
-
-        function openQIDSModal() {
-            document.getElementById('qidsModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeQIDSModal() {
-            document.getElementById('qidsModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function calculateQIDSModal() {
-            let totalScore = 0;
-            const items = document.querySelectorAll('.qids-modal-item:checked');
-
-            items.forEach(item => {
-                const value = parseInt(item.value) || 0;
-                totalScore += value;
-            });
-
-            qidsModalData.score = totalScore;
-
-            // Determine severity (simplified for 6-question version)
-            let severity = '';
-            if (totalScore >= 16) severity = 'Severe Depression';
-            else if (totalScore >= 11) severity = 'Moderate Depression';
-            else if (totalScore >= 6) severity = 'Mild Depression';
-            else severity = 'No Depression';
-
-            qidsModalData.severity = severity;
-
-            // Update modal display
-            document.getElementById('qidsModalScore').textContent = totalScore;
-            document.getElementById('qidsModalSeverity').textContent = severity;
-        }
-
-        function saveQIDSAssessment() {
-            // Update PSYCH section card
-            document.getElementById('qidsResultCard').style.display = 'block';
-            document.getElementById('qidsCardScore').textContent = qidsModalData.score;
-            document.getElementById('qidsCardSeverity').textContent = qidsModalData.severity;
-
-            closeQIDSModal();
-
-            // Auto-calculate HAM-D estimate
-            calculateHAMDEstimate();
-
-            // Scroll to results
-            document.getElementById('qidsResultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function resetQIDSModal() {
-            const items = document.querySelectorAll('.qids-modal-item:checked');
-            items.forEach(item => item.value = '');
-            qidsModalData.score = 0;
-            qidsModalData.severity = '';
-            document.getElementById('qidsModalScore').textContent = '0';
-            document.getElementById('qidsModalSeverity').textContent = 'Not yet assessed';
-        }
-
-                // ========================================
-        // HAM-D AUTO-CALCULATION FUNCTION
-        // ========================================
-        function calculateHAMDEstimate() {
-            const phq9Score = phq9ModalData.score;
-            const qidsScore = qidsModalData.score;
-            
-            let hamdEstimate = null;
-            let method = '';
-            let hamdRange = '';
-            
-            if (phq9Score !== null && phq9Score !== undefined && phq9Score >= 0 && 
-                qidsScore !== null && qidsScore !== undefined && qidsScore >= 0) {
-                // Both scores available - calculate range
-                const hamdFromPHQ9 = Math.round(0.887 * phq9Score + 4.4);
-                const hamdFromQIDS = Math.round(1.56 * qidsScore + 3.0);
-                
-                const minHAMD = Math.min(hamdFromPHQ9, hamdFromQIDS);
-                const maxHAMD = Math.max(hamdFromPHQ9, hamdFromQIDS);
-                
-                hamdRange = `${minHAMD}-${maxHAMD}`;
-                method = 'From PHQ-9 & QIDS';
-                
-                // Display the result card
-                document.getElementById('hamdResultCard').style.display = 'block';
-                document.getElementById('hamdCardScore').textContent = hamdRange;
-                document.getElementById('hamdCardMethod').textContent = method;
-            } else if (phq9Score !== null && phq9Score !== undefined && phq9Score >= 0) {
-                // Only PHQ-9 available
-                const hamdFromPHQ9 = Math.round(0.887 * phq9Score + 4.4);
-                hamdRange = `~${hamdFromPHQ9}`;
-                method = 'From PHQ-9 only';
-                
-                // Display the result card
-                document.getElementById('hamdResultCard').style.display = 'block';
-                document.getElementById('hamdCardScore').textContent = hamdRange;
-                document.getElementById('hamdCardMethod').textContent = method;
-            } else if (qidsScore !== null && qidsScore !== undefined && qidsScore >= 0) {
-                // Only QIDS available
-                const hamdFromQIDS = Math.round(1.56 * qidsScore + 3.0);
-                hamdRange = `~${hamdFromQIDS}`;
-                method = 'From QIDS only';
-                
-                // Display the result card
-                document.getElementById('hamdResultCard').style.display = 'block';
-                document.getElementById('hamdCardScore').textContent = hamdRange;
-                document.getElementById('hamdCardMethod').textContent = method;
-            } else {
-                // No scores available - hide the card
-                document.getElementById('hamdResultCard').style.display = 'none';
-            }
-        }
-
-
-        // ========================================
         // SCID MODAL FUNCTIONS
         // ========================================
         let scidModalData = {
@@ -3615,26 +3625,29 @@
             document.body.style.overflow = 'auto';
         }
 
-        function calculateRAVLTTotal() {
-            let total = 0;
+        function calculateRAVLTTrial(trialNumber) {
+            // Count checked boxes for this trial
+            const checkedBoxes = document.querySelectorAll(`.ravlt-trial${trialNumber}-word:checked`);
+            const count = checkedBoxes.length;
 
-            const trial1 = parseInt(document.getElementById('ravlt_trial1').value) || 0;
-            const trial2 = parseInt(document.getElementById('ravlt_trial2').value) || 0;
-            const trial3 = parseInt(document.getElementById('ravlt_trial3').value) || 0;
-            const trial4 = parseInt(document.getElementById('ravlt_trial4').value) || 0;
-            const trial5 = parseInt(document.getElementById('ravlt_trial5').value) || 0;
-
-            total = trial1 + trial2 + trial3 + trial4 + trial5;
-
-            // Update modal display
-            document.getElementById('ravltModalTotal').textContent = total;
+            // Update trial count display
+            document.getElementById(`trial${trialNumber}_count`).textContent = `${count}/15`;
 
             // Store in data object
-            ravltData.trial1 = trial1;
-            ravltData.trial2 = trial2;
-            ravltData.trial3 = trial3;
-            ravltData.trial4 = trial4;
-            ravltData.trial5 = trial5;
+            ravltData[`trial${trialNumber}`] = count;
+
+            // Recalculate total
+            calculateRAVLTTotal();
+        }
+
+        function calculateRAVLTTotal() {
+            // Sum all trial scores
+            const total = ravltData.trial1 + ravltData.trial2 + ravltData.trial3 + ravltData.trial4 + ravltData.trial5;
+
+            // Update modal total display
+            document.getElementById('ravltModalTotal').textContent = total;
+
+            // Store total
             ravltData.total = total;
 
             return total;
@@ -3698,12 +3711,15 @@
         }
 
         function resetRAVLTModal() {
-            // Clear all trial inputs
-            document.getElementById('ravlt_trial1').value = '';
-            document.getElementById('ravlt_trial2').value = '';
-            document.getElementById('ravlt_trial3').value = '';
-            document.getElementById('ravlt_trial4').value = '';
-            document.getElementById('ravlt_trial5').value = '';
+            // Uncheck all checkboxes for all trials
+            for (let i = 1; i <= 5; i++) {
+                const checkboxes = document.querySelectorAll(`.ravlt-trial${i}-word`);
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                // Reset trial count display
+                document.getElementById(`trial${i}_count`).textContent = '0/15';
+            }
 
             // Reset data object
             ravltData.trial1 = 0;

@@ -1334,6 +1334,39 @@
                         <textarea id="neuro-notes" rows="4" placeholder="Additional clinical information..." style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; resize: vertical;"></textarea>
                     </div>
                 </div>
+
+                <!-- RAVLT Assessment Section -->
+                <div class="assessment-tool" style="padding: 25px; background: white; border: 2px solid #9B59B6; border-radius: 12px; margin-top: 25px;">
+                    <h3 style="color: #7B1FA2; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
+                        🧠 RAVLT - Rey Auditory Verbal Learning Test
+                    </h3>
+
+                    <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
+                        Assesses immediate memory, learning capacity, and retention of verbal information across 5 learning trials.
+                    </p>
+
+                    <!-- RAVLT Result Display -->
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 20px;">
+                        <div id="ravltResultCard" style="padding: 20px; background: #f3e5f5; border-radius: 12px; border: 2px solid #9B59B6; text-align: center;">
+                            <div style="font-size: 14px; color: #7B1FA2; margin-bottom: 5px; font-weight: 600;">RAVLT Total Score</div>
+                            <div style="font-size: 48px; margin-bottom: 5px; font-weight: bold; color: #7B1FA2;" id="ravltTotalDisplay">--</div>
+                            <div style="font-size: 12px; color: #666;">out of 75</div>
+                        </div>
+
+                        <div id="ravltInterpretation" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center;">
+                            <div style="text-align: center; color: #718096;">
+                                Complete RAVLT assessment to see interpretation
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Administer RAVLT Button -->
+                    <div style="text-align: center;">
+                        <button onclick="openRAVLTModal()" style="padding: 15px 30px; background: #9B59B6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
+                            🎯 Administer RAVLT
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2146,6 +2179,77 @@
                         Reset
                     </button>
                     <button onclick="closeSCIDModal()" style="padding: 15px 40px; background: #e2e8f0; color: #2d3748; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RAVLT ASSESSMENT MODAL -->
+        <div id="ravltModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow-y: auto; padding: 20px;">
+            <div style="max-width: 900px; margin: 50px auto; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+                <!-- Modal Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 3px solid #9B59B6; padding-bottom: 20px;">
+                    <h2 style="color: #7B1FA2; margin: 0;">RAVLT Administration - Trials 1-5</h2>
+                    <button onclick="closeRAVLTModal()" style="background: none; border: none; font-size: 32px; cursor: pointer; color: #718096; line-height: 1;">&times;</button>
+                </div>
+
+                <!-- Instructions -->
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #2196F3;">
+                    <h4 style="color: #1565c0; margin-bottom: 10px; margin-top: 0;">📋 Test Instructions:</h4>
+                    <p style="margin: 0 0 10px 0; color: #2d3748; line-height: 1.6;">
+                        Read the following 15 words to the patient at a rate of one word per second. After reading all 15 words, ask the patient to recall as many words as possible in any order. Record the number of correctly recalled words for each trial.
+                    </p>
+                    <p style="margin: 0; color: #2d3748; font-weight: 600;">
+                        <strong>Word List:</strong> Drum, Curtain, Bell, Coffee, School, Parent, Moon, Garden, Hat, Farmer, Nose, Turkey, Color, House, River
+                    </p>
+                </div>
+
+                <!-- Trial Inputs -->
+                <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px;">
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
+                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 1 - First Presentation</label>
+                        <input type="number" id="ravlt_trial1" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                    </div>
+
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
+                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 2 - Second Presentation</label>
+                        <input type="number" id="ravlt_trial2" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                    </div>
+
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
+                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 3 - Third Presentation</label>
+                        <input type="number" id="ravlt_trial3" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                    </div>
+
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
+                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 4 - Fourth Presentation</label>
+                        <input type="number" id="ravlt_trial4" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                    </div>
+
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 10px; border-left: 3px solid #9B59B6;">
+                        <label style="font-weight: 600; margin-bottom: 12px; display: block; color: #7B1FA2;">Trial 5 - Fifth Presentation</label>
+                        <input type="number" id="ravlt_trial5" class="ravlt-trial-input" min="0" max="15" placeholder="0-15 words recalled" onchange="calculateRAVLTTotal()" style="width: 100%; padding: 14px; border: 2px solid #9B59B6; border-radius: 8px; font-size: 16px;">
+                    </div>
+                </div>
+
+                <!-- Running Total Display -->
+                <div style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 16px; color: #7B1FA2; margin-bottom: 8px; font-weight: 600;">Total Score (Trials 1-5)</div>
+                    <div style="font-size: 56px; font-weight: 700; color: #6a1b9a; margin-bottom: 8px;" id="ravltModalTotal">0</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #7B1FA2;">out of 75</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button onclick="saveRAVLTScore()" style="padding: 15px 40px; background: #4caf50; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
+                        ✓ Save Score
+                    </button>
+                    <button onclick="resetRAVLTModal()" style="padding: 15px 40px; background: #ff9800; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
+                        🔄 Reset Trials
+                    </button>
+                    <button onclick="closeRAVLTModal()" style="padding: 15px 40px; background: #9e9e9e; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
                         Cancel
                     </button>
                 </div>
@@ -3487,6 +3591,130 @@
             scidModalData.severity = '';
             document.getElementById('scidModalCount').textContent = '0';
             document.getElementById('scidModalSeverity').textContent = 'No diagnosis';
+        }
+
+        // ========================================
+        // RAVLT ASSESSMENT FUNCTIONS
+        // ========================================
+        let ravltData = {
+            trial1: 0,
+            trial2: 0,
+            trial3: 0,
+            trial4: 0,
+            trial5: 0,
+            total: 0
+        };
+
+        function openRAVLTModal() {
+            document.getElementById('ravltModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRAVLTModal() {
+            document.getElementById('ravltModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function calculateRAVLTTotal() {
+            let total = 0;
+
+            const trial1 = parseInt(document.getElementById('ravlt_trial1').value) || 0;
+            const trial2 = parseInt(document.getElementById('ravlt_trial2').value) || 0;
+            const trial3 = parseInt(document.getElementById('ravlt_trial3').value) || 0;
+            const trial4 = parseInt(document.getElementById('ravlt_trial4').value) || 0;
+            const trial5 = parseInt(document.getElementById('ravlt_trial5').value) || 0;
+
+            total = trial1 + trial2 + trial3 + trial4 + trial5;
+
+            // Update modal display
+            document.getElementById('ravltModalTotal').textContent = total;
+
+            // Store in data object
+            ravltData.trial1 = trial1;
+            ravltData.trial2 = trial2;
+            ravltData.trial3 = trial3;
+            ravltData.trial4 = trial4;
+            ravltData.trial5 = trial5;
+            ravltData.total = total;
+
+            return total;
+        }
+
+        function interpretRAVLT(total) {
+            let interpretation = '';
+            let backgroundColor = '';
+            let textColor = '';
+
+            if (total >= 50) {
+                interpretation = '✓ Normal learning and immediate recall';
+                backgroundColor = 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)';
+                textColor = '#155724';
+            } else if (total >= 40) {
+                interpretation = '⚠ Mild learning difficulty';
+                backgroundColor = 'linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%)';
+                textColor = '#856404';
+            } else if (total >= 30) {
+                interpretation = '⚠ Moderate learning impairment';
+                backgroundColor = 'linear-gradient(135deg, #ffe5cc 0%, #ffd699 100%)';
+                textColor = '#cc5500';
+            } else {
+                interpretation = '✗ Severe learning impairment';
+                backgroundColor = 'linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%)';
+                textColor = '#721c24';
+            }
+
+            return { interpretation, backgroundColor, textColor };
+        }
+
+        function saveRAVLTScore() {
+            const total = calculateRAVLTTotal();
+
+            // Update main document display
+            document.getElementById('ravltTotalDisplay').textContent = total;
+
+            // Get interpretation
+            const result = interpretRAVLT(total);
+
+            // Update interpretation display
+            const interpretDiv = document.getElementById('ravltInterpretation');
+            interpretDiv.style.background = result.backgroundColor;
+            interpretDiv.style.border = `2px solid ${result.textColor}`;
+            interpretDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 18px; font-weight: 600; color: ${result.textColor}; margin-bottom: 5px;">
+                        ${result.interpretation}
+                    </div>
+                    <div style="font-size: 14px; color: #666;">
+                        Total Score: ${total}/75
+                    </div>
+                </div>
+            `;
+
+            // Close modal
+            closeRAVLTModal();
+
+            // Scroll to results
+            document.getElementById('ravltResultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetRAVLTModal() {
+            // Clear all trial inputs
+            document.getElementById('ravlt_trial1').value = '';
+            document.getElementById('ravlt_trial2').value = '';
+            document.getElementById('ravlt_trial3').value = '';
+            document.getElementById('ravlt_trial4').value = '';
+            document.getElementById('ravlt_trial5').value = '';
+
+            // Reset data object
+            ravltData.trial1 = 0;
+            ravltData.trial2 = 0;
+            ravltData.trial3 = 0;
+            ravltData.trial4 = 0;
+            ravltData.trial5 = 0;
+            ravltData.total = 0;
+
+            // Reset modal total display
+            document.getElementById('ravltModalTotal').textContent = '0';
         }
 
         // ========================================

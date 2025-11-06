@@ -1263,23 +1263,25 @@
                     </div>
 
                 <!-- Results Display Cards -->
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px;">
-                    <div id="phq9ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
-                        <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PHQ-9 Score</div>
-                        <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="phq9CardScore">--</div>
-                        <div style="font-size: 12px; color: #718096;" id="phq9CardSeverity">Not completed</div>
-                    </div>
+                <div style="max-width: 900px; margin: 25px auto 0 auto;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div id="phq9ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PHQ-9 Score</div>
+                            <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="phq9CardScore">--</div>
+                            <div style="font-size: 12px; color: #718096;" id="phq9CardSeverity">Not completed</div>
+                        </div>
 
-                    <div id="gad7ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
-                        <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">GAD-7 Score</div>
-                        <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="gad7CardScore">--</div>
-                        <div style="font-size: 12px; color: #718096;" id="gad7CardSeverity">Not completed</div>
-                    </div>
+                        <div id="gad7ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">GAD-7 Score</div>
+                            <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="gad7CardScore">--</div>
+                            <div style="font-size: 12px; color: #718096;" id="gad7CardSeverity">Not completed</div>
+                        </div>
 
-                    <div id="ptsdResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
-                        <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PTSD Status</div>
-                        <div style="font-size: 18px; margin-bottom: 5px; font-weight: bold;" id="ptsdCardDiagnosis">--</div>
-                        <div style="font-size: 12px; color: #718096;" id="ptsdCardActivity">Not completed</div>
+                        <div id="ptsdResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PTSD Status</div>
+                            <div style="font-size: 18px; margin-bottom: 5px; font-weight: bold;" id="ptsdCardDiagnosis">--</div>
+                            <div style="font-size: 12px; color: #718096;" id="ptsdCardActivity">Not completed</div>
+                        </div>
                     </div>
                 </div>
 
@@ -3795,6 +3797,13 @@
         }
 
         function ptsdNextSection() {
+            // Check if Section 1 (Trauma Exposure) and answered "no"
+            if (ptsdData.currentSection === 0 && ptsdData.responses.trauma_exposure === "no") {
+                // Skip to results immediately - no trauma exposure = negative for PTSD
+                showPTSDResults();
+                return;
+            }
+
             if (ptsdData.currentSection < ptsdData.sections.length - 1) {
                 ptsdData.currentSection++;
                 renderPTSDSection();
@@ -3815,9 +3824,9 @@
             if (!traumaExposure) {
                 return {
                     meetsCriteria: false,
-                    diagnosis: "No PTSD",
+                    diagnosis: "Negative for PTSD",
                     active: false,
-                    explanation: "PTSD diagnosis requires exposure to a traumatic event. No trauma exposure was reported."
+                    explanation: "PTSD diagnosis requires exposure to a traumatic event. No trauma exposure was reported. Screening result: Negative for PTSD per DSM-5 Criterion A."
                 };
             }
 
@@ -3839,29 +3848,31 @@
 
             const meetsCriteria = traumaExposure && criterionB >= 1 && criterionC >= 1 && criterionD >= 2 && criterionE >= 2 && durationMet && (significantDistress || impairment) && notSubstance;
 
-            let diagnosis = "No PTSD";
+            let diagnosis = "Negative for PTSD";
             let subtype = "";
             let active = false;
             let explanation = "";
 
             if (meetsCriteria) {
+                diagnosis = "Positive for PTSD";
+
                 if (r.duration === "3-6 months" || r.duration === "More than 6 months") {
-                    diagnosis = "PTSD - Chronic";
+                    subtype = " (Chronic)";
                 } else {
-                    diagnosis = "PTSD";
+                    subtype = " (Acute)";
                 }
 
                 active = (criterionB + criterionC + criterionD + criterionE) >= 8;
 
                 if (dissociative >= 2) {
-                    subtype = " with Dissociative Symptoms";
+                    subtype += " with Dissociative Symptoms";
                 }
 
-                explanation = `Screening indicates ${diagnosis}${subtype}. `;
+                explanation = `Screening result: ${diagnosis}${subtype}. `;
                 explanation += active ?
                     "Symptoms are currently active. This likely represents an exclusionary criterion for most psychiatric research studies." :
                     "Symptoms may be less active currently.";
-                explanation += `\n\nCriteria: B=${criterionB}/5, C=${criterionC}/2, D=${criterionD}/7, E=${criterionE}/6`;
+                explanation += `\n\nDSM-5 Criteria met: B=${criterionB}/5, C=${criterionC}/2, D=${criterionD}/7, E=${criterionE}/6`;
             } else {
                 const unmet = [];
                 if (criterionB < 1) unmet.push("Intrusion (B)");
@@ -3872,7 +3883,7 @@
                 if (!significantDistress && !impairment) unmet.push("Distress/Impairment");
                 if (!notSubstance) unmet.push("Substance exclusion");
 
-                explanation = `Does not meet full PTSD criteria. Unmet: ${unmet.join(", ")}`;
+                explanation = `Screening result: Negative for PTSD per DSM-5 criteria.\n\nUnmet criteria: ${unmet.join(", ")}`;
             }
 
             return {meetsCriteria, diagnosis, subtype, active, explanation, criterionB, criterionC, criterionD, criterionE, dissociative};
@@ -3885,7 +3896,7 @@
             document.getElementById('ptsdResultCard').style.display = 'block';
             document.getElementById('ptsdCardDiagnosis').textContent = results.diagnosis + (results.subtype || '');
             document.getElementById('ptsdCardActivity').textContent = results.active ? 'Active - Likely Exclusionary' :
-                                                                        results.meetsCriteria ? 'May be eligible' : 'No PTSD';
+                                                                        results.meetsCriteria ? 'May be eligible' : 'Negative - Eligible';
             document.getElementById('ptsdCardDiagnosis').style.color = results.active ? '#dc2626' : results.meetsCriteria ? '#f59e0b' : '#16a34a';
             document.getElementById('ptsdCardActivity').style.color = results.active ? '#dc2626' : results.meetsCriteria ? '#f59e0b' : '#16a34a';
 

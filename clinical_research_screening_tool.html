@@ -1251,10 +1251,10 @@
 
                 <!-- Assessment Tool Buttons -->
                 <div class="assessment-buttons">
-                    <button class="assessment-btn" data-assessment="phq9" onclick="openAssessment('phq9')">
+                    <button class="assessment-btn" data-assessment="phq9" onclick="openPHQ9Modal()">
                         PHQ-9<br><small style="font-weight: 400; font-size: 12px;">Depression Screener</small>
                     </button>
-                    <button class="assessment-btn" data-assessment="gad7" onclick="openAssessment('gad7')">
+                    <button class="assessment-btn" data-assessment="gad7" onclick="openGAD7Modal()">
                         GAD-7<br><small style="font-weight: 400; font-size: 12px;">Anxiety Screener</small>
                     </button>
                     <button class="assessment-btn" data-assessment="qids" onclick="openAssessment('qids')">
@@ -1265,17 +1265,22 @@
                     </button>
                 </div>
 
-                <!-- PHQ-9 Assessment Content -->
-                <div id="phq9-content" class="assessment-content">
-                    <div class="assessment-header">
-                        <h3 style="color: #1565C0; font-size: 20px; font-weight: 700; margin: 0;">
-                            PHQ-9 - Patient Health Questionnaire
-                        </h3>
-                        <button class="assessment-close-btn" onclick="closeAssessment('phq9')">Close</button>
+                <!-- Results Display Cards -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 25px;">
+                    <div id="phq9ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
+                        <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PHQ-9 Score</div>
+                        <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="phq9CardScore">--</div>
+                        <div style="font-size: 12px; color: #718096;" id="phq9CardSeverity">Not completed</div>
                     </div>
-                    <p style="color: #666; margin-bottom: 20px; font-style: italic;">
-                        Over the last 2 weeks, how often have you been bothered by any of the following problems?
-                    </p>
+
+                    <div id="gad7ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
+                        <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">GAD-7 Score</div>
+                        <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="gad7CardScore">--</div>
+                        <div style="font-size: 12px; color: #718096;" id="gad7CardSeverity">Not completed</div>
+                    </div>
+                </div>
+
+                <!-- QIDS Content (keeping as collapsible for now) -->
 
                     <div class="phq9-questions" style="display: flex; flex-direction: column; gap: 20px;">
                         <div class="question-item" style="padding: 15px; background: #f8f9fa; border-radius: 8px;">

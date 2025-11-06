@@ -1813,71 +1813,301 @@
         <div id="fibromyalgia-section" class="study-specific-section hidden">
             <div class="section" style="border-left: 4px solid #16A085; background: linear-gradient(135deg, #E8F8F5 0%, #FFFFFF 100%);">
                 <h2 style="color: #117A65; font-size: 24px; font-weight: 700; margin-bottom: 25px; text-align: center;">
-                    FIBROMYALGIA STUDY - PAIN ASSESSMENT
+                    FIBROMYALGIA STUDY - ASSESSMENT TOOLS
                 </h2>
 
-                <div class="assessment-tool" style="padding: 25px; background: white; border: 2px solid #16A085; border-radius: 12px;">
-                    <h3 style="color: #117A65; font-size: 20px; font-weight: 700; margin-bottom: 20px;">
-                        Widespread Pain Assessment
-                    </h3>
+                <!-- FIBROMYALGIA 2016 ACR DIAGNOSTIC CRITERIA -->
+                <div class="section-card" style="margin-top: 20px; padding: 25px; background: white; border: 2px solid #16A085; border-radius: 12px;">
+                    <h3 style="color: #2c5282; margin-bottom: 15px;">🔬 2016 ACR Fibromyalgia Diagnostic Criteria</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                        Click the button below to assess fibromyalgia using the 2016 American College of Rheumatology criteria.
+                    </p>
 
-                    <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">Duration of Widespread Pain (months)</label>
-                        <input type="number" id="fibro-duration" min="0" placeholder="Months with widespread pain" style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                    <!-- Criteria Results Display -->
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div id="fmsCriterion1Display" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Criterion 1</div>
+                            <div style="font-size: 32px; margin-bottom: 5px;">--</div>
+                            <div style="font-size: 12px; color: #718096;">WPI & SSS</div>
+                        </div>
+
+                        <div id="fmsCriterion2Display" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Criterion 2</div>
+                            <div style="font-size: 32px; margin-bottom: 5px;">--</div>
+                            <div style="font-size: 12px; color: #718096;">Generalized Pain</div>
+                        </div>
+
+                        <div id="fmsCriterion3Display" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Criterion 3</div>
+                            <div style="font-size: 32px; margin-bottom: 5px;">--</div>
+                            <div style="font-size: 12px; color: #718096;">Duration ≥3mo</div>
+                        </div>
+
+                        <div id="fmsFinalDiagnosis" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Diagnosis</div>
+                            <div style="font-size: 32px; margin-bottom: 5px;">--</div>
+                            <div style="font-size: 12px; color: #718096;">FMS Criteria</div>
+                        </div>
                     </div>
 
-                    <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">Current Pain Level (0-10 scale)</label>
-                        <input type="number" id="fibro-pain-level" min="0" max="10" placeholder="0 = no pain, 10 = worst pain" style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                    <!-- Assessment Button -->
+                    <div style="text-align: center;">
+                        <button onclick="openFMSModal()" style="padding: 15px 30px; background: #9f7aea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s;">
+                            🩺 Assess Fibromyalgia Criteria
+                        </button>
                     </div>
 
-                    <div style="margin-bottom: 20px;">
-                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">Pain Locations (check all that apply)</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="neck">
+                    <!-- Detailed Results -->
+                    <div id="fmsDetailedResults" style="margin-top: 20px; padding: 20px; background: #f7fafc; border-radius: 12px; border-left: 4px solid #e2e8f0; display: none;">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FIBROMYALGIA ASSESSMENT MODAL -->
+        <div id="fmsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow-y: auto; padding: 20px;">
+            <div style="max-width: 1000px; margin: 50px auto; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+                <!-- Modal Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 3px solid #9f7aea; padding-bottom: 20px;">
+                    <h2 style="color: #2c5282; margin: 0;">2016 ACR Fibromyalgia Diagnostic Criteria</h2>
+                    <button onclick="closeFMSModal()" style="background: none; border: none; font-size: 32px; cursor: pointer; color: #718096; line-height: 1;">&times;</button>
+                </div>
+
+                <!-- Instructions -->
+                <div style="background: #f3e8ff; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #9f7aea;">
+                    <h4 style="color: #6b46c1; margin-bottom: 10px;">📋 Diagnostic Criteria:</h4>
+                    <ol style="margin: 0; padding-left: 20px; color: #2d3748; line-height: 1.6;">
+                        <li><strong>Criterion 1:</strong> WPI ≥ 7 and SSS ≥ 5 OR WPI 4-6 and SSS ≥ 9</li>
+                        <li><strong>Criterion 2:</strong> Generalized pain (pain in 4 of 5 regions)</li>
+                        <li><strong>Criterion 3:</strong> Symptoms present ≥ 3 months</li>
+                    </ol>
+                </div>
+
+                <!-- SECTION 1: Widespread Pain Index (WPI) -->
+                <div style="background: #f7fafc; padding: 25px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #4299e1;">
+                    <h3 style="color: #2c5282; margin-bottom: 15px;">1. Widespread Pain Index (WPI)</h3>
+                    <p style="color: #666; margin-bottom: 20px;"><strong>In the past week, where have you had pain?</strong> (Check all that apply)</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                        <!-- Left Upper Region -->
+                        <div>
+                            <h4 style="color: #2c5282; margin-bottom: 12px; font-size: 15px;">Left Upper Region (1)</h4>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="1" onchange="calculateFMSScores()">
+                                <span style="font-style: italic;">L jaw</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="1" onchange="calculateFMSScores()">
+                                <span>L shoulder girdle</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="1" onchange="calculateFMSScores()">
+                                <span>L upper arm</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="1" onchange="calculateFMSScores()">
+                                <span>L lower arm</span>
+                            </label>
+                        </div>
+
+                        <!-- Right Upper Region -->
+                        <div>
+                            <h4 style="color: #2c5282; margin-bottom: 12px; font-size: 15px;">Right Upper Region (2)</h4>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="2" onchange="calculateFMSScores()">
+                                <span style="font-style: italic;">R jaw</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="2" onchange="calculateFMSScores()">
+                                <span>R shoulder girdle</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="2" onchange="calculateFMSScores()">
+                                <span>R upper arm</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="2" onchange="calculateFMSScores()">
+                                <span>R lower arm</span>
+                            </label>
+                        </div>
+
+                        <!-- Axial Region -->
+                        <div>
+                            <h4 style="color: #2c5282; margin-bottom: 12px; font-size: 15px;">Axial Region (5)</h4>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="5" onchange="calculateFMSScores()">
                                 <span>Neck</span>
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="shoulders">
-                                <span>Shoulders</span>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="5" onchange="calculateFMSScores()">
+                                <span>Upper back</span>
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="upper-back">
-                                <span>Upper Back</span>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="5" onchange="calculateFMSScores()">
+                                <span>Lower back</span>
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="lower-back">
-                                <span>Lower Back</span>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="5" onchange="calculateFMSScores()">
+                                <span style="font-style: italic;">Chest</span>
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="hips">
-                                <span>Hips</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="arms">
-                                <span>Arms</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="legs">
-                                <span>Legs</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" class="fibro-location" value="chest">
-                                <span>Chest</span>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="5" onchange="calculateFMSScores()">
+                                <span style="font-style: italic;">Abdomen</span>
                             </label>
                         </div>
                     </div>
 
-                    <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">Fatigue Level (0-10 scale)</label>
-                        <input type="number" id="fibro-fatigue" min="0" max="10" placeholder="0 = no fatigue, 10 = extreme fatigue" style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 20px;">
+                        <!-- Left Lower Region -->
+                        <div>
+                            <h4 style="color: #2c5282; margin-bottom: 12px; font-size: 15px;">Left Lower Region (3)</h4>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="3" onchange="calculateFMSScores()">
+                                <span>L hip (buttock/trochanter)</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="3" onchange="calculateFMSScores()">
+                                <span>L upper leg</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="3" onchange="calculateFMSScores()">
+                                <span>L lower leg</span>
+                            </label>
+                        </div>
+
+                        <!-- Right Lower Region -->
+                        <div>
+                            <h4 style="color: #2c5282; margin-bottom: 12px; font-size: 15px;">Right Lower Region (4)</h4>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="4" onchange="calculateFMSScores()">
+                                <span>R hip (buttock/trochanter)</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="4" onchange="calculateFMSScores()">
+                                <span>R upper leg</span>
+                            </label>
+                            <label class="checkbox-label" style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" class="wpi-checkbox" data-region="4" onchange="calculateFMSScores()">
+                                <span>R lower leg</span>
+                            </label>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">Additional Symptoms/Notes</label>
-                        <textarea id="fibro-notes" rows="4" placeholder="Other symptoms (e.g., sleep disturbances, cognitive difficulties)..." style="width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; resize: vertical;"></textarea>
+                    <!-- WPI Score Display -->
+                    <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; text-align: center;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">WPI Score</div>
+                        <div id="fmsWPIScore" style="font-size: 48px; font-weight: bold;">0</div>
+                        <div style="font-size: 13px; opacity: 0.8;">(0-19 possible) | <span id="fmsRegionsCount">0</span> of 5 regions with pain</div>
                     </div>
+                </div>
+
+                <!-- SECTION 2: Symptom Severity Score (SSS) -->
+                <div style="background: #fff5f5; padding: 25px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #f56565;">
+                    <h3 style="color: #2c5282; margin-bottom: 15px;">2. Symptom Severity Score (SSS)</h3>
+                    <p style="color: #666; margin-bottom: 20px;"><strong>For the past week, rate the following symptoms:</strong></p>
+
+                    <!-- Main 3 Symptoms (0-3 each) -->
+                    <div style="margin-bottom: 25px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: rgba(0,0,0,0.05);">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #cbd5e0; width: 30%;">Symptom</th>
+                                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #cbd5e0;">No problem (0)</th>
+                                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #cbd5e0;">Slight/Mild (1)</th>
+                                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #cbd5e0;">Moderate (2)</th>
+                                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #cbd5e0;">Severe (3)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 12px;">Fatigue</td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsFatigue" value="0" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsFatigue" value="1" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsFatigue" value="2" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsFatigue" value="3" onchange="calculateFMSScores()"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 12px;">Waking unrefreshed</td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsWaking" value="0" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsWaking" value="1" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsWaking" value="2" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsWaking" value="3" onchange="calculateFMSScores()"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 12px;">Cognitive symptoms</td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsCognitive" value="0" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsCognitive" value="1" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsCognitive" value="2" onchange="calculateFMSScores()"></td>
+                                    <td style="padding: 12px; text-align: center;"><input type="radio" name="fmsCognitive" value="3" onchange="calculateFMSScores()"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Additional Symptoms (0-1 each) -->
+                    <p style="color: #666; margin-bottom: 15px;"><strong>In the past week, have you been bothered by any of the following?</strong></p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fmsHeadaches" value="1" onchange="calculateFMSScores()">
+                            <span>Headaches</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fmsAbdominalPain" value="1" onchange="calculateFMSScores()">
+                            <span>Pain/cramps in lower abdomen</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fmsDepression" value="1" onchange="calculateFMSScores()">
+                            <span>Depression</span>
+                        </label>
+                    </div>
+
+                    <!-- SSS Score Display -->
+                    <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; color: white; text-align: center;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">SSS Score</div>
+                        <div id="fmsSSSScore" style="font-size: 48px; font-weight: bold;">0</div>
+                        <div style="font-size: 13px; opacity: 0.8;">(0-12 possible)</div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: Duration -->
+                <div style="background: #f0fff4; padding: 25px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #48bb78;">
+                    <h3 style="color: #2c5282; margin-bottom: 15px;">3. Symptom Duration</h3>
+                    <label style="display: block; margin-bottom: 12px; font-weight: 600; color: #2d3748;">
+                        Have these symptoms been present for ≥ 3 months?
+                    </label>
+                    <div style="display: flex; gap: 20px;">
+                        <label class="radio-label">
+                            <input type="radio" name="fmsDuration" value="yes" onchange="calculateFMSScores()">
+                            <span>✓ Yes (≥ 3 months)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="fmsDuration" value="no" onchange="calculateFMSScores()">
+                            <span>✗ No (< 3 months)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Criteria Summary -->
+                <div id="fmsModalSummary" style="padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+                    <h3 style="color: #2c5282; margin-bottom: 15px;">📊 Diagnostic Criteria Summary</h3>
+                    <div id="fmsModalCriteriaResults">
+                        <p style="color: #718096; font-style: italic;">Complete the assessment to see results</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 15px;">
+                    <button onclick="saveFMSAssessment()" style="flex: 1; padding: 15px; background: #48bb78; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        ✓ Save Assessment
+                    </button>
+                    <button onclick="resetFMSModal()" style="flex: 1; padding: 15px; background: #ed8936; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        🔄 Reset Form
+                    </button>
+                    <button onclick="closeFMSModal()" style="flex: 1; padding: 15px; background: #718096; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -2639,6 +2869,275 @@
                 closeAssessment('scid');
                 alert(`SCID completed! Criteria Met: ${count}\nSeverity: ${severity}`);
             }, 1000);
+        }
+
+        // ============================================
+        // FIBROMYALGIA 2016 ACR CRITERIA FUNCTIONS
+        // ============================================
+
+        let fmsAssessmentData = {
+            wpiScore: 0,
+            regionsCount: 0,
+            sssScore: 0,
+            criterion1Met: false,
+            criterion2Met: false,
+            criterion3Met: false,
+            diagnosisMet: false
+        };
+
+        function openFMSModal() {
+            document.getElementById('fmsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFMSModal() {
+            document.getElementById('fmsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function calculateFMSScores() {
+            // Calculate WPI Score (0-19)
+            const wpiCheckboxes = document.querySelectorAll('.wpi-checkbox:checked');
+            fmsAssessmentData.wpiScore = wpiCheckboxes.length;
+
+            // Calculate number of regions (1-5) - excluding items in italics for region count
+            const regionsWithPain = new Set();
+            wpiCheckboxes.forEach(checkbox => {
+                const region = checkbox.getAttribute('data-region');
+                // Only count non-italic items for region count
+                const isItalic = checkbox.nextElementSibling &&
+                                checkbox.nextElementSibling.style.fontStyle === 'italic';
+                if (!isItalic) {
+                    regionsWithPain.add(region);
+                }
+            });
+            fmsAssessmentData.regionsCount = regionsWithPain.size;
+
+            // Update WPI display
+            document.getElementById('fmsWPIScore').textContent = fmsAssessmentData.wpiScore;
+            document.getElementById('fmsRegionsCount').textContent = fmsAssessmentData.regionsCount;
+
+            // Calculate SSS Score (0-12)
+            let sssScore = 0;
+
+            // Main 3 symptoms (0-3 each)
+            const fatigue = document.querySelector('input[name="fmsFatigue"]:checked');
+            const waking = document.querySelector('input[name="fmsWaking"]:checked');
+            const cognitive = document.querySelector('input[name="fmsCognitive"]:checked');
+
+            if (fatigue) sssScore += parseInt(fatigue.value);
+            if (waking) sssScore += parseInt(waking.value);
+            if (cognitive) sssScore += parseInt(cognitive.value);
+
+            // Additional symptoms (0-1 each)
+            if (document.getElementById('fmsHeadaches').checked) sssScore += 1;
+            if (document.getElementById('fmsAbdominalPain').checked) sssScore += 1;
+            if (document.getElementById('fmsDepression').checked) sssScore += 1;
+
+            fmsAssessmentData.sssScore = sssScore;
+
+            // Update SSS display
+            document.getElementById('fmsSSSScore').textContent = sssScore;
+
+            // Evaluate Criteria
+            evaluateFMSCriteria();
+        }
+
+        function evaluateFMSCriteria() {
+            const wpi = fmsAssessmentData.wpiScore;
+            const sss = fmsAssessmentData.sssScore;
+            const regions = fmsAssessmentData.regionsCount;
+
+            // Criterion 1: (WPI ≥ 7 and SSS ≥ 5) OR (WPI 4-6 and SSS ≥ 9)
+            fmsAssessmentData.criterion1Met =
+                (wpi >= 7 && sss >= 5) || (wpi >= 4 && wpi <= 6 && sss >= 9);
+
+            // Criterion 2: Pain in 4 of 5 regions
+            fmsAssessmentData.criterion2Met = regions >= 4;
+
+            // Criterion 3: Duration ≥ 3 months
+            const durationYes = document.querySelector('input[name="fmsDuration"][value="yes"]:checked');
+            fmsAssessmentData.criterion3Met = durationYes !== null;
+
+            // Final Diagnosis
+            fmsAssessmentData.diagnosisMet =
+                fmsAssessmentData.criterion1Met &&
+                fmsAssessmentData.criterion2Met &&
+                fmsAssessmentData.criterion3Met;
+
+            // Update modal summary
+            updateFMSModalSummary();
+        }
+
+        function updateFMSModalSummary() {
+            const summaryDiv = document.getElementById('fmsModalSummary');
+            const resultsDiv = document.getElementById('fmsModalCriteriaResults');
+
+            const c1Met = fmsAssessmentData.criterion1Met;
+            const c2Met = fmsAssessmentData.criterion2Met;
+            const c3Met = fmsAssessmentData.criterion3Met;
+            const diagnosed = fmsAssessmentData.diagnosisMet;
+
+            let bgColor, borderColor;
+            if (diagnosed) {
+                bgColor = '#f0fff4';
+                borderColor = '#48bb78';
+            } else {
+                bgColor = '#fff5f5';
+                borderColor = '#f56565';
+            }
+
+            summaryDiv.style.background = bgColor;
+            summaryDiv.style.borderLeft = `4px solid ${borderColor}`;
+
+            resultsDiv.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                    <div style="padding: 15px; background: ${c1Met ? '#c6f6d5' : '#fed7d7'}; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 5px;">${c1Met ? '✓' : '✗'}</div>
+                        <div style="font-weight: bold; color: ${c1Met ? '#22543d' : '#742a2a'};">Criterion 1</div>
+                        <div style="font-size: 13px; color: #666; margin-top: 5px;">WPI: ${fmsAssessmentData.wpiScore}, SSS: ${fmsAssessmentData.sssScore}</div>
+                    </div>
+                    <div style="padding: 15px; background: ${c2Met ? '#c6f6d5' : '#fed7d7'}; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 5px;">${c2Met ? '✓' : '✗'}</div>
+                        <div style="font-weight: bold; color: ${c2Met ? '#22543d' : '#742a2a'};">Criterion 2</div>
+                        <div style="font-size: 13px; color: #666; margin-top: 5px;">${fmsAssessmentData.regionsCount}/5 regions</div>
+                    </div>
+                    <div style="padding: 15px; background: ${c3Met ? '#c6f6d5' : '#fed7d7'}; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 5px;">${c3Met ? '✓' : '✗'}</div>
+                        <div style="font-weight: bold; color: ${c3Met ? '#22543d' : '#742a2a'};">Criterion 3</div>
+                        <div style="font-size: 13px; color: #666; margin-top: 5px;">≥ 3 months</div>
+                    </div>
+                </div>
+                <div style="padding: 20px; background: ${diagnosed ? 'linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%)' : 'linear-gradient(135deg, #fed7d7 0%, #fc8181 100%)'}; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 18px; font-weight: bold; color: ${diagnosed ? '#22543d' : '#742a2a'}; margin-bottom: 10px;">
+                        ${diagnosed ? '✓ FIBROMYALGIA CRITERIA MET' : '✗ FIBROMYALGIA CRITERIA NOT MET'}
+                    </div>
+                    <div style="font-size: 14px; color: ${diagnosed ? '#22543d' : '#742a2a'};">
+                        ${diagnosed ?
+                            'All three diagnostic criteria are satisfied. Fibromyalgia diagnosis can be made.' :
+                            'Not all diagnostic criteria are met. Further evaluation needed.'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveFMSAssessment() {
+            // Update main document displays
+            const c1Color = fmsAssessmentData.criterion1Met ? '#48bb78' : '#f56565';
+            const c2Color = fmsAssessmentData.criterion2Met ? '#48bb78' : '#f56565';
+            const c3Color = fmsAssessmentData.criterion3Met ? '#48bb78' : '#f56565';
+            const diagColor = fmsAssessmentData.diagnosisMet ? '#48bb78' : '#f56565';
+
+            // Criterion 1
+            const c1Display = document.getElementById('fmsCriterion1Display');
+            c1Display.innerHTML = `
+                <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Criterion 1</div>
+                <div style="font-size: 32px; margin-bottom: 5px; color: ${c1Color};">${fmsAssessmentData.criterion1Met ? '✓' : '✗'}</div>
+                <div style="font-size: 12px; color: #718096;">WPI ${fmsAssessmentData.wpiScore}, SSS ${fmsAssessmentData.sssScore}</div>
+            `;
+            c1Display.style.borderColor = c1Color;
+            c1Display.style.background = fmsAssessmentData.criterion1Met ? '#f0fff4' : '#fff5f5';
+
+            // Criterion 2
+            const c2Display = document.getElementById('fmsCriterion2Display');
+            c2Display.innerHTML = `
+                <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Criterion 2</div>
+                <div style="font-size: 32px; margin-bottom: 5px; color: ${c2Color};">${fmsAssessmentData.criterion2Met ? '✓' : '✗'}</div>
+                <div style="font-size: 12px; color: #718096;">${fmsAssessmentData.regionsCount}/5 regions</div>
+            `;
+            c2Display.style.borderColor = c2Color;
+            c2Display.style.background = fmsAssessmentData.criterion2Met ? '#f0fff4' : '#fff5f5';
+
+            // Criterion 3
+            const c3Display = document.getElementById('fmsCriterion3Display');
+            c3Display.innerHTML = `
+                <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Criterion 3</div>
+                <div style="font-size: 32px; margin-bottom: 5px; color: ${c3Color};">${fmsAssessmentData.criterion3Met ? '✓' : '✗'}</div>
+                <div style="font-size: 12px; color: #718096;">Duration ≥3mo</div>
+            `;
+            c3Display.style.borderColor = c3Color;
+            c3Display.style.background = fmsAssessmentData.criterion3Met ? '#f0fff4' : '#fff5f5';
+
+            // Final Diagnosis
+            const diagDisplay = document.getElementById('fmsFinalDiagnosis');
+            diagDisplay.innerHTML = `
+                <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">Diagnosis</div>
+                <div style="font-size: 32px; margin-bottom: 5px; color: ${diagColor}; font-weight: bold;">${fmsAssessmentData.diagnosisMet ? '✓' : '✗'}</div>
+                <div style="font-size: 12px; color: #718096;">${fmsAssessmentData.diagnosisMet ? 'FMS Diagnosed' : 'Not Diagnosed'}</div>
+            `;
+            diagDisplay.style.borderColor = diagColor;
+            diagDisplay.style.background = fmsAssessmentData.diagnosisMet ?
+                'linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%)' :
+                'linear-gradient(135deg, #fed7d7 0%, #fc8181 100%)';
+
+            // Show detailed results
+            const detailedResults = document.getElementById('fmsDetailedResults');
+            detailedResults.style.display = 'block';
+            detailedResults.style.borderLeftColor = diagColor;
+            detailedResults.innerHTML = `
+                <h4 style="color: #2c5282; margin-bottom: 15px;">Detailed Assessment Results</h4>
+                <div style="margin-bottom: 15px;">
+                    <strong>Widespread Pain Index (WPI):</strong> ${fmsAssessmentData.wpiScore}/19<br>
+                    <strong>Symptom Severity Score (SSS):</strong> ${fmsAssessmentData.sssScore}/12<br>
+                    <strong>Regions with Pain:</strong> ${fmsAssessmentData.regionsCount}/5
+                </div>
+                <div style="padding: 15px; background: white; border-radius: 8px; border: 2px solid ${diagColor};">
+                    <strong style="color: ${diagColor}; font-size: 16px;">
+                        ${fmsAssessmentData.diagnosisMet ?
+                            '✓ 2016 ACR Fibromyalgia Criteria MET' :
+                            '✗ 2016 ACR Fibromyalgia Criteria NOT MET'}
+                    </strong>
+                    <p style="margin-top: 10px; margin-bottom: 0; color: #666;">
+                        ${fmsAssessmentData.diagnosisMet ?
+                            'Patient meets all diagnostic criteria for fibromyalgia per 2016 ACR guidelines. This diagnosis can be made irrespective of other diagnoses.' :
+                            'Patient does not meet all required criteria for fibromyalgia diagnosis. Consider other diagnoses or reassess when symptoms evolve.'}
+                    </p>
+                </div>
+            `;
+
+            // Close modal
+            closeFMSModal();
+
+            // Scroll to results
+            detailedResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetFMSModal() {
+            // Clear all WPI checkboxes
+            document.querySelectorAll('.wpi-checkbox').forEach(cb => cb.checked = false);
+
+            // Clear all symptom radio buttons
+            document.querySelectorAll('input[name="fmsFatigue"]').forEach(rb => rb.checked = false);
+            document.querySelectorAll('input[name="fmsWaking"]').forEach(rb => rb.checked = false);
+            document.querySelectorAll('input[name="fmsCognitive"]').forEach(rb => rb.checked = false);
+
+            // Clear additional symptom checkboxes
+            document.getElementById('fmsHeadaches').checked = false;
+            document.getElementById('fmsAbdominalPain').checked = false;
+            document.getElementById('fmsDepression').checked = false;
+
+            // Clear duration
+            document.querySelectorAll('input[name="fmsDuration"]').forEach(rb => rb.checked = false);
+
+            // Reset scores
+            document.getElementById('fmsWPIScore').textContent = '0';
+            document.getElementById('fmsRegionsCount').textContent = '0';
+            document.getElementById('fmsSSSScore').textContent = '0';
+
+            // Reset assessment data
+            fmsAssessmentData = {
+                wpiScore: 0,
+                regionsCount: 0,
+                sssScore: 0,
+                criterion1Met: false,
+                criterion2Met: false,
+                criterion3Met: false,
+                diagnosisMet: false
+            };
+
+            // Reset summary
+            document.getElementById('fmsModalCriteriaResults').innerHTML =
+                '<p style="color: #718096; font-style: italic;">Complete the assessment to see results</p>';
         }
 
         // ===== TABLE INITIALIZATION FUNCTIONS =====

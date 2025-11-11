@@ -1182,6 +1182,43 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Suicidality Subsection -->
+            <div class="substance-use-section" style="margin-top: 25px;">
+                <div class="substance-header" id="suicidalityHeader">
+                    <h3>Suicidality</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="substance-content" id="suicidalityContent" style="display: none;">
+                    <div style="display: flex; flex-direction: column; gap: 20px; padding: 20px; background: #f9fafb; border-radius: 8px;">
+
+                        <!-- Current Suicidal Ideation -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="currentSuicidalIdeation" style="width: 20px; height: 20px; cursor: pointer;">
+                            <label for="currentSuicidalIdeation" style="font-weight: 600; font-size: 16px; cursor: pointer;">
+                                Current Suicidal Ideation
+                            </label>
+                        </div>
+
+                        <!-- History of Suicide Attempt -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="historySuicideAttempt" style="width: 20px; height: 20px; cursor: pointer;" onchange="toggleLastAttemptDate()">
+                            <label for="historySuicideAttempt" style="font-weight: 600; font-size: 16px; cursor: pointer;">
+                                History of Suicide Attempt
+                            </label>
+                        </div>
+
+                        <!-- Last Suicide Attempt Date -->
+                        <div id="lastAttemptDateContainer" style="display: none; padding-left: 30px;">
+                            <label for="lastSuicideAttemptDate" style="display: block; font-weight: 600; color: #4b5563; margin-bottom: 8px;">
+                                Date of Last Suicide Attempt:
+                            </label>
+                            <input type="date" id="lastSuicideAttemptDate" style="padding: 10px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 15px; width: 250px;">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Medications Section -->
@@ -2887,6 +2924,27 @@
                 });
             }
 
+            // Suicidality toggle
+            const suicidalityHeader = document.getElementById('suicidalityHeader');
+            if (suicidalityHeader) {
+                suicidalityHeader.addEventListener('click', function() {
+                    const content = document.getElementById('suicidalityContent');
+                    const icon = this.querySelector('.toggle-icon');
+
+                    if (content && icon) {
+                        if (content.style.display === 'none' || !content.style.display) {
+                            content.style.display = 'block';
+                            icon.style.transform = 'rotate(180deg)';
+                            icon.textContent = '▲';
+                        } else {
+                            content.style.display = 'none';
+                            icon.style.transform = 'rotate(0deg)';
+                            icon.textContent = '▼';
+                        }
+                    }
+                });
+            }
+
             // Substance use checkboxes - FIX: Generate HTML BEFORE showing
             document.querySelectorAll('.substance-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
@@ -3685,6 +3743,28 @@
             ]
         };
 
+        // ========================================
+        // SUICIDALITY FUNCTIONS
+        // ========================================
+        function toggleLastAttemptDate() {
+            const checkbox = document.getElementById('historySuicideAttempt');
+            const dateContainer = document.getElementById('lastAttemptDateContainer');
+
+            if (checkbox && dateContainer) {
+                if (checkbox.checked) {
+                    dateContainer.style.display = 'block';
+                } else {
+                    dateContainer.style.display = 'none';
+                    // Clear the date field when unchecked
+                    const dateField = document.getElementById('lastSuicideAttemptDate');
+                    if (dateField) dateField.value = '';
+                }
+            }
+        }
+
+        // ========================================
+        // PTSD MODAL FUNCTIONS
+        // ========================================
         function openPTSDModal() {
             ptsdData.currentSection = 0;
             ptsdData.responses = {};

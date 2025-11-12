@@ -3,319 +3,1030 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinical Research Screening Tool with Protocol Builder</title>
+    <title>Clinical Research Eligibility Engine</title>
 
     <!-- Protocol Builder CSS -->
     <link rel="stylesheet" href="protocol-builder.css">
 
     <style>
-        /* Main Application Styles */
+        /* ============================================================================
+           MAIN APPLICATION STYLES - PART 3: USER INTERFACE
+           ============================================================================ */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --color-eligible: #16a34a;
+            --color-screen-failure: #dc2626;
+            --color-pending: #f59e0b;
+            --color-primary: #2563eb;
+            --color-gray: #6b7280;
+            --color-gray-light: #f3f4f6;
+            --color-gray-dark: #1f2937;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f9fafb;
             min-height: 100vh;
-            padding: 20px;
         }
 
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* ============================================================================
+           TOP NAVIGATION BAR
+           ============================================================================ */
+
+        .top-nav {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .app-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-left {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .indication-btn {
+            padding: 8px 16px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .indication-btn:hover {
+            border-color: var(--color-primary);
+            background: #eff6ff;
+        }
+
+        .indication-btn.active {
+            background: var(--color-primary);
             color: white;
-            padding: 30px;
+            border-color: var(--color-primary);
+        }
+
+        .indication-badge {
+            display: inline-block;
+            background: #e5e7eb;
+            color: #4b5563;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+            font-weight: 700;
+        }
+
+        .indication-btn.active .indication-badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .nav-center {
             text-align: center;
         }
 
-        .app-header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
+        .nav-center h1 {
+            font-size: 20px;
+            color: var(--color-gray-dark);
+            font-weight: 700;
         }
 
-        .app-header p {
-            font-size: 16px;
-            opacity: 0.9;
+        .nav-right {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            align-items: center;
         }
 
-        .app-content {
-            padding: 40px;
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .debug-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .debug-toggle label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-gray);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--color-primary);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* ============================================================================
+           MAIN CONTENT LAYOUT
+           ============================================================================ */
+
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
         }
 
         .section {
-            margin-bottom: 40px;
-            background: #f8f9fa;
+            background: white;
             border-radius: 12px;
-            padding: 25px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .section h2 {
-            color: #1f2937;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-gray-dark);
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--color-gray);
+            margin-top: 4px;
+        }
+
+        /* ============================================================================
+           PATIENT DATA FORMS
+           ============================================================================ */
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #374151;
+            font-size: 14px;
         }
 
         .form-input,
         .form-select,
         .form-textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 6px;
+            font-size: 14px;
             transition: all 0.2s;
+            font-family: inherit;
         }
 
         .form-input:focus,
         .form-select:focus,
         .form-textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .form-row {
+        .form-help {
+            font-size: 12px;
+            color: var(--color-gray);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* ============================================================================
+           CALCULATE ELIGIBILITY SECTION
+           ============================================================================ */
+
+        .calculate-section {
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .calculate-btn {
+            padding: 16px 48px;
+            border: none;
+            background: linear-gradient(135deg, var(--color-primary) 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+            min-width: 280px;
+        }
+
+        .calculate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        .calculate-btn:disabled {
+            background: var(--color-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .calculate-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .calculate-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--color-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-subtext {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* ============================================================================
+           RESULTS SUMMARY BANNER
+           ============================================================================ */
+
+        .results-summary {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .summary-stat {
+            text-align: center;
+        }
+
+        .summary-stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .summary-stat-value.eligible {
+            color: var(--color-eligible);
+        }
+
+        .summary-stat-value.screen-failure {
+            color: var(--color-screen-failure);
+        }
+
+        .summary-stat-value.pending {
+            color: var(--color-pending);
+        }
+
+        .summary-stat-label {
+            font-size: 12px;
+            color: var(--color-gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================================================
+           RESULTS CONTROLS (Filter/Sort/Export)
+           ============================================================================ */
+
+        .results-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--color-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .controls-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .sort-select {
+            padding: 8px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--color-primary);
+            background: white;
+            color: var(--color-primary);
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .export-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* ============================================================================
+           PROTOCOL CARDS GRID
+           ============================================================================ */
+
+        .protocols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
+        .protocol-card {
+            background: white;
+            border: 3px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .protocol-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .protocol-card.selected {
+            border-color: var(--color-primary);
+            background: #eff6ff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .protocol-card.eligible {
+            border-color: var(--color-eligible);
+        }
+
+        .protocol-card.eligible:hover,
+        .protocol-card.eligible.selected {
+            border-color: var(--color-eligible);
+            background: #f0fdf4;
+        }
+
+        .protocol-card.screen-failure {
+            border-color: var(--color-screen-failure);
+        }
+
+        .protocol-card.screen-failure:hover,
+        .protocol-card.screen-failure.selected {
+            border-color: var(--color-screen-failure);
+            background: #fef2f2;
+        }
+
+        .protocol-card.pending {
+            border-color: var(--color-pending);
+        }
+
+        .protocol-card.pending:hover,
+        .protocol-card.pending.selected {
+            border-color: var(--color-pending);
+            background: #fffbeb;
+        }
+
+        .protocol-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .protocol-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-gray-dark);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .protocol-card-id {
+            font-size: 12px;
+            color: var(--color-gray);
             font-weight: 600;
+        }
+
+        .protocol-status-icon {
+            font-size: 48px;
+            line-height: 1;
+        }
+
+        .protocol-status-icon.eligible {
+            color: var(--color-eligible);
+        }
+
+        .protocol-status-icon.screen-failure {
+            color: var(--color-screen-failure);
+        }
+
+        .protocol-status-icon.pending {
+            color: var(--color-pending);
+        }
+
+        .protocol-status-label {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .protocol-status-label.eligible {
+            background: var(--color-eligible);
+            color: white;
+        }
+
+        .protocol-status-label.screen-failure {
+            background: var(--color-screen-failure);
+            color: white;
+        }
+
+        .protocol-status-label.pending {
+            background: var(--color-pending);
+            color: white;
+        }
+
+        .protocol-summary {
+            font-size: 13px;
+            color: var(--color-gray);
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        /* ============================================================================
+           DETAILED RESULTS PANEL (Slide-out)
+           ============================================================================ */
+
+        .details-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .details-panel-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .details-panel {
+            position: fixed;
+            right: -600px;
+            top: 0;
+            bottom: 0;
+            width: 600px;
+            max-width: 90vw;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 2001;
+            overflow-y: auto;
+            transition: right 0.3s ease-out;
+        }
+
+        .details-panel.active {
+            right: 0;
+        }
+
+        .details-panel-header {
+            padding: 24px;
+            background: var(--color-gray-dark);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .details-panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .details-panel-id {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .details-close-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .details-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        .details-panel-content {
+            padding: 24px;
         }
 
-        .btn-secondary {
-            background: #6b7280;
-            color: white;
+        .details-section {
+            margin-bottom: 32px;
         }
 
-        .btn-secondary:hover {
-            background: #4b5563;
+        .details-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-gray-dark);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
         }
 
-        .eligibility-results {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
+        .criteria-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 4px solid;
+            background: #f9fafb;
         }
 
-        .eligibility-card {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
+        .criteria-item.met {
+            border-left-color: var(--color-eligible);
+            background: #f0fdf4;
         }
 
-        .eligibility-card.eligible {
-            border-left-color: #10b981;
-            background: #ecfdf5;
-        }
-
-        .eligibility-card.not-eligible {
-            border-left-color: #ef4444;
+        .criteria-item.not-met {
+            border-left-color: var(--color-screen-failure);
             background: #fef2f2;
         }
 
-        .eligibility-card.pending {
-            border-left-color: #f59e0b;
+        .criteria-item.pending-data {
+            border-left-color: var(--color-pending);
             background: #fffbeb;
         }
 
-        .eligibility-card h3 {
-            color: #1f2937;
-            margin-bottom: 10px;
+        .criteria-item-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 6px;
         }
 
-        .eligibility-status {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 600;
+        .criteria-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .criteria-icon.met {
+            color: var(--color-eligible);
+        }
+
+        .criteria-icon.not-met {
+            color: var(--color-screen-failure);
+        }
+
+        .criteria-icon.pending-data {
+            color: var(--color-pending);
+        }
+
+        .criteria-description {
+            flex: 1;
             font-size: 14px;
+            font-weight: 600;
+            color: var(--color-gray-dark);
+            line-height: 1.4;
         }
 
-        .eligibility-status.eligible {
-            background: #10b981;
-            color: white;
+        .criteria-reason {
+            font-size: 13px;
+            color: var(--color-gray);
+            margin-left: 32px;
+            line-height: 1.4;
         }
 
-        .eligibility-status.not-eligible {
-            background: #ef4444;
-            color: white;
+        .eligibility-summary-box {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 20px;
         }
 
-        .eligibility-status.pending {
-            background: #f59e0b;
-            color: white;
+        .eligibility-summary-box.eligible {
+            background: #f0fdf4;
+            border: 2px solid var(--color-eligible);
         }
 
-        .criteria-list {
-            margin-top: 15px;
-            padding-left: 20px;
+        .eligibility-summary-box.screen-failure {
+            background: #fef2f2;
+            border: 2px solid var(--color-screen-failure);
         }
 
-        .criteria-list li {
-            margin-bottom: 8px;
-            color: #4b5563;
+        .eligibility-summary-box.pending {
+            background: #fffbeb;
+            border: 2px solid var(--color-pending);
         }
 
-        .criteria-list li.met {
+        .summary-determination {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .summary-determination.eligible {
+            color: var(--color-eligible);
+        }
+
+        .summary-determination.screen-failure {
+            color: var(--color-screen-failure);
+        }
+
+        .summary-determination.pending {
+            color: var(--color-pending);
+        }
+
+        .summary-explanation {
+            font-size: 14px;
+            color: var(--color-gray-dark);
+            line-height: 1.6;
+        }
+
+        /* ============================================================================
+           DEBUG PANEL
+           ============================================================================ */
+
+        .debug-panel {
+            background: #1f2937;
+            color: #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+            display: none;
+            font-family: 'Courier New', monospace;
+        }
+
+        .debug-panel.active {
+            display: block;
+        }
+
+        .debug-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
             color: #10b981;
         }
 
-        .criteria-list li.not-met {
-            color: #ef4444;
+        .debug-content {
+            font-size: 12px;
+            white-space: pre-wrap;
+            overflow-x: auto;
         }
 
-        .criteria-list li.pending {
-            color: #f59e0b;
+        /* ============================================================================
+           RESPONSIVE DESIGN
+           ============================================================================ */
+
+        @media (max-width: 1024px) {
+            .nav-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .nav-center {
+                order: -1;
+            }
+
+            .nav-left,
+            .nav-right {
+                justify-content: center;
+            }
+
+            .protocols-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .app-content {
-                padding: 20px;
+            .main-content {
+                padding: 16px;
+            }
+
+            .section {
+                padding: 16px;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
             }
 
-            .action-buttons {
-                flex-direction: column;
+            .protocols-grid {
+                grid-template-columns: 1fr;
             }
 
-            .btn {
+            .results-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-buttons,
+            .controls-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .details-panel {
                 width: 100%;
             }
+
+            .calculate-btn {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
+        /* ============================================================================
+           UTILITY CLASSES
+           ============================================================================ */
+
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="app-header">
-            <h1>Clinical Research Screening Tool</h1>
-            <p>Comprehensive patient intake and protocol eligibility evaluation</p>
-        </div>
+    <!-- ============================================================================
+         TOP NAVIGATION BAR
+         ============================================================================ -->
+    <div class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="indication-btn" data-indication="Psych" onclick="selectIndication('Psych')">
+                    Psych <span class="indication-badge" id="badge-Psych">0</span>
+                </button>
+                <button class="indication-btn" data-indication="Neuro" onclick="selectIndication('Neuro')">
+                    Neuro <span class="indication-badge" id="badge-Neuro">0</span>
+                </button>
+                <button class="indication-btn" data-indication="AUD" onclick="selectIndication('AUD')">
+                    AUD <span class="indication-badge" id="badge-AUD">0</span>
+                </button>
+                <button class="indication-btn" data-indication="Other" onclick="selectIndication('Other')">
+                    Other <span class="indication-badge" id="badge-Other">0</span>
+                </button>
+            </div>
 
-        <div class="app-content">
-            <!-- Demographics Section -->
-            <div class="section">
-                <h2>Demographics</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Age</label>
-                        <input type="number" class="form-input" id="age" placeholder="Enter age">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Gender</label>
-                        <select class="form-select" id="gender">
-                            <option value="">Select...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Race/Ethnicity</label>
-                        <select class="form-select" id="race">
-                            <option value="">Select...</option>
-                            <option value="white">White</option>
-                            <option value="black">Black/African American</option>
-                            <option value="asian">Asian</option>
-                            <option value="hispanic">Hispanic/Latino</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
+            <div class="nav-center">
+                <h1>Clinical Research Eligibility Engine</h1>
+            </div>
+
+            <div class="nav-right">
+                <button class="nav-btn" onclick="openProtocolBuilder()">
+                    Add/Edit Protocols
+                </button>
+                <div class="debug-toggle">
+                    <label for="debugToggle">Debug</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="debugToggle" onchange="toggleDebugMode()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================================
+         MAIN CONTENT
+         ============================================================================ -->
+    <div class="main-content">
+        <!-- Patient Data Section -->
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Patient Screening Data</div>
+                    <div class="section-subtitle">Enter patient information for eligibility evaluation</div>
                 </div>
             </div>
 
-            <!-- Study Indication Selection -->
-            <div class="section">
-                <h2>Study Indication</h2>
+            <!-- Demographics -->
+            <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Select primary indication for screening</label>
-                    <select class="form-select" id="studyIndication" onchange="handleIndicationChange()">
-                        <option value="">Select indication...</option>
-                        <option value="Psych">Psychiatry (Depression/Anxiety)</option>
-                        <option value="Neuro">Neurology (Alzheimer's/Dementia)</option>
-                        <option value="AUD">Alcohol Use Disorder</option>
-                        <option value="Fibromyalgia">Fibromyalgia</option>
-                        <option value="BackPain">Back Pain</option>
+                    <label class="form-label">Age</label>
+                    <input type="number" class="form-input" id="age" placeholder="Enter age">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Gender</label>
+                    <select class="form-select" id="gender">
+                        <option value="">Select...</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Race/Ethnicity</label>
+                    <select class="form-select" id="race">
+                        <option value="">Select...</option>
+                        <option value="white">White</option>
+                        <option value="black">Black/African American</option>
+                        <option value="asian">Asian</option>
+                        <option value="hispanic">Hispanic/Latino</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Assessment Scores Section -->
-            <div class="section" id="assessmentSection" style="display: none;">
-                <h2>Assessment Scores</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">PHQ-9 Score</label>
-                        <input type="number" class="form-input" id="phq9_score" min="0" max="27" placeholder="0-27">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">GAD-7 Score</label>
-                        <input type="number" class="form-input" id="gad7_score" min="0" max="21" placeholder="0-21">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">MMSE Score</label>
-                        <input type="number" class="form-input" id="mmse_score" min="0" max="30" placeholder="0-30">
-                    </div>
+            <!-- Assessment Scores -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">PHQ-9 Score</label>
+                    <input type="number" class="form-input" id="phq9_score" min="0" max="27" placeholder="0-27">
+                    <span class="form-help">Depression severity (0-27)</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">GAD-7 Score</label>
+                    <input type="number" class="form-input" id="gad7_score" min="0" max="21" placeholder="0-21">
+                    <span class="form-help">Anxiety severity (0-21)</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">MMSE Score</label>
+                    <input type="number" class="form-input" id="mmse_score" min="0" max="30" placeholder="0-30">
+                    <span class="form-help">Cognitive function (0-30)</span>
                 </div>
             </div>
 
             <!-- Clinical History -->
-            <div class="section">
-                <h2>Clinical History</h2>
+            <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Active Suicidal Ideation</label>
                     <select class="form-select" id="active_si">
@@ -343,34 +1054,87 @@
             </div>
 
             <!-- Medications -->
-            <div class="section">
-                <h2>Current Medications</h2>
-                <div class="form-group">
-                    <label class="form-label">Medications (comma-separated)</label>
-                    <textarea class="form-textarea" id="medications" rows="3"
-                        placeholder="e.g., sertraline, lisinopril, metformin"></textarea>
-                    <small style="color: #6b7280; display: block; margin-top: 5px;">
-                        Enter medication names separated by commas
-                    </small>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="evaluateEligibility()">
-                    Evaluate Eligibility
-                </button>
-                <button class="btn btn-secondary" onclick="clearForm()">
-                    Clear Form
-                </button>
-            </div>
-
-            <!-- Eligibility Results -->
-            <div id="eligibilityResults" class="eligibility-results" style="display: none;">
-                <h2 style="color: #1f2937; margin-bottom: 20px;">Eligibility Results</h2>
-                <div id="resultsContainer"></div>
+            <div class="form-group">
+                <label class="form-label">Current Medications</label>
+                <textarea class="form-textarea" id="medications" rows="3"
+                    placeholder="e.g., sertraline, lisinopril, metformin"></textarea>
+                <span class="form-help">Enter medication names separated by commas</span>
             </div>
         </div>
+
+        <!-- Calculate Eligibility Section -->
+        <div class="section calculate-section">
+            <button class="calculate-btn" id="calculateBtn" onclick="calculateEligibility()">
+                Calculate Eligibility
+            </button>
+            <div class="section-subtitle mt-4" id="calculateHint">
+                Select an indication above and enter patient data to begin
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden">
+            <div class="section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">Eligibility Results for <span id="resultsIndication"></span></div>
+                        <div class="section-subtitle" id="resultsTimestamp"></div>
+                    </div>
+                </div>
+
+                <!-- Results Summary Banner -->
+                <div class="results-summary" id="resultsSummary"></div>
+
+                <!-- Results Controls -->
+                <div class="results-controls">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all" onclick="filterResults('all')">
+                            All
+                        </button>
+                        <button class="filter-btn" data-filter="eligible" onclick="filterResults('eligible')">
+                            Eligible Only
+                        </button>
+                        <button class="filter-btn" data-filter="screen-failure" onclick="filterResults('screen-failure')">
+                            Screen Failures
+                        </button>
+                        <button class="filter-btn" data-filter="pending" onclick="filterResults('pending')">
+                            Pending
+                        </button>
+                    </div>
+                    <div class="controls-right">
+                        <select class="sort-select" id="sortSelect" onchange="sortResults()">
+                            <option value="status">Sort by Status</option>
+                            <option value="name">Sort by Protocol Name</option>
+                        </select>
+                        <button class="export-btn" onclick="exportResults()">
+                            📥 Export Results
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Protocol Cards Grid -->
+                <div class="protocols-grid" id="protocolsGrid"></div>
+            </div>
+        </div>
+
+        <!-- Debug Panel -->
+        <div class="debug-panel" id="debugPanel">
+            <div class="debug-title">🐛 Debug Information</div>
+            <div class="debug-content" id="debugContent"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================================
+         DETAILED RESULTS PANEL (Slide-out)
+         ============================================================================ -->
+    <div class="details-panel-overlay" id="detailsOverlay" onclick="closeDetailsPanel()"></div>
+    <div class="details-panel" id="detailsPanel">
+        <div class="details-panel-header">
+            <div class="details-panel-title" id="detailsTitle"></div>
+            <div class="details-panel-id" id="detailsId"></div>
+            <button class="details-close-btn" onclick="closeDetailsPanel()">&times;</button>
+        </div>
+        <div class="details-panel-content" id="detailsContent"></div>
     </div>
 
     <!-- Load dependencies in order -->
@@ -379,182 +1143,6 @@
     <script src="protocol-builder.js"></script>
 
     <!-- Main Application Logic -->
-    <script>
-        // Initialize state
-        let currentIndication = '';
-
-        function handleIndicationChange() {
-            const indication = document.getElementById('studyIndication').value;
-            currentIndication = indication;
-
-            // Show assessment section if indication is selected
-            const assessmentSection = document.getElementById('assessmentSection');
-            if (indication) {
-                assessmentSection.style.display = 'block';
-            } else {
-                assessmentSection.style.display = 'none';
-            }
-        }
-
-        function collectPatientData() {
-            // Collect demographics
-            const age = document.getElementById('age').value;
-            const gender = document.getElementById('gender').value;
-            const race = document.getElementById('race').value;
-
-            // Collect assessment scores
-            const phq9_score = document.getElementById('phq9_score').value;
-            const gad7_score = document.getElementById('gad7_score').value;
-            const mmse_score = document.getElementById('mmse_score').value;
-
-            // Collect clinical history
-            const active_si = document.getElementById('active_si').value;
-            const psychosis_history = document.getElementById('psychosis_history').value;
-            const substance_abuse = document.getElementById('substance_abuse').value;
-
-            // Collect medications
-            const medicationsText = document.getElementById('medications').value;
-            const medications = medicationsText
-                ? medicationsText.split(',').map(m => m.trim()).filter(m => m)
-                : [];
-
-            // Build patient data object
-            const patientData = {
-                age: age ? parseInt(age) : null,
-                gender: gender || null,
-                race: race || null,
-                phq9_score: phq9_score ? parseInt(phq9_score) : null,
-                gad7_score: gad7_score ? parseInt(gad7_score) : null,
-                mmse_score: mmse_score ? parseInt(mmse_score) : null,
-                active_si: active_si === 'true' ? true : active_si === 'false' ? false : null,
-                psychosis_history: psychosis_history === 'true' ? true : psychosis_history === 'false' ? false : null,
-                substance_abuse: substance_abuse === 'true' ? true : substance_abuse === 'false' ? false : null,
-                medications: medications
-            };
-
-            return patientData;
-        }
-
-        function evaluateEligibility() {
-            // Validate indication is selected
-            if (!currentIndication) {
-                alert('Please select a study indication first');
-                return;
-            }
-
-            // Collect patient data
-            const patientData = collectPatientData();
-
-            // Create eligibility engine instance
-            const engine = new EligibilityEngine();
-
-            // Evaluate all protocols for this indication
-            const results = engine.evaluateAllProtocols(currentIndication, patientData);
-
-            // Display results
-            displayResults(results);
-        }
-
-        function displayResults(results) {
-            const resultsContainer = document.getElementById('resultsContainer');
-            const resultsSection = document.getElementById('eligibilityResults');
-
-            if (!results || results.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div class="eligibility-card">
-                        <p>No active protocols found for this indication.</p>
-                    </div>
-                `;
-                resultsSection.style.display = 'block';
-                return;
-            }
-
-            let html = '';
-
-            results.forEach(result => {
-                const statusClass = result.eligible ? 'eligible' :
-                    result.status === 'pending' ? 'pending' : 'not-eligible';
-                const statusText = result.eligible ? 'ELIGIBLE' :
-                    result.status === 'pending' ? 'PENDING' : 'NOT ELIGIBLE';
-
-                html += `
-                    <div class="eligibility-card ${statusClass}">
-                        <h3>${result.protocolName}</h3>
-                        <p><strong>Protocol ID:</strong> ${result.protocolId}</p>
-                        <p>
-                            <span class="eligibility-status ${statusClass}">
-                                ${statusText}
-                            </span>
-                        </p>
-
-                        ${result.reasons && result.reasons.length > 0 ? `
-                            <div style="margin-top: 15px;">
-                                <strong>Reasons:</strong>
-                                <ul class="criteria-list">
-                                    ${result.reasons.map(r => `<li>${r}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-
-                        <details style="margin-top: 15px;">
-                            <summary style="cursor: pointer; font-weight: 600; color: #667eea;">
-                                View Detailed Criteria Results
-                            </summary>
-
-                            <div style="margin-top: 10px;">
-                                <strong>Inclusion Criteria:</strong>
-                                <ul class="criteria-list">
-                                    ${result.inclusionResults.map(c => {
-                                        const icon = c.met ? '✓' : c.met === null ? '⏳' : '✗';
-                                        const className = c.met ? 'met' : c.met === null ? 'pending' : 'not-met';
-                                        return `<li class="${className}">${icon} ${c.description}${c.reason ? ` - ${c.reason}` : ''}</li>`;
-                                    }).join('')}
-                                </ul>
-                            </div>
-
-                            ${result.exclusionResults.length > 0 ? `
-                                <div style="margin-top: 10px;">
-                                    <strong>Exclusion Criteria:</strong>
-                                    <ul class="criteria-list">
-                                        ${result.exclusionResults.map(c => {
-                                            const icon = c.met ? '✓' : c.met === null ? '⏳' : '✗';
-                                            const className = c.met ? 'met' : c.met === null ? 'pending' : 'not-met';
-                                            return `<li class="${className}">${icon} ${c.description}${c.reason ? ` - ${c.reason}` : ''}</li>`;
-                                        }).join('')}
-                                    </ul>
-                                </div>
-                            ` : ''}
-                        </details>
-                    </div>
-                `;
-            });
-
-            resultsContainer.innerHTML = html;
-            resultsSection.style.display = 'block';
-
-            // Scroll to results
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function clearForm() {
-            if (!confirm('Are you sure you want to clear all form data?')) {
-                return;
-            }
-
-            // Clear all inputs
-            document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(element => {
-                element.value = '';
-            });
-
-            // Hide results
-            document.getElementById('eligibilityResults').style.display = 'none';
-            document.getElementById('assessmentSection').style.display = 'none';
-            currentIndication = '';
-        }
-
-        // Log initialization
-        console.log('[Clinical Research Tool] Application initialized');
-        console.log('[Clinical Research Tool] Loaded protocols:', protocols.length);
-    </script>
+    <script src="main-interface.js"></script>
 </body>
 </html>

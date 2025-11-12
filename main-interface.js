@@ -183,17 +183,28 @@ function calculateEligibility() {
     // Simulate async operation (in real app might be API call)
     setTimeout(() => {
         try {
+            // Start timing
+            debugState.evaluationStartTime = performance.now();
+
             // Collect patient data
             appState.patientData = collectPatientData();
 
             // Create eligibility engine
             const engine = new EligibilityEngine();
 
-            // Evaluate all protocols
-            const results = engine.evaluateAllProtocols(
-                appState.currentIndication,
-                appState.patientData
-            );
+            // Evaluate all protocols with individual timing
+            const results = [];
+            activeProtocols.forEach(protocol => {
+                const protocolStart = performance.now();
+                const result = engine.evaluateProtocol(protocol.protocolId, appState.patientData);
+                const protocolEnd = performance.now();
+
+                debugState.protocolTimings[protocol.protocolId] = Math.round(protocolEnd - protocolStart);
+                results.push(result);
+            });
+
+            // End timing
+            debugState.evaluationEndTime = performance.now();
 
             // Store results
             appState.evaluationResults = results;
@@ -626,8 +637,16 @@ function exportResults() {
 }
 
 // ============================================================================
-// DEBUG MODE
+// DEBUG MODE - ENHANCED DEBUGGER
 // ============================================================================
+
+const debugState = {
+    evaluationStartTime: null,
+    evaluationEndTime: null,
+    protocolTimings: {},
+    debugLog: [],
+    isExpanded: true
+};
 
 function toggleDebugMode() {
     appState.debugMode = document.getElementById('debugToggle').checked;
@@ -635,7 +654,11 @@ function toggleDebugMode() {
     const panel = document.getElementById('debugPanel');
     if (appState.debugMode) {
         panel.classList.add('active');
-        updateDebugPanel();
+        if (appState.evaluationResults) {
+            updateDebugPanel();
+        } else {
+            showEmptyDebugPanel();
+        }
     } else {
         panel.classList.remove('active');
     }
@@ -643,25 +666,367 @@ function toggleDebugMode() {
     console.log('[Main Interface] Debug mode:', appState.debugMode ? 'ON' : 'OFF');
 }
 
-function updateDebugPanel() {
-    if (!appState.debugMode) return;
+function showEmptyDebugPanel() {
+    const content = document.getElementById('debugContent');
+    content.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #9ca3af;">
+            <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;">🐛</div>
+            <div style="font-size: 16px; margin-bottom: 8px;">No evaluation data available</div>
+            <div style="font-size: 14px; opacity: 0.7;">Calculate eligibility to see detailed debug information</div>
+        </div>
+    `;
+}
 
-    const debugInfo = {
+function updateDebugPanel() {
+    if (!appState.debugMode || !appState.evaluationResults) return;
+
+    const totalEvaluationTime = debugState.evaluationEndTime - debugState.evaluationStartTime;
+    const totalCriteria = appState.evaluationResults.reduce((sum, r) => {
+        return sum + r.inclusionResults.length + r.exclusionResults.length;
+    }, 0);
+
+    // Build debug panel HTML
+    let html = `
+        <!-- Debug Header -->
+        <div class="debug-header">
+            <div class="debug-header-left">
+                <div class="debug-header-title">
+                    <span style="font-size: 20px; margin-right: 8px;">🐛</span>
+                    Eligibility Engine Debugger
+                </div>
+                <div class="debug-header-timestamp">
+                    Last evaluation: ${appState.lastEvaluationTimestamp.toLocaleString()}
+                </div>
+            </div>
+            <div class="debug-header-stats">
+                <div class="debug-stat">
+                    <div class="debug-stat-value">${appState.evaluationResults.length}</div>
+                    <div class="debug-stat-label">Protocols</div>
+                </div>
+                <div class="debug-stat">
+                    <div class="debug-stat-value">${totalCriteria}</div>
+                    <div class="debug-stat-label">Criteria</div>
+                </div>
+                <div class="debug-stat">
+                    <div class="debug-stat-value">${totalEvaluationTime}ms</div>
+                    <div class="debug-stat-label">Eval Time</div>
+                </div>
+            </div>
+            <div class="debug-header-actions">
+                <button class="debug-btn" onclick="toggleDebugExpansion()">
+                    ${debugState.isExpanded ? '▼ Collapse All' : '▶ Expand All'}
+                </button>
+                <button class="debug-btn" onclick="clearDebugLog()">🗑️ Clear Log</button>
+                <button class="debug-btn" onclick="exportDebugLog()">📥 Export</button>
+            </div>
+        </div>
+
+        <!-- Patient Data Snapshot -->
+        <div class="debug-section">
+            <div class="debug-section-header" onclick="toggleDebugSection('patient-data')">
+                <span class="debug-section-arrow" id="arrow-patient-data">▼</span>
+                <span class="debug-section-title">Patient Data Snapshot</span>
+            </div>
+            <div class="debug-section-content" id="content-patient-data">
+                <pre class="debug-json">${JSON.stringify(appState.patientData, null, 2)}</pre>
+            </div>
+        </div>
+
+        <!-- Protocol Evaluations -->
+        <div class="debug-protocols">
+            ${renderProtocolDebugSections()}
+        </div>
+    `;
+
+    document.getElementById('debugContent').innerHTML = html;
+
+    // Add to debug log
+    debugState.debugLog.push({
         timestamp: new Date().toISOString(),
         indication: appState.currentIndication,
-        totalProtocols: protocols.length,
-        activeProtocols: protocols.filter(p => p.active !== false).length,
+        results: appState.evaluationResults,
         patientData: appState.patientData,
-        evaluationResults: appState.evaluationResults ? {
-            total: appState.evaluationResults.length,
-            eligible: appState.evaluationResults.filter(r => r.eligible).length,
-            screenFailure: appState.evaluationResults.filter(r => !r.eligible && r.status !== 'pending').length,
-            pending: appState.evaluationResults.filter(r => r.status === 'pending').length,
-            details: appState.evaluationResults
-        } : null
+        timings: {
+            total: totalEvaluationTime,
+            protocols: debugState.protocolTimings
+        }
+    });
+}
+
+function renderProtocolDebugSections() {
+    if (!appState.evaluationResults) return '';
+
+    let html = '';
+
+    appState.evaluationResults.forEach((result, index) => {
+        const statusClass = result.eligible ? 'eligible' :
+            result.status === 'pending' ? 'pending' : 'screen-failure';
+
+        const statusBadge = result.eligible ? '✓ ELIGIBLE' :
+            result.status === 'pending' ? '⚠ PENDING' : '✗ SCREEN FAILURE';
+
+        const protocolTiming = debugState.protocolTimings[result.protocolId] || 0;
+
+        html += `
+            <div class="debug-protocol-section ${statusClass}">
+                <div class="debug-protocol-header" onclick="toggleDebugSection('protocol-${index}')">
+                    <div class="debug-protocol-header-left">
+                        <span class="debug-section-arrow" id="arrow-protocol-${index}">▼</span>
+                        <div>
+                            <div class="debug-protocol-name">${result.protocolName}</div>
+                            <div class="debug-protocol-id">ID: ${result.protocolId}</div>
+                        </div>
+                    </div>
+                    <div class="debug-protocol-header-right">
+                        <span class="debug-protocol-badge ${statusClass}">${statusBadge}</span>
+                        <span class="debug-protocol-time">${protocolTiming}ms</span>
+                    </div>
+                </div>
+
+                <div class="debug-protocol-content" id="content-protocol-${index}">
+                    <!-- Evaluation Metadata -->
+                    <div class="debug-subsection">
+                        <div class="debug-subsection-title">Evaluation Metadata</div>
+                        <div class="debug-metadata">
+                            <div class="debug-metadata-row">
+                                <span class="debug-metadata-label">Evaluation Time:</span>
+                                <span class="debug-metadata-value">${protocolTiming}ms</span>
+                            </div>
+                            <div class="debug-metadata-row">
+                                <span class="debug-metadata-label">Total Criteria:</span>
+                                <span class="debug-metadata-value">${result.inclusionResults.length + result.exclusionResults.length}</span>
+                            </div>
+                            <div class="debug-metadata-row">
+                                <span class="debug-metadata-label">Overall Status:</span>
+                                <span class="debug-metadata-value ${statusClass}">${statusBadge}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inclusion Criteria Tracking -->
+                    <div class="debug-subsection">
+                        <div class="debug-subsection-title">
+                            Inclusion Criteria (${result.inclusionResults.length})
+                        </div>
+                        ${renderCriteriaDebugTable(result.inclusionResults, false)}
+                    </div>
+
+                    <!-- Exclusion Criteria Tracking -->
+                    ${result.exclusionResults.length > 0 ? `
+                        <div class="debug-subsection">
+                            <div class="debug-subsection-title">
+                                Exclusion Criteria (${result.exclusionResults.length})
+                                <span style="font-size: 12px; color: #9ca3af; font-weight: normal; margin-left: 8px;">
+                                    (✗ Met = Patient Excluded, ✓ Not Met = Patient Passes)
+                                </span>
+                            </div>
+                            ${renderCriteriaDebugTable(result.exclusionResults, true)}
+                        </div>
+                    ` : ''}
+
+                    <!-- Calculation Breakdown -->
+                    <div class="debug-subsection">
+                        <div class="debug-subsection-title">Calculation Breakdown</div>
+                        ${renderCalculationBreakdown(result)}
+                    </div>
+
+                    <!-- Raw Result Data -->
+                    <div class="debug-subsection">
+                        <div class="debug-subsection-header" onclick="toggleDebugSection('raw-${index}')">
+                            <span class="debug-section-arrow" id="arrow-raw-${index}">▶</span>
+                            <span class="debug-subsection-title" style="margin: 0;">Raw Result Data (JSON)</span>
+                        </div>
+                        <div class="debug-section-content" id="content-raw-${index}" style="display: none;">
+                            <pre class="debug-json">${JSON.stringify(result, null, 2)}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    return html;
+}
+
+function renderCriteriaDebugTable(criteria, isExclusion) {
+    if (!criteria || criteria.length === 0) {
+        return '<p style="color: #9ca3af; font-style: italic; padding: 12px;">No criteria</p>';
+    }
+
+    let html = `
+        <div class="debug-criteria-table">
+            <div class="debug-criteria-header">
+                <div class="debug-criteria-col" style="width: 40px;">#</div>
+                <div class="debug-criteria-col" style="flex: 2;">Description</div>
+                <div class="debug-criteria-col" style="width: 100px;">Status</div>
+                <div class="debug-criteria-col" style="flex: 1;">Details</div>
+            </div>
+    `;
+
+    criteria.forEach((criterion, index) => {
+        // For exclusions, invert the visual logic
+        const met = criterion.met;
+        const statusIcon = met === null ? '⚠' :
+            isExclusion ? (met ? '✗' : '✓') :
+            (met ? '✓' : '✗');
+
+        const statusClass = met === null ? 'pending' :
+            isExclusion ? (met ? 'not-met' : 'met') :
+            (met ? 'met' : 'not-met');
+
+        const statusText = met === null ? 'PENDING' :
+            isExclusion ? (met ? 'EXCLUDED' : 'PASSES') :
+            (met ? 'MET' : 'NOT MET');
+
+        html += `
+            <div class="debug-criteria-row ${statusClass}">
+                <div class="debug-criteria-col" style="width: 40px; font-weight: 700;">${index + 1}</div>
+                <div class="debug-criteria-col" style="flex: 2;">
+                    <div class="debug-criteria-desc">${criterion.description}</div>
+                    ${criterion.id ? `<div class="debug-criteria-id">ID: ${criterion.id}</div>` : ''}
+                </div>
+                <div class="debug-criteria-col" style="width: 100px;">
+                    <span class="debug-criteria-status ${statusClass}">
+                        ${statusIcon} ${statusText}
+                    </span>
+                </div>
+                <div class="debug-criteria-col" style="flex: 1;">
+                    <div class="debug-criteria-reason">${criterion.reason || 'No details available'}</div>
+                </div>
+            </div>
+        `;
+    });
+
+    html += '</div>';
+    return html;
+}
+
+function renderCalculationBreakdown(result) {
+    const inclusionMet = result.inclusionResults.filter(c => c.met === true).length;
+    const inclusionTotal = result.inclusionResults.length;
+    const inclusionPending = result.inclusionResults.filter(c => c.met === null).length;
+
+    const exclusionMet = result.exclusionResults.filter(c => c.met === true).length;
+    const exclusionTotal = result.exclusionResults.length;
+    const exclusionPending = result.exclusionResults.filter(c => c.met === null).length;
+
+    let html = `
+        <div class="debug-calculation">
+            <div class="debug-calc-step">
+                <div class="debug-calc-label">Step 1: Inclusion Criteria</div>
+                <div class="debug-calc-formula">
+                    ${inclusionMet} of ${inclusionTotal} criteria met
+                    ${inclusionPending > 0 ? ` (${inclusionPending} pending)` : ''}
+                </div>
+                <div class="debug-calc-result ${inclusionMet === inclusionTotal && inclusionPending === 0 ? 'pass' : 'fail'}">
+                    ${inclusionMet === inclusionTotal && inclusionPending === 0 ? '✓ All inclusion criteria met' :
+                      inclusionPending > 0 ? '⚠ Waiting for data' :
+                      '✗ Not all inclusion criteria met'}
+                </div>
+            </div>
+
+            ${exclusionTotal > 0 ? `
+                <div class="debug-calc-step">
+                    <div class="debug-calc-label">Step 2: Exclusion Criteria</div>
+                    <div class="debug-calc-formula">
+                        ${exclusionMet} of ${exclusionTotal} exclusions met
+                        ${exclusionPending > 0 ? ` (${exclusionPending} pending)` : ''}
+                    </div>
+                    <div class="debug-calc-result ${exclusionMet === 0 && exclusionPending === 0 ? 'pass' : 'fail'}">
+                        ${exclusionMet === 0 && exclusionPending === 0 ? '✓ No exclusions apply' :
+                          exclusionPending > 0 ? '⚠ Waiting for data' :
+                          '✗ Patient meets ' + exclusionMet + ' exclusion criteria'}
+                    </div>
+                </div>
+            ` : ''}
+
+            <div class="debug-calc-step final">
+                <div class="debug-calc-label">Final Determination</div>
+                <div class="debug-calc-formula">
+                    Inclusion: ${inclusionMet}/${inclusionTotal} met, ${inclusionPending} pending<br>
+                    Exclusion: ${exclusionMet} met, ${exclusionPending} pending
+                </div>
+                <div class="debug-calc-result ${result.eligible ? 'pass' : result.status === 'pending' ? 'pending' : 'fail'}">
+                    ${result.eligible ? '✓ PATIENT ELIGIBLE' :
+                      result.status === 'pending' ? '⚠ PENDING - MISSING DATA' :
+                      '✗ SCREEN FAILURE'}
+                </div>
+            </div>
+        </div>
+    `;
+
+    return html;
+}
+
+function toggleDebugSection(sectionId) {
+    const content = document.getElementById(`content-${sectionId}`);
+    const arrow = document.getElementById(`arrow-${sectionId}`);
+
+    if (!content || !arrow) return;
+
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        arrow.textContent = '▼';
+    } else {
+        content.style.display = 'none';
+        arrow.textContent = '▶';
+    }
+}
+
+function toggleDebugExpansion() {
+    debugState.isExpanded = !debugState.isExpanded;
+
+    // Toggle all protocol sections
+    document.querySelectorAll('[id^="content-protocol-"]').forEach(el => {
+        el.style.display = debugState.isExpanded ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('[id^="arrow-protocol-"]').forEach(el => {
+        el.textContent = debugState.isExpanded ? '▼' : '▶';
+    });
+
+    // Update button text
+    event.target.textContent = debugState.isExpanded ? '▼ Collapse All' : '▶ Expand All';
+}
+
+function clearDebugLog() {
+    if (!confirm('Clear all debug log history? This cannot be undone.')) {
+        return;
+    }
+
+    debugState.debugLog = [];
+    debugState.protocolTimings = {};
+
+    showToast('Debug log cleared', 'info');
+    console.log('[Debug] Log cleared');
+}
+
+function exportDebugLog() {
+    if (debugState.debugLog.length === 0) {
+        alert('No debug data to export. Calculate eligibility first.');
+        return;
+    }
+
+    const exportData = {
+        exportedAt: new Date().toISOString(),
+        debuggerVersion: '1.0.0',
+        totalEvaluations: debugState.debugLog.length,
+        log: debugState.debugLog
     };
 
-    document.getElementById('debugContent').textContent = JSON.stringify(debugInfo, null, 2);
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `debug_log_${Date.now()}.json`;
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+    showToast('Debug log exported', 'success');
+    console.log('[Debug] Log exported');
 }
 
 // ============================================================================

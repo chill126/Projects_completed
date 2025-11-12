@@ -1297,11 +1297,14 @@
                     <button class="assessment-btn" data-assessment="ptsd" onclick="openPTSDModal()">
                         PTSD<br><small style="font-weight: 400; font-size: 12px;">DSM-5 Screener</small>
                     </button>
+                    <button class="assessment-btn" data-assessment="lsas" onclick="openLSASModal()">
+                        LSAS<br><small style="font-weight: 400; font-size: 12px;">Social Anxiety Scale</small>
+                    </button>
                     </div>
 
                 <!-- Results Display Cards -->
                 <div style="max-width: 900px; margin: 25px auto 0 auto;">
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
                         <div id="phq9ResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
                             <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PHQ-9 Score</div>
                             <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="phq9CardScore">--</div>
@@ -1318,6 +1321,12 @@
                             <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">PTSD Status</div>
                             <div style="font-size: 18px; margin-bottom: 5px; font-weight: bold;" id="ptsdCardDiagnosis">--</div>
                             <div style="font-size: 12px; color: #718096;" id="ptsdCardActivity">Not completed</div>
+                        </div>
+
+                        <div id="lsasResultCard" style="padding: 20px; background: #f7fafc; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; display: none;">
+                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">LSAS Score</div>
+                            <div style="font-size: 32px; margin-bottom: 5px; font-weight: bold;" id="lsasCardScore">--</div>
+                            <div style="font-size: 12px; color: #718096;" id="lsasCardSeverity">Not completed</div>
                         </div>
                     </div>
                 </div>
@@ -1966,6 +1975,77 @@
                 </div>
             </div>
         </div>
+
+        <!-- LSAS ASSESSMENT MODAL -->
+        <div id="lsasModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow-y: auto; padding: 20px;">
+            <div style="max-width: 1000px; margin: 50px auto; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+                <!-- Modal Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 3px solid #9B59B6; padding-bottom: 20px;">
+                    <h2 style="color: #7B1FA2; margin: 0;">Liebowitz Social Anxiety Scale (LSAS)</h2>
+                    <button onclick="closeLSASModal()" style="background: none; border: none; font-size: 32px; cursor: pointer; color: #718096; line-height: 1;">&times;</button>
+                </div>
+
+                <!-- Instructions -->
+                <div style="background: #f3e5f5; padding: 20px; border-radius: 10px; margin-bottom: 25px; border-left: 4px solid #9B59B6;">
+                    <p style="margin: 0 0 10px 0; font-weight: 600; color: #7B1FA2;">Instructions:</p>
+                    <p style="margin: 0; color: #4b5563; line-height: 1.6;">
+                        Rate each situation according to how much <strong>fear or anxiety</strong> you experience (0-3) and how often you <strong>avoid</strong> the situation (0-3).
+                    </p>
+                </div>
+
+                <!-- Score Display -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 12px; text-align: center; border: 2px solid #9B59B6;">
+                        <div style="font-size: 14px; color: #7B1FA2; margin-bottom: 5px; font-weight: 600;">Fear Subtotal</div>
+                        <div style="font-size: 32px; font-weight: bold; color: #7B1FA2;" id="lsasFearScore">0</div>
+                        <div style="font-size: 12px; color: #7B1FA2;">/72</div>
+                    </div>
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 12px; text-align: center; border: 2px solid #9B59B6;">
+                        <div style="font-size: 14px; color: #7B1FA2; margin-bottom: 5px; font-weight: 600;">Avoidance Subtotal</div>
+                        <div style="font-size: 32px; font-weight: bold; color: #7B1FA2;" id="lsasAvoidanceScore">0</div>
+                        <div style="font-size: 12px; color: #7B1FA2;">/72</div>
+                    </div>
+                    <div style="padding: 20px; background: #7B1FA2; border-radius: 12px; text-align: center; border: 2px solid #7B1FA2;">
+                        <div style="font-size: 14px; color: white; margin-bottom: 5px; font-weight: 600;">Total Score</div>
+                        <div style="font-size: 32px; font-weight: bold; color: white;" id="lsasTotalScore">0</div>
+                        <div style="font-size: 12px; color: white;">/144</div>
+                    </div>
+                </div>
+
+                <!-- Severity Interpretation -->
+                <div id="lsasSeverity" style="padding: 15px; background: #f9fafb; border-radius: 10px; text-align: center; margin-bottom: 25px; border: 2px solid #e2e8f0; display: none;">
+                    <div style="font-size: 16px; font-weight: 600; color: #1f2937;"></div>
+                </div>
+
+                <!-- Assessment Table -->
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #7B1FA2; color: white;">
+                                <th style="padding: 12px; text-align: left; border: 1px solid #9B59B6;">Situation</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #9B59B6; width: 200px;">Fear/Anxiety<br><small style="font-weight: 400;">(0=None, 1=Mild, 2=Moderate, 3=Severe)</small></th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #9B59B6; width: 200px;">Avoidance<br><small style="font-weight: 400;">(0=Never, 1=Occasionally, 2=Often, 3=Usually)</small></th>
+                            </tr>
+                        </thead>
+                        <tbody id="lsasQuestions">
+                            <!-- Questions will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button onclick="resetLSASModal()" style="padding: 12px 30px; background: #6b7280; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                        Reset
+                    </button>
+                    <button onclick="saveLSASAssessment()" style="padding: 12px 30px; background: #9B59B6; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                        Save Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- SCID ASSESSMENT MODAL -->
         <div id="scidModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow-y: auto; padding: 20px;">
             <div style="max-width: 900px; margin: 50px auto; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
@@ -4027,6 +4107,193 @@
 
             // Scroll to result card
             document.getElementById('ptsdResultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // LSAS MODAL FUNCTIONS
+        // ========================================
+        const lsasSituations = [
+            "Telephoning in public",
+            "Participating in small groups",
+            "Eating in public places",
+            "Drinking with others in public places",
+            "Talking to people in authority",
+            "Acting, performing or giving a talk in front of an audience",
+            "Going to a party",
+            "Working while being observed",
+            "Writing while being observed",
+            "Calling someone you don't know very well",
+            "Talking with people you don't know very well",
+            "Meeting strangers",
+            "Urinating in a public bathroom",
+            "Entering a room when others are already seated",
+            "Being the center of attention",
+            "Speaking up at a meeting",
+            "Taking a test",
+            "Expressing a disagreement or disapproval to people you don't know very well",
+            "Looking at people you don't know very well in the eyes",
+            "Giving a report to a group",
+            "Trying to pick up someone",
+            "Returning goods to a store",
+            "Giving a party",
+            "Resisting a high pressure salesperson"
+        ];
+
+        function openLSASModal() {
+            populateLSASQuestions();
+            document.getElementById('lsasModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLSASModal() {
+            document.getElementById('lsasModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function populateLSASQuestions() {
+            const tbody = document.getElementById('lsasQuestions');
+            let html = '';
+
+            lsasSituations.forEach((situation, index) => {
+                const rowClass = index % 2 === 0 ? 'background: #f9fafb;' : 'background: white;';
+                html += `
+                    <tr style="${rowClass}">
+                        <td style="padding: 15px; border: 1px solid #e5e7eb;">
+                            <strong>${index + 1}.</strong> ${situation}
+                        </td>
+                        <td style="padding: 15px; border: 1px solid #e5e7eb; text-align: center;">
+                            <select id="lsas_fear_${index}" onchange="calculateLSAS()" style="width: 100%; padding: 8px; border: 2px solid #9B59B6; border-radius: 6px; font-size: 14px; cursor: pointer;">
+                                <option value="">--</option>
+                                <option value="0">0 - None</option>
+                                <option value="1">1 - Mild</option>
+                                <option value="2">2 - Moderate</option>
+                                <option value="3">3 - Severe</option>
+                            </select>
+                        </td>
+                        <td style="padding: 15px; border: 1px solid #e5e7eb; text-align: center;">
+                            <select id="lsas_avoid_${index}" onchange="calculateLSAS()" style="width: 100%; padding: 8px; border: 2px solid #9B59B6; border-radius: 6px; font-size: 14px; cursor: pointer;">
+                                <option value="">--</option>
+                                <option value="0">0 - Never</option>
+                                <option value="1">1 - Occasionally</option>
+                                <option value="2">2 - Often</option>
+                                <option value="3">3 - Usually</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+            calculateLSAS();
+        }
+
+        function calculateLSAS() {
+            let fearTotal = 0;
+            let avoidanceTotal = 0;
+
+            lsasSituations.forEach((_, index) => {
+                const fearSelect = document.getElementById(`lsas_fear_${index}`);
+                const avoidSelect = document.getElementById(`lsas_avoid_${index}`);
+
+                if (fearSelect && fearSelect.value) {
+                    fearTotal += parseInt(fearSelect.value);
+                }
+                if (avoidSelect && avoidSelect.value) {
+                    avoidanceTotal += parseInt(avoidSelect.value);
+                }
+            });
+
+            const total = fearTotal + avoidanceTotal;
+
+            // Update score displays
+            document.getElementById('lsasFearScore').textContent = fearTotal;
+            document.getElementById('lsasAvoidanceScore').textContent = avoidanceTotal;
+            document.getElementById('lsasTotalScore').textContent = total;
+
+            // Show severity interpretation
+            const severityDiv = document.getElementById('lsasSeverity');
+            const interpretation = interpretLSAS(total);
+
+            if (total > 0) {
+                severityDiv.style.display = 'block';
+                severityDiv.innerHTML = `<div style="font-size: 16px; font-weight: 600; color: ${interpretation.color};">${interpretation.label}</div>`;
+                severityDiv.style.borderColor = interpretation.color;
+                severityDiv.style.background = interpretation.bgColor;
+            } else {
+                severityDiv.style.display = 'none';
+            }
+
+            return { fearTotal, avoidanceTotal, total, severity: interpretation.label };
+        }
+
+        function interpretLSAS(total) {
+            if (total >= 95) {
+                return {
+                    label: "Very Severe Social Anxiety",
+                    color: "#7f1d1d",
+                    bgColor: "#fef2f2"
+                };
+            } else if (total >= 80) {
+                return {
+                    label: "Severe Social Anxiety",
+                    color: "#991b1b",
+                    bgColor: "#fef2f2"
+                };
+            } else if (total >= 65) {
+                return {
+                    label: "Marked Social Anxiety",
+                    color: "#dc2626",
+                    bgColor: "#fee2e2"
+                };
+            } else if (total >= 50) {
+                return {
+                    label: "Moderate Social Anxiety",
+                    color: "#ea580c",
+                    bgColor: "#fff7ed"
+                };
+            } else if (total >= 30) {
+                return {
+                    label: "Mild Social Anxiety",
+                    color: "#f59e0b",
+                    bgColor: "#fffbeb"
+                };
+            } else {
+                return {
+                    label: "No Social Anxiety",
+                    color: "#16a34a",
+                    bgColor: "#f0fdf4"
+                };
+            }
+        }
+
+        function saveLSASAssessment() {
+            const results = calculateLSAS();
+
+            // Update result card
+            document.getElementById('lsasResultCard').style.display = 'block';
+            document.getElementById('lsasCardScore').textContent = results.total;
+            document.getElementById('lsasCardSeverity').textContent = results.severity;
+
+            // Color code based on severity
+            const interpretation = interpretLSAS(results.total);
+            document.getElementById('lsasCardScore').style.color = interpretation.color;
+
+            // Close modal
+            closeLSASModal();
+
+            // Scroll to result card
+            document.getElementById('lsasResultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetLSASModal() {
+            lsasSituations.forEach((_, index) => {
+                const fearSelect = document.getElementById(`lsas_fear_${index}`);
+                const avoidSelect = document.getElementById(`lsas_avoid_${index}`);
+
+                if (fearSelect) fearSelect.value = '';
+                if (avoidSelect) avoidSelect.value = '';
+            });
+
+            calculateLSAS();
         }
 
         // SCID MODAL FUNCTIONS

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Research Screening Tool with Protocol Builder</title>
+
+    <!-- Protocol Builder CSS -->
+    <link rel="stylesheet" href="protocol-builder.css">
+
+    <style>
+        /* Main Application Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .app-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .app-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .app-content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .section h2 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .eligibility-results {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .eligibility-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .eligibility-card.eligible {
+            border-left-color: #10b981;
+            background: #ecfdf5;
+        }
+
+        .eligibility-card.not-eligible {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .eligibility-card.pending {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .eligibility-card h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .eligibility-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .eligibility-status.eligible {
+            background: #10b981;
+            color: white;
+        }
+
+        .eligibility-status.not-eligible {
+            background: #ef4444;
+            color: white;
+        }
+
+        .eligibility-status.pending {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .criteria-list {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .criteria-list li {
+            margin-bottom: 8px;
+            color: #4b5563;
+        }
+
+        .criteria-list li.met {
+            color: #10b981;
+        }
+
+        .criteria-list li.not-met {
+            color: #ef4444;
+        }
+
+        .criteria-list li.pending {
+            color: #f59e0b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-content {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="app-header">
+            <h1>Clinical Research Screening Tool</h1>
+            <p>Comprehensive patient intake and protocol eligibility evaluation</p>
+        </div>
+
+        <div class="app-content">
+            <!-- Demographics Section -->
+            <div class="section">
+                <h2>Demographics</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-input" id="age" placeholder="Enter age">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select class="form-select" id="gender">
+                            <option value="">Select...</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Race/Ethnicity</label>
+                        <select class="form-select" id="race">
+                            <option value="">Select...</option>
+                            <option value="white">White</option>
+                            <option value="black">Black/African American</option>
+                            <option value="asian">Asian</option>
+                            <option value="hispanic">Hispanic/Latino</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Indication Selection -->
+            <div class="section">
+                <h2>Study Indication</h2>
+                <div class="form-group">
+                    <label class="form-label">Select primary indication for screening</label>
+                    <select class="form-select" id="studyIndication" onchange="handleIndicationChange()">
+                        <option value="">Select indication...</option>
+                        <option value="Psych">Psychiatry (Depression/Anxiety)</option>
+                        <option value="Neuro">Neurology (Alzheimer's/Dementia)</option>
+                        <option value="AUD">Alcohol Use Disorder</option>
+                        <option value="Fibromyalgia">Fibromyalgia</option>
+                        <option value="BackPain">Back Pain</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Assessment Scores Section -->
+            <div class="section" id="assessmentSection" style="display: none;">
+                <h2>Assessment Scores</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">PHQ-9 Score</label>
+                        <input type="number" class="form-input" id="phq9_score" min="0" max="27" placeholder="0-27">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">GAD-7 Score</label>
+                        <input type="number" class="form-input" id="gad7_score" min="0" max="21" placeholder="0-21">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">MMSE Score</label>
+                        <input type="number" class="form-input" id="mmse_score" min="0" max="30" placeholder="0-30">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinical History -->
+            <div class="section">
+                <h2>Clinical History</h2>
+                <div class="form-group">
+                    <label class="form-label">Active Suicidal Ideation</label>
+                    <select class="form-select" id="active_si">
+                        <option value="">Select...</option>
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">History of Psychosis</label>
+                    <select class="form-select" id="psychosis_history">
+                        <option value="">Select...</option>
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Substance Abuse (active)</label>
+                    <select class="form-select" id="substance_abuse">
+                        <option value="">Select...</option>
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Medications -->
+            <div class="section">
+                <h2>Current Medications</h2>
+                <div class="form-group">
+                    <label class="form-label">Medications (comma-separated)</label>
+                    <textarea class="form-textarea" id="medications" rows="3"
+                        placeholder="e.g., sertraline, lisinopril, metformin"></textarea>
+                    <small style="color: #6b7280; display: block; margin-top: 5px;">
+                        Enter medication names separated by commas
+                    </small>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="evaluateEligibility()">
+                    Evaluate Eligibility
+                </button>
+                <button class="btn btn-secondary" onclick="clearForm()">
+                    Clear Form
+                </button>
+            </div>
+
+            <!-- Eligibility Results -->
+            <div id="eligibilityResults" class="eligibility-results" style="display: none;">
+                <h2 style="color: #1f2937; margin-bottom: 20px;">Eligibility Results</h2>
+                <div id="resultsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load dependencies in order -->
+    <script src="eligibility-engine.js"></script>
+    <script src="example-protocols.js"></script>
+    <script src="protocol-builder.js"></script>
+
+    <!-- Main Application Logic -->
+    <script>
+        // Initialize state
+        let currentIndication = '';
+
+        function handleIndicationChange() {
+            const indication = document.getElementById('studyIndication').value;
+            currentIndication = indication;
+
+            // Show assessment section if indication is selected
+            const assessmentSection = document.getElementById('assessmentSection');
+            if (indication) {
+                assessmentSection.style.display = 'block';
+            } else {
+                assessmentSection.style.display = 'none';
+            }
+        }
+
+        function collectPatientData() {
+            // Collect demographics
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const race = document.getElementById('race').value;
+
+            // Collect assessment scores
+            const phq9_score = document.getElementById('phq9_score').value;
+            const gad7_score = document.getElementById('gad7_score').value;
+            const mmse_score = document.getElementById('mmse_score').value;
+
+            // Collect clinical history
+            const active_si = document.getElementById('active_si').value;
+            const psychosis_history = document.getElementById('psychosis_history').value;
+            const substance_abuse = document.getElementById('substance_abuse').value;
+
+            // Collect medications
+            const medicationsText = document.getElementById('medications').value;
+            const medications = medicationsText
+                ? medicationsText.split(',').map(m => m.trim()).filter(m => m)
+                : [];
+
+            // Build patient data object
+            const patientData = {
+                age: age ? parseInt(age) : null,
+                gender: gender || null,
+                race: race || null,
+                phq9_score: phq9_score ? parseInt(phq9_score) : null,
+                gad7_score: gad7_score ? parseInt(gad7_score) : null,
+                mmse_score: mmse_score ? parseInt(mmse_score) : null,
+                active_si: active_si === 'true' ? true : active_si === 'false' ? false : null,
+                psychosis_history: psychosis_history === 'true' ? true : psychosis_history === 'false' ? false : null,
+                substance_abuse: substance_abuse === 'true' ? true : substance_abuse === 'false' ? false : null,
+                medications: medications
+            };
+
+            return patientData;
+        }
+
+        function evaluateEligibility() {
+            // Validate indication is selected
+            if (!currentIndication) {
+                alert('Please select a study indication first');
+                return;
+            }
+
+            // Collect patient data
+            const patientData = collectPatientData();
+
+            // Create eligibility engine instance
+            const engine = new EligibilityEngine();
+
+            // Evaluate all protocols for this indication
+            const results = engine.evaluateAllProtocols(currentIndication, patientData);
+
+            // Display results
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultsSection = document.getElementById('eligibilityResults');
+
+            if (!results || results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="eligibility-card">
+                        <p>No active protocols found for this indication.</p>
+                    </div>
+                `;
+                resultsSection.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+
+            results.forEach(result => {
+                const statusClass = result.eligible ? 'eligible' :
+                    result.status === 'pending' ? 'pending' : 'not-eligible';
+                const statusText = result.eligible ? 'ELIGIBLE' :
+                    result.status === 'pending' ? 'PENDING' : 'NOT ELIGIBLE';
+
+                html += `
+                    <div class="eligibility-card ${statusClass}">
+                        <h3>${result.protocolName}</h3>
+                        <p><strong>Protocol ID:</strong> ${result.protocolId}</p>
+                        <p>
+                            <span class="eligibility-status ${statusClass}">
+                                ${statusText}
+                            </span>
+                        </p>
+
+                        ${result.reasons && result.reasons.length > 0 ? `
+                            <div style="margin-top: 15px;">
+                                <strong>Reasons:</strong>
+                                <ul class="criteria-list">
+                                    ${result.reasons.map(r => `<li>${r}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+
+                        <details style="margin-top: 15px;">
+                            <summary style="cursor: pointer; font-weight: 600; color: #667eea;">
+                                View Detailed Criteria Results
+                            </summary>
+
+                            <div style="margin-top: 10px;">
+                                <strong>Inclusion Criteria:</strong>
+                                <ul class="criteria-list">
+                                    ${result.inclusionResults.map(c => {
+                                        const icon = c.met ? '✓' : c.met === null ? '⏳' : '✗';
+                                        const className = c.met ? 'met' : c.met === null ? 'pending' : 'not-met';
+                                        return `<li class="${className}">${icon} ${c.description}${c.reason ? ` - ${c.reason}` : ''}</li>`;
+                                    }).join('')}
+                                </ul>
+                            </div>
+
+                            ${result.exclusionResults.length > 0 ? `
+                                <div style="margin-top: 10px;">
+                                    <strong>Exclusion Criteria:</strong>
+                                    <ul class="criteria-list">
+                                        ${result.exclusionResults.map(c => {
+                                            const icon = c.met ? '✓' : c.met === null ? '⏳' : '✗';
+                                            const className = c.met ? 'met' : c.met === null ? 'pending' : 'not-met';
+                                            return `<li class="${className}">${icon} ${c.description}${c.reason ? ` - ${c.reason}` : ''}</li>`;
+                                        }).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </details>
+                    </div>
+                `;
+            });
+
+            resultsContainer.innerHTML = html;
+            resultsSection.style.display = 'block';
+
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function clearForm() {
+            if (!confirm('Are you sure you want to clear all form data?')) {
+                return;
+            }
+
+            // Clear all inputs
+            document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(element => {
+                element.value = '';
+            });
+
+            // Hide results
+            document.getElementById('eligibilityResults').style.display = 'none';
+            document.getElementById('assessmentSection').style.display = 'none';
+            currentIndication = '';
+        }
+
+        // Log initialization
+        console.log('[Clinical Research Tool] Application initialized');
+        console.log('[Clinical Research Tool] Loaded protocols:', protocols.length);
+    </script>
+</body>
+</html>

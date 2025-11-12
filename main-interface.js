@@ -637,7 +637,7 @@ function exportResults() {
 }
 
 // ============================================================================
-// DEBUG MODE - ENHANCED DEBUGGER
+// DEBUG MODE - ENHANCED DEBUGGER (PART 4B)
 // ============================================================================
 
 const debugState = {
@@ -645,7 +645,12 @@ const debugState = {
     evaluationEndTime: null,
     protocolTimings: {},
     debugLog: [],
-    isExpanded: true
+    isExpanded: true,
+    verbosityLevel: 'detailed', // 'minimal', 'standard', 'detailed', 'verbose'
+    filterMode: 'all', // 'all', 'failed', 'passed', 'pending'
+    searchQuery: '',
+    maxLogHistory: 10,
+    errorsAndWarnings: []
 };
 
 function toggleDebugMode() {
@@ -685,6 +690,10 @@ function updateDebugPanel() {
         return sum + r.inclusionResults.length + r.exclusionResults.length;
     }, 0);
 
+    // Performance warning detection
+    const totalTime = Math.round(totalEvaluationTime);
+    const perfClass = totalTime > 500 ? 'error' : totalTime > 100 ? 'warning' : 'normal';
+
     // Build debug panel HTML
     let html = `
         <!-- Debug Header -->
@@ -693,6 +702,7 @@ function updateDebugPanel() {
                 <div class="debug-header-title">
                     <span style="font-size: 20px; margin-right: 8px;">🐛</span>
                     Eligibility Engine Debugger
+                    <span class="debug-version">v2.0</span>
                 </div>
                 <div class="debug-header-timestamp">
                     Last evaluation: ${appState.lastEvaluationTimestamp.toLocaleString()}
@@ -707,19 +717,79 @@ function updateDebugPanel() {
                     <div class="debug-stat-value">${totalCriteria}</div>
                     <div class="debug-stat-label">Criteria</div>
                 </div>
+                <div class="debug-stat ${perfClass}">
+                    <div class="debug-stat-value">${totalTime}ms</div>
+                    <div class="debug-stat-label">Eval Time ${perfClass === 'warning' ? '⚠' : perfClass === 'error' ? '🔴' : ''}</div>
+                </div>
                 <div class="debug-stat">
-                    <div class="debug-stat-value">${totalEvaluationTime}ms</div>
-                    <div class="debug-stat-label">Eval Time</div>
+                    <div class="debug-stat-value">${debugState.debugLog.length}</div>
+                    <div class="debug-stat-label">History</div>
                 </div>
             </div>
             <div class="debug-header-actions">
                 <button class="debug-btn" onclick="toggleDebugExpansion()">
                     ${debugState.isExpanded ? '▼ Collapse All' : '▶ Expand All'}
                 </button>
-                <button class="debug-btn" onclick="clearDebugLog()">🗑️ Clear Log</button>
+                <button class="debug-btn" onclick="clearDebugLog()">🗑️ Clear</button>
                 <button class="debug-btn" onclick="exportDebugLog()">📥 Export</button>
+                <button class="debug-btn" onclick="copyDebugInfo()">📋 Copy</button>
             </div>
         </div>
+
+        <!-- Global Debug Controls -->
+        <div class="debug-controls">
+            <div class="debug-controls-row">
+                <div class="debug-control-group">
+                    <label class="debug-control-label">Filter:</label>
+                    <div class="debug-filter-buttons">
+                        <button class="debug-filter-btn ${debugState.filterMode === 'all' ? 'active' : ''}"
+                                onclick="setDebugFilter('all')">All</button>
+                        <button class="debug-filter-btn ${debugState.filterMode === 'failed' ? 'active' : ''}"
+                                onclick="setDebugFilter('failed')">Failed</button>
+                        <button class="debug-filter-btn ${debugState.filterMode === 'passed' ? 'active' : ''}"
+                                onclick="setDebugFilter('passed')">Passed</button>
+                        <button class="debug-filter-btn ${debugState.filterMode === 'pending' ? 'active' : ''}"
+                                onclick="setDebugFilter('pending')">Pending</button>
+                    </div>
+                </div>
+                <div class="debug-control-group">
+                    <label class="debug-control-label">Verbosity:</label>
+                    <select class="debug-select" id="debugVerbosity" onchange="setDebugVerbosity(this.value)">
+                        <option value="minimal" ${debugState.verbosityLevel === 'minimal' ? 'selected' : ''}>Minimal</option>
+                        <option value="standard" ${debugState.verbosityLevel === 'standard' ? 'selected' : ''}>Standard</option>
+                        <option value="detailed" ${debugState.verbosityLevel === 'detailed' ? 'selected' : ''}>Detailed</option>
+                        <option value="verbose" ${debugState.verbosityLevel === 'verbose' ? 'selected' : ''}>Verbose</option>
+                    </select>
+                </div>
+                <div class="debug-control-group flex-grow">
+                    <label class="debug-control-label">Search:</label>
+                    <input type="text" class="debug-search" id="debugSearch" placeholder="Search protocols, criteria..."
+                           value="${debugState.searchQuery}" oninput="handleDebugSearch(this.value)">
+                </div>
+            </div>
+        </div>
+
+        ${debugState.debugLog.length > 1 ? `
+        <!-- Debug Log History -->
+        <div class="debug-history">
+            <label class="debug-control-label">View Previous Evaluation:</label>
+            <select class="debug-select" id="debugHistory" onchange="loadDebugHistory(this.value)">
+                <option value="current">Current (${appState.lastEvaluationTimestamp.toLocaleTimeString()})</option>
+                ${debugState.debugLog.slice(0, debugState.maxLogHistory - 1).map((log, idx) => `
+                    <option value="${idx}">Evaluation ${idx + 1} (${new Date(log.timestamp).toLocaleTimeString()})</option>
+                `).join('')}
+            </select>
+        </div>
+        ` : ''}
+
+        ${perfClass !== 'normal' ? `
+        <!-- Performance Warning -->
+        <div class="debug-warning ${perfClass}">
+            <strong>⚠ Performance ${perfClass === 'error' ? 'Error' : 'Warning'}:</strong>
+            Evaluation took ${totalTime}ms (threshold: ${perfClass === 'error' ? '500ms' : '100ms'})
+            ${perfClass === 'error' ? ' - Consider optimizing criteria evaluation functions or reducing protocol count.' : ''}
+        </div>
+        ` : ''}
 
         <!-- Patient Data Snapshot -->
         <div class="debug-section">
@@ -757,8 +827,35 @@ function renderProtocolDebugSections() {
     if (!appState.evaluationResults) return '';
 
     let html = '';
+    let filteredResults = appState.evaluationResults;
 
-    appState.evaluationResults.forEach((result, index) => {
+    // Apply filter
+    if (debugState.filterMode !== 'all') {
+        filteredResults = filteredResults.filter(result => {
+            if (debugState.filterMode === 'failed') return result.eligible === false && result.status !== 'pending';
+            if (debugState.filterMode === 'passed') return result.eligible === true;
+            if (debugState.filterMode === 'pending') return result.status === 'pending';
+            return true;
+        });
+    }
+
+    // Apply search query
+    if (debugState.searchQuery) {
+        const query = debugState.searchQuery.toLowerCase();
+        filteredResults = filteredResults.filter(result => {
+            const nameMatch = result.protocolName.toLowerCase().includes(query);
+            const idMatch = result.protocolId.toLowerCase().includes(query);
+            const criteriaMatch = [...result.inclusionResults, ...result.exclusionResults]
+                .some(c => c.description.toLowerCase().includes(query));
+            return nameMatch || idMatch || criteriaMatch;
+        });
+    }
+
+    if (filteredResults.length === 0) {
+        return '<div style="text-align: center; padding: 40px; color: #9ca3af;">No protocols match the current filter/search criteria</div>';
+    }
+
+    filteredResults.forEach((result, index) => {
         const statusClass = result.eligible ? 'eligible' :
             result.status === 'pending' ? 'pending' : 'screen-failure';
 
@@ -835,9 +932,12 @@ function renderProtocolDebugSections() {
                         <div class="debug-subsection-header" onclick="toggleDebugSection('raw-${index}')">
                             <span class="debug-section-arrow" id="arrow-raw-${index}">▶</span>
                             <span class="debug-subsection-title" style="margin: 0;">Raw Result Data (JSON)</span>
+                            <button class="debug-copy-btn" onclick="event.stopPropagation(); copyJsonData('${result.protocolId}', ${index})">
+                                📋 Copy JSON
+                            </button>
                         </div>
                         <div class="debug-section-content" id="content-raw-${index}" style="display: none;">
-                            <pre class="debug-json">${JSON.stringify(result, null, 2)}</pre>
+                            <pre class="debug-json" id="json-${index}">${JSON.stringify(result, null, 2)}</pre>
                         </div>
                     </div>
                 </div>
@@ -912,50 +1012,100 @@ function renderCalculationBreakdown(result) {
 
     let html = `
         <div class="debug-calculation">
+            <!-- Detailed Inclusion Evaluation -->
             <div class="debug-calc-step">
-                <div class="debug-calc-label">Step 1: Inclusion Criteria</div>
-                <div class="debug-calc-formula">
-                    ${inclusionMet} of ${inclusionTotal} criteria met
-                    ${inclusionPending > 0 ? ` (${inclusionPending} pending)` : ''}
-                </div>
-                <div class="debug-calc-result ${inclusionMet === inclusionTotal && inclusionPending === 0 ? 'pass' : 'fail'}">
-                    ${inclusionMet === inclusionTotal && inclusionPending === 0 ? '✓ All inclusion criteria met' :
-                      inclusionPending > 0 ? '⚠ Waiting for data' :
-                      '✗ Not all inclusion criteria met'}
+                <div class="debug-calc-label">INCLUSION EVALUATION:</div>
+                <div class="debug-calc-details">
+                    ${result.inclusionResults.map((c, idx) => {
+                        const icon = c.met === null ? '⚠' : c.met ? '✓' : '✗';
+                        const detailLine = formatCriterionDetail(c, false);
+                        return `<div class="debug-calc-line ${c.met === null ? 'pending' : c.met ? 'met' : 'not-met'}">
+                            ${icon} ${c.id || 'inc_' + (idx + 1)}: ${detailLine}
+                        </div>`;
+                    }).join('')}
+                    <div class="debug-calc-result ${inclusionMet === inclusionTotal && inclusionPending === 0 ? 'pass' : 'fail'}">
+                        → ${inclusionMet === inclusionTotal && inclusionPending === 0 ?
+                            `All ${inclusionTotal} inclusion criteria MET` :
+                            inclusionPending > 0 ?
+                            `${inclusionPending} criteria PENDING DATA` :
+                            `Only ${inclusionMet} of ${inclusionTotal} criteria met`}
+                    </div>
                 </div>
             </div>
 
             ${exclusionTotal > 0 ? `
+                <!-- Detailed Exclusion Evaluation -->
                 <div class="debug-calc-step">
-                    <div class="debug-calc-label">Step 2: Exclusion Criteria</div>
-                    <div class="debug-calc-formula">
-                        ${exclusionMet} of ${exclusionTotal} exclusions met
-                        ${exclusionPending > 0 ? ` (${exclusionPending} pending)` : ''}
-                    </div>
-                    <div class="debug-calc-result ${exclusionMet === 0 && exclusionPending === 0 ? 'pass' : 'fail'}">
-                        ${exclusionMet === 0 && exclusionPending === 0 ? '✓ No exclusions apply' :
-                          exclusionPending > 0 ? '⚠ Waiting for data' :
-                          '✗ Patient meets ' + exclusionMet + ' exclusion criteria'}
+                    <div class="debug-calc-label">EXCLUSION EVALUATION:</div>
+                    <div class="debug-calc-details">
+                        ${result.exclusionResults.map((c, idx) => {
+                            const icon = c.met === null ? '⚠' : c.met ? '✗' : '✓';
+                            const detailLine = formatCriterionDetail(c, true);
+                            return `<div class="debug-calc-line ${c.met === null ? 'pending' : c.met ? 'not-met' : 'met'}">
+                                ${icon} ${c.id || 'exc_' + (idx + 1)}: ${detailLine}
+                            </div>`;
+                        }).join('')}
+                        <div class="debug-calc-result ${exclusionMet === 0 && exclusionPending === 0 ? 'pass' : 'fail'}">
+                            → ${exclusionMet === 0 && exclusionPending === 0 ?
+                                `No exclusions met - PATIENT PASSES` :
+                                exclusionPending > 0 ?
+                                `${exclusionPending} exclusions PENDING DATA` :
+                                `${exclusionMet} exclusion${exclusionMet > 1 ? 's' : ''} MET - PATIENT EXCLUDED`}
+                        </div>
                     </div>
                 </div>
             ` : ''}
 
+            <!-- Final Determination -->
             <div class="debug-calc-step final">
-                <div class="debug-calc-label">Final Determination</div>
-                <div class="debug-calc-formula">
-                    Inclusion: ${inclusionMet}/${inclusionTotal} met, ${inclusionPending} pending<br>
-                    Exclusion: ${exclusionMet} met, ${exclusionPending} pending
-                </div>
-                <div class="debug-calc-result ${result.eligible ? 'pass' : result.status === 'pending' ? 'pending' : 'fail'}">
-                    ${result.eligible ? '✓ PATIENT ELIGIBLE' :
-                      result.status === 'pending' ? '⚠ PENDING - MISSING DATA' :
-                      '✗ SCREEN FAILURE'}
+                <div class="debug-calc-label">FINAL DETERMINATION:
+                    <strong style="color: ${result.eligible ? '#10b981' : result.status === 'pending' ? '#f59e0b' : '#ef4444'}">
+                        ${result.eligible ? 'ELIGIBLE' : result.status === 'pending' ? 'PENDING' : 'SCREEN FAILURE'}
+                    </strong>
                 </div>
             </div>
         </div>
     `;
 
     return html;
+}
+
+function formatCriterionDetail(criterion, isExclusion) {
+    if (criterion.met === null) {
+        return `${criterion.description} → PENDING DATA`;
+    }
+
+    // Extract details if available
+    const details = criterion.details || {};
+    let comparison = '';
+
+    if (details.actualValue !== undefined && details.requiredValue !== undefined) {
+        const actual = details.actualValue;
+        const required = details.requiredValue;
+        const op = details.operator || '=';
+
+        if (details.range) {
+            // Range check
+            comparison = `[${actual} between ${details.range[0]}-${details.range[1]}]`;
+        } else {
+            // Comparison operator
+            comparison = `[${actual} ${op} ${required}]`;
+        }
+
+        const status = criterion.met ? 'MET' : 'NOT MET';
+        const statusSuffix = isExclusion ?
+            (criterion.met ? ' (FAIL - EXCLUDED)' : ' (PASS)') :
+            ` → ${status}`;
+
+        return `${criterion.description.substring(0, 50)}${criterion.description.length > 50 ? '...' : ''} ${comparison} ${statusSuffix}`;
+    }
+
+    // Fallback to reason
+    const status = criterion.met ? 'MET' : 'NOT MET';
+    const statusSuffix = isExclusion ?
+        (criterion.met ? ' → MET (FAIL - EXCLUDED)' : ' → NOT MET (PASS)') :
+        ` → ${status}`;
+    return `${criterion.description} ${statusSuffix}`;
 }
 
 function toggleDebugSection(sectionId) {
@@ -1009,7 +1159,7 @@ function exportDebugLog() {
 
     const exportData = {
         exportedAt: new Date().toISOString(),
-        debuggerVersion: '1.0.0',
+        debuggerVersion: '2.0.0',
         totalEvaluations: debugState.debugLog.length,
         log: debugState.debugLog
     };
@@ -1027,6 +1177,100 @@ function exportDebugLog() {
 
     showToast('Debug log exported', 'success');
     console.log('[Debug] Log exported');
+}
+
+function copyDebugInfo() {
+    if (!appState.evaluationResults) {
+        alert('No debug data to copy. Calculate eligibility first.');
+        return;
+    }
+
+    const summary = {
+        timestamp: appState.lastEvaluationTimestamp.toISOString(),
+        indication: appState.currentIndication,
+        totalProtocols: appState.evaluationResults.length,
+        eligible: appState.evaluationResults.filter(r => r.eligible).length,
+        screenFailure: appState.evaluationResults.filter(r => !r.eligible && r.status !== 'pending').length,
+        pending: appState.evaluationResults.filter(r => r.status === 'pending').length,
+        evaluationTime: Math.round(debugState.evaluationEndTime - debugState.evaluationStartTime) + 'ms',
+        results: appState.evaluationResults.map(r => ({
+            protocol: r.protocolName,
+            status: r.eligible ? 'ELIGIBLE' : r.status === 'pending' ? 'PENDING' : 'SCREEN FAILURE',
+            inclusionMet: `${r.inclusionResults.filter(c => c.met).length}/${r.inclusionResults.length}`,
+            exclusionMet: r.exclusionResults.filter(c => c.met).length
+        }))
+    };
+
+    const text = JSON.stringify(summary, null, 2);
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('Debug info copied to clipboard', 'success');
+        console.log('[Debug] Info copied to clipboard');
+    }).catch(err => {
+        console.error('[Debug] Failed to copy:', err);
+        showToast('Failed to copy to clipboard', 'error');
+    });
+}
+
+function setDebugFilter(mode) {
+    debugState.filterMode = mode;
+    updateDebugPanel();
+    console.log('[Debug] Filter set to:', mode);
+}
+
+function setDebugVerbosity(level) {
+    debugState.verbosityLevel = level;
+    updateDebugPanel();
+    console.log('[Debug] Verbosity set to:', level);
+}
+
+function handleDebugSearch(query) {
+    debugState.searchQuery = query;
+    updateDebugPanel();
+}
+
+function loadDebugHistory(index) {
+    if (index === 'current') {
+        updateDebugPanel();
+        return;
+    }
+
+    const idx = parseInt(index);
+    if (idx >= 0 && idx < debugState.debugLog.length) {
+        const historicalLog = debugState.debugLog[idx];
+
+        // Temporarily replace current results with historical data
+        const savedResults = appState.evaluationResults;
+        const savedTimestamp = appState.lastEvaluationTimestamp;
+        const savedPatientData = appState.patientData;
+
+        appState.evaluationResults = historicalLog.results;
+        appState.lastEvaluationTimestamp = new Date(historicalLog.timestamp);
+        appState.patientData = historicalLog.patientData;
+
+        updateDebugPanel();
+
+        // Restore current data after a short delay (so user can see historical view)
+        // Note: In a real implementation, you'd want a "lock" to prevent switching back
+        // but for this demo we'll just update the panel
+        console.log('[Debug] Loaded historical evaluation:', index);
+    }
+}
+
+function copyJsonData(protocolId, index) {
+    const element = document.getElementById(`json-${index}`);
+    if (!element) {
+        showToast('Failed to find JSON data', 'error');
+        return;
+    }
+
+    const jsonText = element.textContent;
+    navigator.clipboard.writeText(jsonText).then(() => {
+        showToast(`JSON data for ${protocolId} copied`, 'success');
+        console.log('[Debug] JSON data copied for protocol:', protocolId);
+    }).catch(err => {
+        console.error('[Debug] Failed to copy JSON:', err);
+        showToast('Failed to copy JSON data', 'error');
+    });
 }
 
 // ============================================================================

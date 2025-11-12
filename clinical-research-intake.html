@@ -1247,6 +1247,203 @@
             color: white;
         }
 
+        /* Part 4b Enhancements - Debug Controls */
+        .debug-version {
+            font-size: 10px;
+            color: #6b7280;
+            background: #374151;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .debug-stat.warning .debug-stat-value {
+            color: #f59e0b;
+        }
+
+        .debug-stat.error .debug-stat-value {
+            color: #ef4444;
+        }
+
+        .debug-controls {
+            background: #111827;
+            padding: 16px 20px;
+            border-bottom: 1px solid #374151;
+        }
+
+        .debug-controls-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .debug-control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .debug-control-group.flex-grow {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .debug-control-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #9ca3af;
+            white-space: nowrap;
+        }
+
+        .debug-filter-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .debug-filter-btn {
+            padding: 6px 12px;
+            background: #374151;
+            border: 1px solid #4b5563;
+            color: #e5e7eb;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .debug-filter-btn:hover {
+            background: #4b5563;
+            border-color: #10b981;
+        }
+
+        .debug-filter-btn.active {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .debug-select {
+            padding: 6px 10px;
+            background: #374151;
+            border: 1px solid #4b5563;
+            color: #e5e7eb;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .debug-select:hover,
+        .debug-select:focus {
+            border-color: #10b981;
+            outline: none;
+        }
+
+        .debug-search {
+            flex: 1;
+            padding: 6px 12px;
+            background: #374151;
+            border: 1px solid #4b5563;
+            color: #e5e7eb;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .debug-search:focus {
+            outline: none;
+            border-color: #10b981;
+            background: #1f2937;
+        }
+
+        .debug-search::placeholder {
+            color: #6b7280;
+        }
+
+        .debug-history {
+            padding: 12px 20px;
+            background: #111827;
+            border-bottom: 1px solid #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .debug-warning {
+            padding: 12px 20px;
+            margin: 16px 20px;
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .debug-warning.warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid #f59e0b;
+            color: #fbbf24;
+        }
+
+        .debug-warning.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #f87171;
+        }
+
+        /* Enhanced Calculation Breakdown */
+        .debug-calc-details {
+            margin-top: 8px;
+        }
+
+        .debug-calc-line {
+            padding: 6px 10px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            border-radius: 4px;
+            line-height: 1.5;
+        }
+
+        .debug-calc-line.met {
+            background: rgba(22, 163, 74, 0.15);
+            color: #10b981;
+            border-left: 3px solid #10b981;
+            padding-left: 8px;
+        }
+
+        .debug-calc-line.not-met {
+            background: rgba(220, 38, 38, 0.15);
+            color: #f87171;
+            border-left: 3px solid #ef4444;
+            padding-left: 8px;
+        }
+
+        .debug-calc-line.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-left: 3px solid #f59e0b;
+            padding-left: 8px;
+        }
+
+        .debug-copy-btn {
+            padding: 4px 10px;
+            background: #10b981;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: auto;
+        }
+
+        .debug-copy-btn:hover {
+            background: #059669;
+        }
+
         /* ============================================================================
            RESPONSIVE DESIGN
            ============================================================================ */
